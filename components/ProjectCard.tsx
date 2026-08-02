@@ -6,7 +6,7 @@ import { ProjectArtwork } from "@/components/ProjectArtwork";
 export function ProjectCard({ project, priority = false }: { project: Project; priority?: boolean }) {
   return (
     <article className={`project-card ratio-${project.ratio}`} data-project-card data-priority={priority || undefined}>
-      <Link href={`/work/${project.slug}`} aria-label={`View ${project.title} case study`}>
+      <Link href={`/work/${project.slug}`} aria-label={`Open ${project.title} showcase`} data-cursor-label="Open">
         <ProjectArtwork project={project} />
         <div className="project-card-meta">
           <div><p>{project.title}</p><span>{project.category} · {project.industry}</span></div>
@@ -16,4 +16,3 @@ export function ProjectCard({ project, priority = false }: { project: Project; p
     </article>
   );
 }
-

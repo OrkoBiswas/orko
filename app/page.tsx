@@ -37,12 +37,12 @@ export default async function Home() {
           <div className="showcase-toolbar" data-reveal>
             <div className="showcase-count"><span>Live showcase</span><strong>{String(featured.length).padStart(2, "0")}</strong></div>
             <div className="showcase-categories" aria-label="Featured project categories">{showcaseCategories.map((category) => <span key={category}>{category}</span>)}</div>
-            <p>Selected case studies<br />Open any frame to explore</p>
+            <p>Selected work<br />Open any frame to explore</p>
           </div>
           <div className="featured-grid">{featured.map((project, index) => <ProjectCard project={project} key={project.id} priority={index < 2} />)}</div>
-          <div className="showcase-footer"><span>Curated selection / {new Date().getFullYear()}</span><span>Hover, tap, or use the keyboard to open a case study</span></div>
+          <div className="showcase-footer"><span>Curated selection / {new Date().getFullYear()}</span><span>Hover, tap, or use the keyboard to open a showcase item</span></div>
         </div>
-        <div className="archive-callout" data-reveal><p><span>{liveProjects.length}</span> curated case studies</p><p>Filter by discipline, industry, and year. Every project opens into the decisions behind the final frame.</p><Link className="button button-light" href="/work">Browse everything <ArrowRight aria-hidden="true" /></Link></div>
+        <div className="archive-callout" data-reveal><p><span>{liveProjects.length}</span> curated showcase items</p><p>Filter by discipline, industry, and year. Explore single pieces, bundles, motion work, design systems, and deeper project stories.</p><Link className="button button-light" href="/work">Browse everything <ArrowRight aria-hidden="true" /></Link></div>
       </section>
 
       <section className="showreel-section section-shell section-space">
