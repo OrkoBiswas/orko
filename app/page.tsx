@@ -2,8 +2,8 @@ import Link from "next/link";
 import { ArrowDown, ArrowRight, ArrowUpRight, Asterisk, Sparkles } from "lucide-react";
 import { projects, services } from "@/lib/portfolio";
 import { getSiteContent, listPortfolioProjects, listPortfolioServices } from "@/db/repository";
-import { ProjectCard } from "@/components/ProjectCard";
 import { ProjectArtwork } from "@/components/ProjectArtwork";
+import { ShowcaseGrid } from "@/components/ShowcaseGrid";
 import { ShowreelDialog } from "@/components/ShowreelDialog";
 
 export const dynamic = "force-dynamic";
@@ -39,7 +39,7 @@ export default async function Home() {
             <div className="showcase-categories" aria-label="Featured project categories">{showcaseCategories.map((category) => <span key={category}>{category}</span>)}</div>
             <p>Selected work<br />Open any frame to explore</p>
           </div>
-          <div className="featured-grid">{featured.map((project, index) => <ProjectCard project={project} key={project.id} priority={index < 2} />)}</div>
+          <ShowcaseGrid projects={featured} />
           <div className="showcase-footer"><span>Curated selection / {new Date().getFullYear()}</span><span>Hover, tap, or use the keyboard to open a showcase item</span></div>
         </div>
         <div className="archive-callout" data-reveal><p><span>{liveProjects.length}</span> curated showcase items</p><p>Filter by discipline, industry, and year. Explore single pieces, bundles, motion work, design systems, and deeper project stories.</p><Link className="button button-light" href="/work">Browse everything <ArrowRight aria-hidden="true" /></Link></div>

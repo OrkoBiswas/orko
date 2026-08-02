@@ -21,4 +21,6 @@ Project showcases use a framed editorial system: a category-and-count toolbar, t
 
 Showcase titles use a compact standard scale so video, motion, graphic-design, bundle, and case-study entries share one hierarchy. Fine-pointer devices receive an acid-green custom cursor with contextual Open/Select states; touch devices and editable controls retain native behavior.
 
+The showcase media wall is format-aware. Saved project frames map to landscape/HD (16:9), vertical short (9:16), square (1:1), poster/portrait (4:5), or banner (21:9), and a dense measured grid recalculates row spans as the viewport changes. Titles sit above the metadata safety area rather than touching the lower edge.
+
 Focus outlines always use the accent token. Minimum targets are 44px. Information is never encoded by color alone.
