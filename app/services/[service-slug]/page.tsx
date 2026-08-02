@@ -2,19 +2,21 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-import { getProject, getService, services } from "@/lib/portfolio";
+import { projects, services } from "@/lib/portfolio";
+import { listPortfolioProjects, listPortfolioServices } from "@/db/repository";
 import { PageHero } from "@/components/PageHero";
 import { ProjectCard } from "@/components/ProjectCard";
 import { CtaBand } from "@/components/CtaBand";
 
 export function generateStaticParams() { return services.map((service) => ({ "service-slug": service.slug })); }
-export async function generateMetadata({ params }: { params: Promise<{ "service-slug": string }> }): Promise<Metadata> { const { "service-slug": slug } = await params; const service = getService(slug); return service ? { title: service.title, description: service.promise } : { title: "Service not found" }; }
+export async function generateMetadata({ params }: { params: Promise<{ "service-slug": string }> }): Promise<Metadata> { const { "service-slug": slug } = await params; const service = (await listPortfolioServices(services)).find((item) => item.slug === slug); return service ? { title: service.title, description: service.promise } : { title: "Service not found" }; }
 
 export default async function ServicePage({ params }: { params: Promise<{ "service-slug": string }> }) {
   const { "service-slug": slug } = await params;
-  const service = getService(slug);
+  const [liveServices, liveProjects] = await Promise.all([listPortfolioServices(services), listPortfolioProjects(projects, { publishedOnly: true })]);
+  const service = liveServices.find((item) => item.slug === slug);
   if (!service) notFound();
-  const related = service.related.map(getProject).filter((item) => item !== undefined);
+  const related = service.related.map((relatedSlug) => liveProjects.find((project) => project.slug === relatedSlug)).filter((item) => item !== undefined);
   return <>
     <PageHero index={service.number} eyebrow="Service" title={<>{service.title.split(" ").slice(0,-1).join(" ")}<br /><em>{service.title.split(" ").at(-1)}</em></>} intro={service.promise} />
     <section className="service-detail-intro section-shell"><h2>{service.short}</h2><div className="service-facts"><div><span>Typical timing</span><p>{service.timeline}</p></div><div><span>Pricing mode</span><p>{service.pricing}</p></div><div><span>Starting point</span><p>Focused discovery and a clear scope</p></div></div></section>
