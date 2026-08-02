@@ -17,4 +17,6 @@ An editorial motion studio rather than a freelancer template: carbon-black canva
 
 Wordmark, utility nav, availability chip, kinetic headline, project tile, filter rail, editorial list, service index, proof strip, process timeline, modal reel, multi-step brief, field system, notice, footer, and owner tables.
 
+Project showcases use a seamless contact-sheet grid with one-pixel joins, neutral-grey demo frames, integrated metadata, and responsive mosaic patterns. Scroll motion uses restrained reveal, stagger, and scrubbed depth cues with a complete reduced-motion fallback.
+
 Focus outlines always use the accent token. Minimum targets are 44px. Information is never encoded by color alone.

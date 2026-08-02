@@ -13,6 +13,7 @@ Last updated: 2026-08-02
 - Custom social preview asset and host-derived Open Graph/X metadata
 - Keyboard/touch semantics, mobile menu, modal dialog, responsive layout, focus states, and 320px-safe overflow controls
 - Modernized display typography and full-bleed responsive section system with fluid gutters and a wider 1760px content ceiling
+- Continuous responsive showcase mosaic with neutral-grey demo previews, integrated card metadata, aligned section rules, route-aware staggered reveals, and smoother scrubbed scroll motion
 
 ## Validation
 
