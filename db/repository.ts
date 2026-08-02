@@ -13,6 +13,49 @@ async function database() {
 
 let schemaReady: Promise<void> | null = null;
 
+const legacySiteCopy: Partial<Record<keyof SiteContent, string>> = {
+  title: "Video Editor · Motion Designer · Visual Storyteller",
+  shortTitle: "Editor, motion artist & visual designer",
+  headline: "Visual stories, built to move.",
+  heroLineOne: "Visual stories,",
+  heroLineTwo: "built to move.",
+  intro: "I shape raw ideas into cinematic edits, precise motion systems, and campaign visuals people remember.",
+  biography: "Orko Biswas is a multidisciplinary visual designer focused on the space where story, rhythm, and graphic clarity meet. From a single launch film to a complete social content system, every decision is made to give the message more momentum.",
+  availability: "Booking select projects",
+  responseTime: "Usually within 1–2 business days",
+  workHeading: "Work worth stalking.",
+  workIntro: "A growing library of edits, motion systems, campaigns, and visual experiments—built to be explored, not skimmed.",
+  showreelHeading: "Seventy-two seconds of controlled energy.",
+  showreelIntro: "The final reel will use licensed work only. Until then, the project library carries every frame honestly.",
+  capabilitiesHeading: "One visual partner. More momentum.",
+  capabilitiesIntro: "From the first story beat to the final export matrix, the work stays connected by one clear idea.",
+  seoTitle: "Orko Biswas — Video Editor, Motion Designer & Visual Storyteller",
+  seoDescription: "I shape raw ideas into cinematic edits, precise motion systems, and campaign visuals people remember.",
+};
+
+async function refreshLegacySiteCopy(db: D1Database) {
+  const record = await db.prepare("SELECT content_json FROM site_content WHERE id = 'primary'").first<{ content_json: string }>();
+  if (!record) return;
+  try {
+    const current = JSON.parse(record.content_json) as Record<string, unknown>;
+    const next = { ...current };
+    let changed = false;
+    for (const [key, oldValue] of Object.entries(legacySiteCopy)) {
+      if (current[key] === oldValue) {
+        next[key] = defaultSiteContent[key as keyof SiteContent];
+        changed = true;
+      }
+    }
+    if (changed) {
+      await db.prepare("UPDATE site_content SET content_json = ?, updated_at = ? WHERE id = 'primary'")
+        .bind(JSON.stringify(next), new Date().toISOString())
+        .run();
+    }
+  } catch {
+    // Leave owner-managed content untouched if the saved JSON cannot be parsed.
+  }
+}
+
 export function ensureSchema() {
   if (schemaReady) return schemaReady;
   schemaReady = (async () => {
@@ -86,6 +129,7 @@ export function ensureSchema() {
         updated_at TEXT NOT NULL
       )`),
     ]);
+    await refreshLegacySiteCopy(db);
     await db.prepare("PRAGMA optimize").run();
   })().catch((error) => {
     schemaReady = null;

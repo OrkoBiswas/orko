@@ -14,8 +14,8 @@
   --display: "Aptos Display", "Segoe UI Variable Display", "Helvetica Neue", system-ui, sans-serif;
   --body: Inter, Aptos, "Segoe UI", Helvetica, Arial, sans-serif;
   --serif: Iowan Old Style, Baskerville, "Times New Roman", serif;
-  --content-max: 1760px;
-  --page-gutter: clamp(24px, 3.5vw, 72px);
+  --content-max: 1520px;
+  --page-gutter: clamp(28px, 4.5vw, 86px);
   --shell: 100%;
 }
 
@@ -686,6 +686,46 @@ html { scroll-padding-top: 76px; }
 
 @media (prefers-reduced-motion: reduce) {
   .custom-cursor-ring { transition-duration: .01ms; }
+}
+
+/* Calmer reading width, balanced headline scale, and added content cards */
+.hero-title { font-size: clamp(4rem, 8.6vw, 9.75rem); }
+.section-heading h2,
+.why-copy h2 { font-size: clamp(2.8rem, 5.5vw, 5.8rem); line-height: .9; }
+.page-hero h1 { font-size: clamp(4rem, 9vw, 9rem); line-height: .86; }
+.case-hero h1 { font-size: clamp(4rem, 9.5vw, 9.5rem); line-height: .84; }
+.editorial-copy h2,
+.proof-section > div:last-child h2 { font-size: clamp(2.7rem, 4.8vw, 5rem); line-height: .92; }
+.cta-band h2 { font-size: clamp(3.4rem, 7.2vw, 7.2rem); line-height: .88; }
+.footer-lead h2 { font-size: clamp(3.8rem, 7.8vw, 8rem); line-height: .84; }
+.editorial-copy > p { max-width: 720px; }
+
+.content-needs { color: var(--paper); background: var(--ink-2); }
+.content-needs .section-heading { border-top-color: var(--line-dark); }
+.content-needs .section-heading > div:last-child > p,
+.content-needs .section-heading > p { color: #bfc3b8; }
+.content-needs-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; border: 1px solid var(--line-dark); background: var(--line-dark); }
+.content-needs-grid article { min-height: 230px; display: flex; flex-direction: column; padding: 26px; background: var(--ink-2); }
+.content-needs-grid article > span { color: var(--accent); font: 10px/1 monospace; }
+.content-needs-grid h3 { max-width: 320px; margin: auto 0 12px; font-size: clamp(1.4rem, 2vw, 2rem); line-height: 1; }
+.content-needs-grid p { max-width: 360px; margin: 0; color: #bfc3b8; font-size: 14px; }
+
+@media (max-width: 1024px) {
+  :root { --page-gutter: clamp(20px, 4vw, 36px); }
+  .content-needs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 700px) {
+  :root { --page-gutter: 16px; }
+  .hero-title { font-size: clamp(3.15rem, 13.8vw, 4.7rem); }
+  .section-heading h2,
+  .why-copy h2 { font-size: clamp(2.6rem, 11.8vw, 4.2rem); }
+  .page-hero h1,
+  .case-hero h1 { font-size: 13.5vw; line-height: .9; }
+  .cta-band h2 { font-size: 13vw; }
+  .footer-lead h2 { font-size: 14vw; }
+  .content-needs-grid { grid-template-columns: 1fr; }
+  .content-needs-grid article { min-height: 190px; padding: 22px; }
 }
 
 @media print {

@@ -16,9 +16,9 @@ export default async function WorkPage() {
   const liveProjects = await listPortfolioProjects(projects, { publishedOnly: true });
   return (
     <div className="work-page">
-      <PageHero index="01" eyebrow="The work archive" title={<>A library of<br /><em>moving ideas.</em></>} intro="Not a highlight strip. A deep, filterable archive of edits, motion studies, campaign systems, and visual experiments—each opening into the thinking behind it." aside={<span className="eyebrow">{liveProjects.length} projects / many directions</span>} />
+      <PageHero index="01" eyebrow="Work archive" title={<>Video, motion,<br />and <em>design work.</em></>} intro="Browse video edits, motion graphics, posters, social content, campaign visuals, and creative bundles. Use the filters to find the work you need." aside={<span className="eyebrow">{liveProjects.length} projects / many formats</span>} />
       <section className="section-shell"><WorkLibrary projects={liveProjects} /></section>
-      <CtaBand title={<>Found a direction<br />worth building on?</>} copy="Mention the project or visual language that caught your eye. It makes the first creative conversation much more useful." />
+      <CtaBand title={<>Found something<br />you like?</>} copy="Tell me which project, style, or format caught your attention. It will help us start with a clear direction." />
     </div>
   );
 }

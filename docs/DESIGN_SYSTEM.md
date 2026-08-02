@@ -11,7 +11,9 @@ An editorial motion studio rather than a freelancer template: carbon-black canva
 - Display: modern variable grotesk (`Aptos Display` / `Segoe UI Variable Display` fallbacks) with a restrained editorial serif accent; interface/body: precise grotesk sans
 - Radius: restrained 2–18px; cards avoid generic pill-heavy SaaS styling
 - Spacing: fluid 4px base with viewport-scaled section rhythm
-- Layout: full-bleed section backgrounds with a 1760px content ceiling and fluid 14–72px page gutters, so compositions use large displays without crowding small screens
+- Layout: full-bleed section backgrounds with a calmer 1520px content ceiling and fluid 28–86px desktop gutters; tablet and mobile gutters step down carefully so content stays comfortable without feeling narrow
+- Type scale: display headlines remain expressive but use moderated responsive limits on hero, section, proof, CTA, case-study, and footer headings
+- Writing: short, direct, professional English that clearly describes video editing, motion graphics, graphic design, and content packages
 
 ## Components
 

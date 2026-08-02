@@ -23,6 +23,6 @@ export default async function ServicePage({ params }: { params: Promise<{ "servi
     <section className="service-lists"><div className="service-lists-inner section-shell"><div><p className="eyebrow">Typical deliverables</p><ul className="numbered-list">{service.deliverables.map((item) => <li key={item}>{item}</li>)}</ul></div><div><p className="eyebrow">A strong fit for</p><ul className="numbered-list">{service.idealFor.map((item) => <li key={item}>{item}</li>)}</ul></div></div></section>
     <section className="editorial-section section-shell"><div className="section-heading"><div><p className="eyebrow">Related work</p><h2>See the craft<br /><em>in context.</em></h2></div><Link className="text-link" href="/work">Full archive <ArrowUpRight aria-hidden="true" /></Link></div><div className="featured-grid">{related.map((project) => <ProjectCard project={project} key={project.id} />)}</div></section>
     <section className="editorial-section section-shell"><div className="editorial-grid"><p className="eyebrow">Common question</p><div className="faq-list">{service.faqs.map((faq) => <details key={faq.question}><summary>{faq.question}</summary><p>{faq.answer}</p></details>)}</div></div></section>
-    <CtaBand title={<>Make {service.title.toLowerCase()}<br />work harder.</>} />
+    <CtaBand title={<>Start a {service.title.toLowerCase()}<br />project.</>} />
   </>;
 }

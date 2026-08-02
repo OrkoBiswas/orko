@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 
-export function CtaBand({ title = <>Ready to make<br />the idea move?</>, copy = "Share the context, ambition, timing, and constraints. You’ll get a thoughtful next step—not an automated sales pitch." }: { title?: React.ReactNode; copy?: string }) {
+export function CtaBand({ title = <>Ready to start<br />your project?</>, copy = "Share your goal, deadline, budget, and available materials. I will reply with a clear next step." }: { title?: React.ReactNode; copy?: string }) {
   return (
     <section className="cta-band">
       <div className="cta-band-inner section-shell">
@@ -11,4 +11,3 @@ export function CtaBand({ title = <>Ready to make<br />the idea move?</>, copy =
     </section>
   );
 }
-
