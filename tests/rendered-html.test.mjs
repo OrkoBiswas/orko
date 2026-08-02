@@ -21,8 +21,22 @@ test("server-renders the finished portfolio homepage", async () => {
   assert.match(html, /Selected creative work/);
   assert.match(html, /Featured library/);
   assert.match(html, /items in the full library/);
+  assert.match(html, /About &amp; experience/);
+  assert.match(html, /Independent creative practice/);
+  assert.match(html, /Testimonials/);
+  assert.match(html, /No made-up quotes/);
   assert.match(html, /Start a project/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|Your site is taking shape/i);
+});
+
+test("about page includes the managed work history", async () => {
+  const response = await request("/about");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /About me/);
+  assert.match(html, /About &amp; experience/);
+  assert.match(html, /Independent creative practice/);
+  assert.match(html, /Bangladesh/);
 });
 
 test("work archive renders real searchable project content", async () => {

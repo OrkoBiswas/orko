@@ -19,12 +19,15 @@ Last updated: 2026-08-02
 - Moderated oversized headline scales, simplified professional copy across public pages, services, project samples, and legal pages, plus a new content-needs section covering promo videos, YouTube, short-form, motion, design, and creative bundles
 - Safe live-content refresh updates only untouched legacy default text in D1 while preserving any wording customized through the dashboard
 - Rebuilt the homepage showcase as a systematic paired-row library with equal-height card architecture, format-preserving preview stages, consistent metadata zones, discipline counts, and an integrated full-archive action
+- Added structured About & Experience content across the homepage, About page, and résumé, with current/past workplace, role, period, location, and responsibility fields managed from the secure dashboard
+- Added a managed testimonial section with approved quote, person, role, and company fields; when no real testimonials are published, the public section shows an intentional honest state instead of invented social proof
+- Extended the existing validated D1 JSON content record for experience and testimonials without changing the database schema; older stored content receives safe defaults and remains editable
 
 ## Validation
 
 - Lint: passed
 - Typecheck: passed
-- Automated tests: 5 passed
+- Automated tests: 8 passed
 - Production build: passed
 - Browser review: desktop and 390×844 mobile passed; archive search/filter/empty/reset, case study, showreel dialog, brief progression, contact validation, and a durable synthetic inquiry submission verified
 - Browser console: no new warnings or errors after animation cleanup
@@ -37,7 +40,7 @@ Last updated: 2026-08-02
 
 ## Honest remaining extensions
 
-- The owner area manages public profile content, homepage messaging, service offers, project narratives and presentation, publication status, and inquiries; media uploads, testimonials, analytics, and role-granular multi-user permissions remain future modules.
+- The owner area manages public profile content, experience history, approved testimonials, homepage messaging, service offers, project narratives and presentation, publication status, and inquiries; media uploads, analytics, and role-granular multi-user permissions remain future modules.
 - Real client logos, testimonials, performance metrics, and project footage are intentionally absent until supplied and approved.
 - Public uploads remain disabled until an R2 MIME, file-size, authorization, and in-use deletion policy is reviewed.
 - Drizzle Kit encountered a host-level credential lookup failure in this Windows sandbox, so the equivalent inspected SQL migration was added directly and runtime initialization uses the same idempotent schema.
