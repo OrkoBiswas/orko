@@ -12,6 +12,7 @@ Last updated: 2026-08-02
 - Professional dashboard-only owner workspace with editable public identity, homepage messaging, biography, contact/social details, SEO, complete project narratives, featured placement, ordering, publication status, and full service-offer editing
 - Custom social preview asset and host-derived Open Graph/X metadata
 - Keyboard/touch semantics, mobile menu, modal dialog, responsive layout, focus states, and 320px-safe overflow controls
+- Modernized display typography and full-bleed responsive section system with fluid gutters and a wider 1760px content ceiling
 
 ## Validation
 
