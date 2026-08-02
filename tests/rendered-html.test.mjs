@@ -24,7 +24,8 @@ test("server-renders the finished portfolio homepage", async () => {
   assert.match(html, /About &amp; experience/);
   assert.match(html, /Independent creative practice/);
   assert.match(html, /Testimonials/);
-  assert.match(html, /No made-up quotes/);
+  assert.match(html, /Real feedback/);
+  assert.match(html, /ready for real client testimonials/);
   assert.match(html, /Start a project/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|Your site is taking shape/i);
 });

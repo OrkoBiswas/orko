@@ -21,6 +21,7 @@ Last updated: 2026-08-02
 - Rebuilt the homepage showcase as a systematic paired-row library with equal-height card architecture, format-preserving preview stages, consistent metadata zones, discipline counts, and an integrated full-archive action
 - Added structured About & Experience content across the homepage, About page, and résumé, with current/past workplace, role, period, location, and responsibility fields managed from the secure dashboard
 - Added a managed testimonial section with approved quote, person, role, and company fields; when no real testimonials are published, the public section shows an intentional honest state instead of invented social proof
+- Upgraded approved testimonials into an auto-sliding editorial carousel with six-second pacing, animated progress, direct slide selection, previous/next and play/pause controls, touch swiping, pause-on-hover/focus, page-visibility awareness, and reduced-motion behavior
 - Extended the existing validated D1 JSON content record for experience and testimonials without changing the database schema; older stored content receives safe defaults and remains editable
 
 ## Validation
