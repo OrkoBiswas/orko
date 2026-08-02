@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SettingsDock } from "@/components/SettingsDock";
 import { MotionProvider } from "@/components/MotionProvider";
+import { CustomCursor } from "@/components/CustomCursor";
 import type { SiteContent } from "@/lib/site-content";
 
 export function AppFrame({ content, children }: { content: SiteContent; children: React.ReactNode }) {
@@ -23,6 +24,7 @@ export function AppFrame({ content, children }: { content: SiteContent; children
       <SiteFooter content={content} />
       <SettingsDock />
       <MotionProvider />
+      <CustomCursor />
     </>
   );
 }

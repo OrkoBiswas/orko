@@ -496,7 +496,7 @@ html { scroll-padding-top: 76px; }
 .featured-grid .project-card { overflow: hidden; background: #b9bbb6; }
 .featured-grid .project-card > a { position: relative; }
 .featured-grid .project-card > a::after {
-  content: "View case study  ↗";
+  content: "Open showcase  ↗";
   position: absolute;
   z-index: 10;
   right: 18px;
@@ -528,9 +528,9 @@ html { scroll-padding-top: 76px; }
   backdrop-filter: blur(10px);
 }
 .featured-grid .project-card-meta span { color: #bfc2b9; }
-.featured-grid .art-title { bottom: 19%; }
-.featured-grid .project-card:nth-child(2) .art-title,
-.featured-grid .project-card:nth-child(3) .art-title { font-size: clamp(2.2rem, 3.6vw, 4.4rem); }
+.featured-grid .art-title { bottom: 19%; font-size: clamp(1.65rem, 2.7vw, 3.25rem); line-height: .9; }
+.featured-grid .project-card-meta > div:first-child p { font-size: 13px; }
+.featured-grid .project-card-meta span { font-size: 10px; }
 
 .project-art,
 .visual-signal,
@@ -600,8 +600,6 @@ html { scroll-padding-top: 76px; }
   }
   .featured-grid .project-card:nth-child(n) { grid-column: span 1; }
   .featured-grid .project-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
-  .featured-grid .project-card:nth-child(2) .art-title,
-  .featured-grid .project-card:nth-child(3) .art-title { font-size: clamp(2.4rem, 5.3vw, 4.8rem); }
   .project-library.is-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
@@ -631,6 +629,45 @@ html { scroll-padding-top: 76px; }
 
 @media (hover: none) {
   .featured-grid .project-card > a::after { opacity: 1; transform: none; }
+}
+
+/* Desktop custom cursor */
+.custom-cursor { display: none; position: fixed; inset: 0; z-index: 1200; pointer-events: none; }
+.custom-cursor-ring,
+.custom-cursor-dot {
+  position: fixed;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  opacity: 0;
+  will-change: transform;
+  transition: width .25s ease, height .25s ease, opacity .2s ease, background-color .25s ease, border-color .25s ease;
+}
+.custom-cursor-ring { width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid rgba(201,255,67,.9); }
+.custom-cursor-ring b { color: var(--ink); font: 850 8px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; }
+.custom-cursor-dot { width: 5px; height: 5px; background: var(--accent); }
+.custom-cursor.is-visible .custom-cursor-ring,
+.custom-cursor.is-visible .custom-cursor-dot { opacity: 1; }
+.custom-cursor.is-active .custom-cursor-ring { width: 70px; height: 70px; border-color: var(--accent); background: var(--accent); }
+.custom-cursor.is-active .custom-cursor-dot { opacity: 0; }
+.custom-cursor.is-pressed .custom-cursor-ring { width: 58px; height: 58px; }
+.custom-cursor.is-native .custom-cursor-ring,
+.custom-cursor.is-native .custom-cursor-dot { opacity: 0; }
+
+@media (pointer: fine) {
+  .custom-cursor { display: block; }
+  html.cursor-ready,
+  html.cursor-ready body,
+  html.cursor-ready a,
+  html.cursor-ready button,
+  html.cursor-ready summary { cursor: none !important; }
+  html.cursor-ready input,
+  html.cursor-ready textarea { cursor: text !important; }
+  html.cursor-ready select { cursor: default !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .custom-cursor-ring { transition-duration: .01ms; }
 }
 
 @media print {

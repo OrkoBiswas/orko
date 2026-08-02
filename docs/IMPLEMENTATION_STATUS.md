@@ -14,6 +14,7 @@ Last updated: 2026-08-02
 - Keyboard/touch semantics, mobile menu, modal dialog, responsive layout, focus states, and 320px-safe overflow controls
 - Modernized display typography and full-bleed responsive section system with fluid gutters and a wider 1760px content ceiling
 - Structured responsive showcase system with a category/count toolbar, balanced feature rows, neutral-grey demo previews, integrated card metadata and interaction cues, aligned section rules, route-aware staggered reveals, and smoother scrubbed scroll motion
+- Standardized compact showcase typography, format-neutral showcase language, and a site-wide fine-pointer custom cursor with native touch and form-control fallbacks
 
 ## Validation
 

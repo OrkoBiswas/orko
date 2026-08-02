@@ -19,4 +19,6 @@ Wordmark, utility nav, availability chip, kinetic headline, project tile, filter
 
 Project showcases use a framed editorial system: a category-and-count toolbar, three balanced feature rows with one-pixel joins, neutral-grey demo frames, integrated metadata, visible interaction cues, and resilient tablet/mobile stacking. Scroll motion uses restrained reveal, stagger, and scrubbed depth cues with a complete reduced-motion fallback.
 
+Showcase titles use a compact standard scale so video, motion, graphic-design, bundle, and case-study entries share one hierarchy. Fine-pointer devices receive an acid-green custom cursor with contextual Open/Select states; touch devices and editable controls retain native behavior.
+
 Focus outlines always use the accent token. Minimum targets are 44px. Information is never encoded by color alone.
