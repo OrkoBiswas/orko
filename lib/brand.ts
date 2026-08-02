@@ -1,16 +1,16 @@
 export const brand = {
   name: "Orko Biswas",
   monogram: "OB",
-  title: "Video Editor · Motion Designer · Visual Storyteller",
-  shortTitle: "Editor, motion artist & visual designer",
-  headline: "Visual stories, built to move.",
+  title: "Video Editor · Motion Designer · Graphic Designer",
+  shortTitle: "Video editor, motion designer & graphic designer",
+  headline: "Strong visuals, clear stories.",
   intro:
-    "I shape raw ideas into cinematic edits, precise motion systems, and campaign visuals people remember.",
+    "I turn raw ideas into clear videos, smooth motion graphics, and strong visual content for brands and creators.",
   biography:
-    "Orko Biswas is a multidisciplinary visual designer focused on the space where story, rhythm, and graphic clarity meet. From a single launch film to a complete social content system, every decision is made to give the message more momentum.",
+    "I am Orko Biswas, a video editor, motion designer, and graphic designer from Bangladesh. I help brands, businesses, and creators turn ideas into clear and engaging visual work. I can support one video, a set of social posts, a motion package, or a complete campaign.",
   location: "Bangladesh · Working worldwide",
   timezone: "GMT+6",
-  availability: "Booking select projects",
+  availability: "Available for new projects",
   responseTime: "Usually within 1–2 business days",
   primaryCta: "Explore the work",
   secondaryCta: "Start a project",
@@ -23,4 +23,3 @@ export const brand = {
 } as const;
 
 export type Brand = typeof brand;
-

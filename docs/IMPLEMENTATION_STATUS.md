@@ -12,16 +12,18 @@ Last updated: 2026-08-02
 - Professional dashboard-only owner workspace with editable public identity, homepage messaging, biography, contact/social details, SEO, complete project narratives, featured placement, ordering, publication status, and full service-offer editing
 - Custom social preview asset and host-derived Open Graph/X metadata
 - Keyboard/touch semantics, mobile menu, modal dialog, responsive layout, focus states, and 320px-safe overflow controls
-- Modernized display typography and full-bleed responsive section system with fluid gutters and a wider 1760px content ceiling
+- Modernized display typography and full-bleed responsive section system with a comfortable 1520px content ceiling, wider desktop gutters, and balanced mobile spacing
 - Structured responsive showcase system with a category/count toolbar, balanced feature rows, neutral-grey demo previews, integrated card metadata and interaction cues, aligned section rules, route-aware staggered reveals, and smoother scrubbed scroll motion
 - Standardized compact showcase typography, format-neutral showcase language, and a site-wide fine-pointer custom cursor with native touch and form-control fallbacks
 - Format-aware homepage and archive media walls with five admin-selectable frame types, dense responsive packing, measured row spans, and elevated in-frame title positioning; the existing D1 schema remains unchanged
+- Moderated oversized headline scales, simplified professional copy across public pages, services, project samples, and legal pages, plus a new content-needs section covering promo videos, YouTube, short-form, motion, design, and creative bundles
+- Safe live-content refresh updates only untouched legacy default text in D1 while preserving any wording customized through the dashboard
 
 ## Validation
 
 - Lint: passed
 - Typecheck: passed
-- Automated tests: 7 passed
+- Automated tests: 5 passed
 - Production build: passed
 - Browser review: desktop and 390×844 mobile passed; archive search/filter/empty/reset, case study, showreel dialog, brief progression, contact validation, and a durable synthetic inquiry submission verified
 - Browser console: no new warnings or errors after animation cleanup
