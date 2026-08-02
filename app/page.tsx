@@ -11,6 +11,7 @@ export const dynamic = "force-dynamic";
 export default async function Home() {
   const [brand, liveProjects, liveServices] = await Promise.all([getSiteContent(), listPortfolioProjects(projects, { publishedOnly: true }), listPortfolioServices(services)]);
   const featured = liveProjects.filter((project) => project.featured).slice(0, 6);
+  const showcaseCategories = Array.from(new Set(featured.map((project) => project.category)));
   const proofProject = liveProjects[8] ?? liveProjects.at(-1);
   return (
     <>
@@ -32,7 +33,15 @@ export default async function Home() {
 
       <section id="selected-work" className="selected-work section-shell section-space">
         <div className="section-heading" data-reveal><div><p className="eyebrow"><span>01</span>Selected work</p><h2>{brand.workHeading}</h2></div><div><p>{brand.workIntro}</p><Link className="text-link" href="/work">Enter the full archive <ArrowUpRight aria-hidden="true" /></Link></div></div>
-        <div className="featured-grid">{featured.map((project, index) => <ProjectCard project={project} key={project.id} priority={index < 2} />)}</div>
+        <div className="showcase-system">
+          <div className="showcase-toolbar" data-reveal>
+            <div className="showcase-count"><span>Live showcase</span><strong>{String(featured.length).padStart(2, "0")}</strong></div>
+            <div className="showcase-categories" aria-label="Featured project categories">{showcaseCategories.map((category) => <span key={category}>{category}</span>)}</div>
+            <p>Selected case studies<br />Open any frame to explore</p>
+          </div>
+          <div className="featured-grid">{featured.map((project, index) => <ProjectCard project={project} key={project.id} priority={index < 2} />)}</div>
+          <div className="showcase-footer"><span>Curated selection / {new Date().getFullYear()}</span><span>Hover, tap, or use the keyboard to open a case study</span></div>
+        </div>
         <div className="archive-callout" data-reveal><p><span>{liveProjects.length}</span> curated case studies</p><p>Filter by discipline, industry, and year. Every project opens into the decisions behind the final frame.</p><Link className="button button-light" href="/work">Browse everything <ArrowRight aria-hidden="true" /></Link></div>
       </section>
 
