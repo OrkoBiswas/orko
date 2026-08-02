@@ -5,6 +5,8 @@ import { getSiteContent, listPortfolioProjects, listPortfolioServices } from "@/
 import { ProjectArtwork } from "@/components/ProjectArtwork";
 import { ShowcaseGrid } from "@/components/ShowcaseGrid";
 import { ShowreelDialog } from "@/components/ShowreelDialog";
+import { ExperienceSection } from "@/components/ExperienceSection";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
 
 export const dynamic = "force-dynamic";
 
@@ -63,8 +65,10 @@ export default async function Home() {
         <Link className="button button-dark" href="/services">View all services <ArrowRight aria-hidden="true" /></Link>
       </section>
 
+      <ExperienceSection content={brand} />
+
       <section className="content-needs section-shell section-space">
-        <div className="section-heading" data-reveal><div><p className="eyebrow"><span>04</span>What I can create</p><h2>Useful content for every screen.</h2></div><p>Choose one item or combine several into a complete content package.</p></div>
+        <div className="section-heading" data-reveal><div><p className="eyebrow"><span>05</span>What I can create</p><h2>Useful content for every screen.</h2></div><p>Choose one item or combine several into a complete content package.</p></div>
         <div className="content-needs-grid">
           {[
             ["01", "Brand and promo videos", "Clear edits for products, services, events, and campaigns."],
@@ -86,9 +90,11 @@ export default async function Home() {
       </section>
 
       <section className="process-preview section-shell section-space">
-        <div className="section-heading" data-reveal><div><p className="eyebrow"><span>05</span>Process</p><h2>A simple process with room for ideas.</h2></div><Link className="text-link" href="/process">See the full process <ArrowUpRight aria-hidden="true" /></Link></div>
+        <div className="section-heading" data-reveal><div><p className="eyebrow"><span>06</span>Process</p><h2>A simple process with room for ideas.</h2></div><Link className="text-link" href="/process">See the full process <ArrowUpRight aria-hidden="true" /></Link></div>
         <ol className="process-list">{[["Discover","We discuss your goal, audience, content, deadline, and budget."],["Plan","I prepare the story, visual direction, deliverables, and schedule."],["Create","I build the first edit, design, or motion direction."],["Review","You share clear feedback and we agree on the next changes."],["Refine","I improve timing, sound, color, text, and final details."],["Deliver","You receive clean files in the correct formats and sizes."]].map(([title,copy], index) => <li key={title} data-reveal><span>0{index + 1}</span><h3>{title}</h3><p>{copy}</p><i /></li>)}</ol>
       </section>
+
+      <TestimonialsSection content={brand} />
 
       <section className="proof-section section-shell section-space">
         {proofProject && <div className="proof-art"><ProjectArtwork project={proofProject} compact /></div>}
