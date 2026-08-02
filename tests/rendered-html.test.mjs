@@ -17,8 +17,10 @@ test("server-renders the finished portfolio homepage", async () => {
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /<title>Orko Biswas/);
-  assert.match(html, /Visual stories/);
-  assert.match(html, /Work worth/);
+  assert.match(html, /Strong visuals/);
+  assert.match(html, /Selected creative work/);
+  assert.match(html, /Featured library/);
+  assert.match(html, /items in the full library/);
   assert.match(html, /Start a project/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|Your site is taking shape/i);
 });
@@ -27,7 +29,7 @@ test("work archive renders real searchable project content", async () => {
   const response = await request("/work");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /A library of/);
+  assert.match(html, /Video, motion/);
   assert.match(html, /Kinetic Launch Film/);
   assert.match(html, /Abstract Index/);
   assert.match(html, /Search title, format, industry/);

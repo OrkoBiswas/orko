@@ -11,7 +11,11 @@ export const dynamic = "force-dynamic";
 export default async function Home() {
   const [brand, liveProjects, liveServices] = await Promise.all([getSiteContent(), listPortfolioProjects(projects, { publishedOnly: true }), listPortfolioServices(services)]);
   const featured = liveProjects.filter((project) => project.featured).slice(0, 6);
-  const showcaseCategories = Array.from(new Set(featured.map((project) => project.category)));
+  const showcaseDisciplines = [
+    ["Video", featured.filter((project) => project.services.some((service) => ["Video Editing", "YouTube"].includes(service))).length],
+    ["Motion", featured.filter((project) => project.services.some((service) => service.includes("Motion"))).length],
+    ["Design", featured.filter((project) => project.services.some((service) => ["Graphic Design", "Brand Visuals", "Social Media"].includes(service))).length],
+  ] as const;
   const proofProject = liveProjects[8] ?? liveProjects.at(-1);
   return (
     <>
@@ -33,16 +37,19 @@ export default async function Home() {
 
       <section id="selected-work" className="selected-work section-shell section-space">
         <div className="section-heading" data-reveal><div><p className="eyebrow"><span>01</span>Selected work</p><h2>{brand.workHeading}</h2></div><div><p>{brand.workIntro}</p><Link className="text-link" href="/work">Enter the full archive <ArrowUpRight aria-hidden="true" /></Link></div></div>
-        <div className="showcase-system">
-          <div className="showcase-toolbar" data-reveal>
-            <div className="showcase-count"><span>Live showcase</span><strong>{String(featured.length).padStart(2, "0")}</strong></div>
-            <div className="showcase-categories" aria-label="Featured project categories">{showcaseCategories.map((category) => <span key={category}>{category}</span>)}</div>
-            <p>Selected work<br />Open any frame to explore</p>
+        <div className="showcase-library">
+          <div className="showcase-library-top" data-reveal>
+            <div className="showcase-library-title"><span>Featured library</span><strong>{String(featured.length).padStart(2, "0")} selected works</strong></div>
+            <dl aria-label="Featured work disciplines">{showcaseDisciplines.map(([discipline, count]) => <div key={discipline}><dt>{discipline}</dt><dd>{String(count).padStart(2, "0")}</dd></div>)}</dl>
+            <p>Each preview keeps the correct frame shape for video, vertical content, posters, squares, and banners.</p>
           </div>
           <ShowcaseGrid projects={featured} />
-          <div className="showcase-footer"><span>Curated selection / {new Date().getFullYear()}</span><span>Hover, tap, or use the keyboard to open a showcase item</span></div>
+          <div className="showcase-library-footer" data-reveal>
+            <div><strong>{String(liveProjects.length).padStart(2, "0")}</strong><span>items in the full library</span></div>
+            <p>Browse all video edits, motion work, posters, campaigns, social content, and creative bundles.</p>
+            <Link className="button button-accent" href="/work">Browse everything <ArrowRight aria-hidden="true" /></Link>
+          </div>
         </div>
-        <div className="archive-callout" data-reveal><p><span>{liveProjects.length}</span> curated showcase items</p><p>Filter by discipline, industry, and year. Explore single pieces, bundles, motion work, design systems, and deeper project stories.</p><Link className="button button-light" href="/work">Browse everything <ArrowRight aria-hidden="true" /></Link></div>
       </section>
 
       <section className="showreel-section section-shell section-space">

@@ -19,7 +19,7 @@ An editorial motion studio rather than a freelancer template: carbon-black canva
 
 Wordmark, utility nav, availability chip, kinetic headline, project tile, filter rail, editorial list, service index, proof strip, process timeline, modal reel, multi-step brief, field system, notice, footer, and owner tables.
 
-Project showcases use a framed editorial system: a category-and-count toolbar, three balanced feature rows with one-pixel joins, neutral-grey demo frames, integrated metadata, visible interaction cues, and resilient tablet/mobile stacking. Scroll motion uses restrained reveal, stagger, and scrubbed depth cues with a complete reduced-motion fallback.
+The homepage showcase uses a systematic library frame: a discipline summary, three precisely paired rows, equal-height card structures, one-pixel joins, neutral-grey media stages, and a single archive footer. Every preview is centered inside a controlled stage while preserving its landscape, vertical, square, poster, or banner ratio. Titles, summaries, services, year, and open actions occupy consistent metadata zones, with resilient tablet/mobile stacking. Scroll motion uses restrained reveal, stagger, and scrubbed depth cues with a complete reduced-motion fallback.
 
 Showcase titles use a compact standard scale so video, motion, graphic-design, bundle, and case-study entries share one hierarchy. Fine-pointer devices receive an acid-green custom cursor with contextual Open/Select states; touch devices and editable controls retain native behavior.
 
