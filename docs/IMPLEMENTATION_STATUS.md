@@ -18,6 +18,7 @@ Last updated: 2026-08-02
 - Format-aware homepage and archive media walls with five admin-selectable frame types, dense responsive packing, measured row spans, and elevated in-frame title positioning; the existing D1 schema remains unchanged
 - Moderated oversized headline scales, simplified professional copy across public pages, services, project samples, and legal pages, plus a new content-needs section covering promo videos, YouTube, short-form, motion, design, and creative bundles
 - Safe live-content refresh updates only untouched legacy default text in D1 while preserving any wording customized through the dashboard
+- Rebuilt the homepage showcase as a systematic paired-row library with equal-height card architecture, format-preserving preview stages, consistent metadata zones, discipline counts, and an integrated full-archive action
 
 ## Validation
 
