@@ -11,7 +11,7 @@ export type Project = {
   featured: boolean;
   accent: string;
   visual: "orbit" | "signal" | "editorial" | "spectrum" | "type" | "frame";
-  ratio: "wide" | "tall" | "square";
+  ratio: "wide" | "tall" | "square" | "vertical" | "banner";
   summary: string;
   challenge: string;
   concept: string;
@@ -55,7 +55,7 @@ export const projects: Project[] = [
     featured: true,
     accent: "#ff6338",
     visual: "orbit",
-    ratio: "tall",
+    ratio: "vertical",
     summary: "A nocturnal identity system built from orbiting type, elastic timing, and imperfect print texture.",
     challenge: "Create a channel identity that can open a film, label a chapter, or live as a ten-second social loop.",
     concept: "Late-night transmission: minimal geometry interrupted by warm, human texture.",
@@ -97,7 +97,7 @@ export const projects: Project[] = [
     featured: true,
     accent: "#f5d05f",
     visual: "frame",
-    ratio: "wide",
+    ratio: "banner",
     summary: "An editorial explainer cut that moves quickly, breathes at the right moments, and keeps the idea in focus.",
     challenge: "Condense a dense interview and supporting footage into a concise story without flattening the speaker’s voice.",
     concept: "Momentum through contrast: intimate statements, graphic proof, and purposeful silence.",
@@ -181,7 +181,7 @@ export const projects: Project[] = [
     featured: false,
     accent: "#bd8cff",
     visual: "orbit",
-    ratio: "tall",
+    ratio: "vertical",
     summary: "A bright, modular motion system made for launches, menus, stories, and weekly social rhythm.",
     challenge: "Create a social identity broad enough for daily use and bold enough to stop a fast scroll.",
     concept: "Menus from tomorrow—sharp type, soft circles, and quick elastic movement.",
@@ -223,7 +223,7 @@ export const projects: Project[] = [
     featured: false,
     accent: "#61d7e8",
     visual: "signal",
-    ratio: "tall",
+    ratio: "vertical",
     summary: "A short-form study proving that hook, change, and payoff can still feel authored in ten seconds.",
     challenge: "Make multiple ultra-short versions without reducing the idea to noisy, interchangeable content.",
     concept: "One visual verb per cut: fold, snap, reveal, repeat.",
@@ -408,4 +408,3 @@ export function filterProjects(
     );
   });
 }
-

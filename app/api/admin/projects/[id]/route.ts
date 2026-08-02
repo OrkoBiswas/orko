@@ -19,7 +19,7 @@ const projectSchema = z.object({
   featured: z.boolean(),
   accent: z.string().regex(/^#[0-9a-f]{6}$/i),
   visual: z.enum(["orbit", "signal", "editorial", "spectrum", "type", "frame"]),
-  ratio: z.enum(["wide", "tall", "square"]),
+  ratio: z.enum(["wide", "tall", "square", "vertical", "banner"]),
   summary: z.string().trim().min(1).max(1000),
   challenge: z.string().trim().min(1).max(2000),
   concept: z.string().trim().min(1).max(2000),

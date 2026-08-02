@@ -32,6 +32,41 @@ export function WorkLibrary({ projects }: { projects: Project[] }) {
     pendingFlip.current = null;
   }, [visible]);
 
+  useLayoutEffect(() => {
+    const grid = root.current;
+    if (!grid) return;
+    const cards = Array.from(grid.querySelectorAll<HTMLElement>("[data-project-card]"));
+    if (view !== "grid") {
+      cards.forEach((card) => { card.style.gridRowEnd = ""; });
+      return;
+    }
+
+    let frame = 0;
+    const layout = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        const styles = window.getComputedStyle(grid);
+        const row = Number.parseFloat(styles.gridAutoRows) || 8;
+        const gap = Number.parseFloat(styles.rowGap) || 1;
+        cards.forEach((card) => {
+          const content = card.querySelector<HTMLElement>("a");
+          if (!content) return;
+          const span = Math.max(1, Math.ceil((content.scrollHeight + gap) / (row + gap)));
+          const next = `span ${span}`;
+          if (card.style.gridRowEnd !== next) card.style.gridRowEnd = next;
+        });
+      });
+    };
+
+    const observer = new ResizeObserver(layout);
+    observer.observe(grid);
+    layout();
+    return () => {
+      observer.disconnect();
+      window.cancelAnimationFrame(frame);
+    };
+  }, [visible, view]);
+
   function changeFilter(update: () => void) {
     if (root.current) pendingFlip.current = Flip.getState(root.current.querySelectorAll("[data-project-card]"));
     update();
