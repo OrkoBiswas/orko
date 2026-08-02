@@ -7,6 +7,7 @@ export function ProjectArtwork({ project, compact = false }: { project: Project;
     <div className={`project-art visual-${project.visual} ${compact ? "is-compact" : ""}`} style={style} aria-hidden="true">
       <span className="art-index">{project.index}</span>
       <span className="art-kicker">{project.category}</span>
+      <span className="art-demo-label">Demo preview</span>
       <span className="art-title">{project.title}</span>
       <span className="art-line art-line-one" />
       <span className="art-line art-line-two" />
@@ -16,4 +17,3 @@ export function ProjectArtwork({ project, compact = false }: { project: Project;
     </div>
   );
 }
-
