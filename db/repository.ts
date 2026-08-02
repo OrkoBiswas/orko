@@ -1,5 +1,5 @@
 import type { InquiryInput } from "@/lib/inquiry";
-import type { Project } from "@/lib/portfolio";
+import type { Project, Service } from "@/lib/portfolio";
 import { defaultSiteContent, parseSiteContent, type SiteContent } from "@/lib/site-content";
 
 type DatabaseEnv = { DB?: D1Database };
@@ -77,6 +77,11 @@ export function ensureSchema() {
       )`),
       db.prepare(`CREATE TABLE IF NOT EXISTS project_content (
         project_id TEXT PRIMARY KEY,
+        content_json TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )`),
+      db.prepare(`CREATE TABLE IF NOT EXISTS service_content (
+        service_slug TEXT PRIMARY KEY,
         content_json TEXT NOT NULL,
         updated_at TEXT NOT NULL
       )`),
@@ -275,6 +280,36 @@ export async function updateManagedProject(
   await db.batch([
     db.prepare("INSERT INTO project_content (project_id, content_json, updated_at) VALUES (?, ?, ?) ON CONFLICT(project_id) DO UPDATE SET content_json = excluded.content_json, updated_at = excluded.updated_at").bind(id, JSON.stringify(content), now),
     db.prepare("INSERT INTO audit_logs (id, actor_id, actor_email, action, entity_type, entity_id, created_at) VALUES (?, ?, ?, 'project.content.updated', 'project', ?, ?)").bind(crypto.randomUUID(), actor.userId, actor.email, id, now),
+  ]);
+  return true;
+}
+
+export async function listPortfolioServices(defaults: Service[]) {
+  try {
+    await ensureSchema();
+    const rows = await (await database()).prepare("SELECT service_slug, content_json FROM service_content").all<{ service_slug: string; content_json: string }>();
+    const overrides = new Map((rows.results ?? []).map((row) => [row.service_slug, row.content_json]));
+    return defaults.map((service) => {
+      const raw = overrides.get(service.slug);
+      if (!raw) return service;
+      try { return { ...service, ...(JSON.parse(raw) as Partial<Service>) }; } catch { return service; }
+    }).sort((left, right) => left.number.localeCompare(right.number));
+  } catch {
+    return defaults;
+  }
+}
+
+export async function getManagedService(defaults: Service[], slug: string) {
+  return (await listPortfolioServices(defaults)).find((service) => service.slug === slug) ?? null;
+}
+
+export async function updateManagedService(originalSlug: string, service: Service, actor: { userId: string; email: string }) {
+  await ensureSchema();
+  const db = await database();
+  const now = new Date().toISOString();
+  await db.batch([
+    db.prepare("INSERT INTO service_content (service_slug, content_json, updated_at) VALUES (?, ?, ?) ON CONFLICT(service_slug) DO UPDATE SET content_json = excluded.content_json, updated_at = excluded.updated_at").bind(originalSlug, JSON.stringify(service), now),
+    db.prepare("INSERT INTO audit_logs (id, actor_id, actor_email, action, entity_type, entity_id, created_at) VALUES (?, ?, ?, 'service.content.updated', 'service', ?, ?)").bind(crypto.randomUUID(), actor.userId, actor.email, originalSlug, now),
   ]);
   return true;
 }

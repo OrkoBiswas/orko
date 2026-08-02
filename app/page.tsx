@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowDown, ArrowRight, ArrowUpRight, Asterisk, Sparkles } from "lucide-react";
 import { projects, services } from "@/lib/portfolio";
-import { getSiteContent, listPortfolioProjects } from "@/db/repository";
+import { getSiteContent, listPortfolioProjects, listPortfolioServices } from "@/db/repository";
 import { ProjectCard } from "@/components/ProjectCard";
 import { ProjectArtwork } from "@/components/ProjectArtwork";
 import { ShowreelDialog } from "@/components/ShowreelDialog";
@@ -9,7 +9,7 @@ import { ShowreelDialog } from "@/components/ShowreelDialog";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const [brand, liveProjects] = await Promise.all([getSiteContent(), listPortfolioProjects(projects, { publishedOnly: true })]);
+  const [brand, liveProjects, liveServices] = await Promise.all([getSiteContent(), listPortfolioProjects(projects, { publishedOnly: true }), listPortfolioServices(services)]);
   const featured = liveProjects.filter((project) => project.featured).slice(0, 6);
   const proofProject = liveProjects[8] ?? liveProjects.at(-1);
   return (
@@ -43,7 +43,7 @@ export default async function Home() {
 
       <section className="services-section section-shell section-space">
         <div className="section-heading" data-reveal><div><p className="eyebrow"><span>03</span>Capabilities</p><h2>{brand.capabilitiesHeading}</h2></div><p>{brand.capabilitiesIntro}</p></div>
-        <div className="service-index">{services.map((service) => <Link key={service.slug} href={`/services/${service.slug}`}><span>{service.number}</span><h3>{service.title}</h3><p>{service.short}</p><ArrowUpRight aria-hidden="true" /></Link>)}</div>
+        <div className="service-index">{liveServices.map((service) => <Link key={service.slug} href={`/services/${service.slug}`}><span>{service.number}</span><h3>{service.title}</h3><p>{service.short}</p><ArrowUpRight aria-hidden="true" /></Link>)}</div>
         <Link className="button button-dark" href="/services">View all services <ArrowRight aria-hidden="true" /></Link>
       </section>
 

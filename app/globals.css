@@ -375,7 +375,7 @@ html[data-data="low"] .art-grain, html[data-data="low"] .home-hero::before { dis
   .admin-workspace-head { min-height: 102px; align-items: flex-start; padding: 22px 18px; }
   .admin-head-actions { align-items: flex-end; flex-direction: column-reverse; }
   .admin-secure { display: none; }
-  .admin-mobile-nav { position: sticky; z-index: 30; top: 0; display: grid; grid-template-columns: repeat(5, 1fr); background: #111a18; }
+  .admin-mobile-nav { position: sticky; z-index: 30; top: 0; display: grid; grid-template-columns: repeat(6, 1fr); background: #111a18; }
   .admin-mobile-nav a { min-height: 60px; display: grid; place-items: center; align-content: center; gap: 3px; color: #aeb9b4; font-size: 8px; }
   .admin-mobile-nav svg { width: 17px; }
   .admin-workspace-body { padding: 22px 14px 55px; }

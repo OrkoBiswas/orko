@@ -85,3 +85,9 @@ export const projectContent = sqliteTable("project_content", {
   contentJson: text("content_json").notNull(),
   updatedAt: text("updated_at").notNull(),
 });
+
+export const serviceContent = sqliteTable("service_content", {
+  serviceSlug: text("service_slug").primaryKey(),
+  contentJson: text("content_json").notNull(),
+  updatedAt: text("updated_at").notNull(),
+});

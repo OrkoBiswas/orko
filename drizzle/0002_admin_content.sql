@@ -10,4 +10,10 @@ CREATE TABLE `project_content` (
 	`updated_at` text NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE `service_content` (
+	`service_slug` text PRIMARY KEY NOT NULL,
+	`content_json` text NOT NULL,
+	`updated_at` text NOT NULL
+);
+--> statement-breakpoint
 PRAGMA optimize;
