@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { brand } from "@/lib/brand";
+import type { SiteContent } from "@/lib/site-content";
 
 const navigation = [
   ["Work", "/work"],
@@ -13,7 +13,7 @@ const navigation = [
   ["Contact", "/contact"],
 ] as const;
 
-export function SiteHeader() {
+export function SiteHeader({ content: brand }: { content: SiteContent }) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -50,4 +50,3 @@ export function SiteHeader() {
     </header>
   );
 }
-

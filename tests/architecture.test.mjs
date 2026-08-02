@@ -14,7 +14,9 @@ test("backend keeps persistence, validation, auth, and rate limiting server-side
   assert.match(route, /consumeRateLimit/);
   assert.match(repository, /prepare\(/);
   assert.match(repository, /audit_logs/);
-  assert.match(admin, /requireChatGPTUser/);
+  assert.match(admin, /HMAC/);
+  assert.match(admin, /httpOnly|ADMIN_COOKIE/);
+  assert.doesNotMatch(admin, /requireChatGPTUser|getChatGPTUser/);
   assert.doesNotMatch(repository, /localStorage|sessionStorage/);
 });
 

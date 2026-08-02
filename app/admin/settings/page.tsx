@@ -1,5 +1,17 @@
-import { requireOwner } from "@/lib/admin";
+import { BellRing, Check, Database, KeyRound, ShieldCheck } from "lucide-react";
+import { requireOwner, adminAuthConfigured } from "@/lib/admin";
 import { AdminShell } from "@/components/AdminShell";
-import { brand } from "@/lib/brand";
+
 export const dynamic = "force-dynamic";
-export default async function AdminSettingsPage() { const user = await requireOwner("/admin/settings"); const notificationsConfigured = Boolean(process.env.RESEND_API_KEY && process.env.INQUIRY_NOTIFICATION_TO && process.env.INQUIRY_FROM_EMAIL); return <AdminShell user={user} eyebrow="Configuration" title="Settings"><section className="admin-section"><table className="admin-table"><tbody><tr><th>Public name</th><td>{brand.name}</td><td>Managed in central brand configuration</td></tr><tr><th>Availability</th><td>{brand.availability}</td><td>Update before accepting live production traffic</td></tr><tr><th>Location</th><td>{brand.location}</td><td>Public</td></tr><tr><th>Owner allowlist</th><td>{process.env.OWNER_EMAILS ? "Configured" : "Open to authenticated site owner"}</td><td>Set OWNER_EMAILS before broader team access</td></tr><tr><th>Notifications</th><td>{notificationsConfigured ? "Configured" : "Storage only"}</td><td>Set optional provider values without changing inquiry persistence</td></tr></tbody></table></section></AdminShell>; }
+
+export default async function AdminSettingsPage() {
+  const user = await requireOwner("/admin/settings");
+  const notificationsConfigured = Boolean(process.env.RESEND_API_KEY && process.env.INQUIRY_NOTIFICATION_TO && process.env.INQUIRY_FROM_EMAIL);
+  const settings = [
+    { icon: KeyRound, title: "Administrator sign-in", value: adminAuthConfigured() ? "Configured" : "Needs configuration", note: "Private username/password authentication with a signed eight-hour session." },
+    { icon: ShieldCheck, title: "Dashboard protection", value: "Active", note: "HTTP-only secure cookies, same-origin mutations, and rate-limited login attempts." },
+    { icon: Database, title: "Portfolio database", value: "Connected", note: "Public content, projects, inquiries, and audit history are stored durably." },
+    { icon: BellRing, title: "Email notifications", value: notificationsConfigured ? "Configured" : "Storage only", note: notificationsConfigured ? "New inquiries can trigger notification delivery." : "Inquiries are saved safely even without an email provider." },
+  ];
+  return <AdminShell user={user} eyebrow="Workspace configuration" title="Settings"><section className="admin-settings-grid">{settings.map(({ icon: Icon, title, value, note }) => <article className="admin-card" key={title}><div className="admin-settings-icon"><Icon aria-hidden="true" /></div><div><p className="admin-kicker">{title}</p><h2><Check aria-hidden="true" /> {value}</h2><p>{note}</p></div></article>)}</section><section className="admin-card admin-security-note"><div><ShieldCheck aria-hidden="true" /></div><div><p className="admin-kicker">Security policy</p><h2>Credentials stay outside the website source.</h2><p>The administrator password and session-signing key are stored as protected hosting secrets. They are never rendered in the dashboard, committed to the codebase, or returned by an API.</p></div></section></AdminShell>;
+}

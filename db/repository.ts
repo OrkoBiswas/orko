@@ -1,5 +1,6 @@
 import type { InquiryInput } from "@/lib/inquiry";
 import type { Project } from "@/lib/portfolio";
+import { defaultSiteContent, parseSiteContent, type SiteContent } from "@/lib/site-content";
 
 type DatabaseEnv = { DB?: D1Database };
 
@@ -68,6 +69,16 @@ export function ensureSchema() {
         key TEXT PRIMARY KEY,
         count INTEGER NOT NULL DEFAULT 0,
         window_started_at INTEGER NOT NULL
+      )`),
+      db.prepare(`CREATE TABLE IF NOT EXISTS site_content (
+        id TEXT PRIMARY KEY,
+        content_json TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )`),
+      db.prepare(`CREATE TABLE IF NOT EXISTS project_content (
+        project_id TEXT PRIMARY KEY,
+        content_json TEXT NOT NULL,
+        updated_at TEXT NOT NULL
       )`),
     ]);
     await db.prepare("PRAGMA optimize").run();
@@ -187,6 +198,85 @@ export async function listManagedProjects() {
   await ensureSchema();
   const result = await (await database()).prepare("SELECT id, slug, title, status, featured, display_order, updated_at FROM projects ORDER BY display_order ASC").all<ManagedProject>();
   return result.results ?? [];
+}
+
+export async function getSiteContent(): Promise<SiteContent> {
+  try {
+    await ensureSchema();
+    const record = await (await database()).prepare("SELECT content_json FROM site_content WHERE id = 'primary'").first<{ content_json: string }>();
+    if (!record) return defaultSiteContent;
+    return parseSiteContent(JSON.parse(record.content_json));
+  } catch {
+    return defaultSiteContent;
+  }
+}
+
+export async function updateSiteContent(content: SiteContent, actor: { userId: string; email: string }) {
+  await ensureSchema();
+  const db = await database();
+  const now = new Date().toISOString();
+  await db.batch([
+    db.prepare("INSERT INTO site_content (id, content_json, updated_at) VALUES ('primary', ?, ?) ON CONFLICT(id) DO UPDATE SET content_json = excluded.content_json, updated_at = excluded.updated_at").bind(JSON.stringify(content), now),
+    db.prepare("INSERT INTO audit_logs (id, actor_id, actor_email, action, entity_type, entity_id, created_at) VALUES (?, ?, ?, 'site.content.updated', 'site', 'primary', ?)").bind(crypto.randomUUID(), actor.userId, actor.email, now),
+  ]);
+  return content;
+}
+
+type ProjectStateRecord = ManagedProject & { content_json: string | null };
+
+function mergeProject(base: Project, record?: ProjectStateRecord): Project {
+  let overrides: Partial<Project> = {};
+  if (record?.content_json) {
+    try { overrides = JSON.parse(record.content_json) as Partial<Project>; } catch { overrides = {}; }
+  }
+  return {
+    ...base,
+    ...overrides,
+    slug: record?.slug ?? base.slug,
+    title: record?.title ?? base.title,
+    featured: record ? Boolean(record.featured) : base.featured,
+  };
+}
+
+export async function listPortfolioProjects(defaults: Project[], options: { publishedOnly?: boolean } = {}) {
+  try {
+    await seedProjects(defaults);
+    const rows = await (await database()).prepare(`SELECT p.id, p.slug, p.title, p.status, p.featured, p.display_order, p.updated_at, c.content_json
+      FROM projects p LEFT JOIN project_content c ON c.project_id = p.id
+      ${options.publishedOnly ? "WHERE p.status = 'published'" : ""}
+      ORDER BY p.display_order ASC`).all<ProjectStateRecord>();
+    const byId = new Map(defaults.map((project) => [project.id, project]));
+    return (rows.results ?? []).flatMap((row) => {
+      const base = byId.get(row.id);
+      return base ? [{ ...mergeProject(base, row), status: row.status, displayOrder: row.display_order }] : [];
+    });
+  } catch {
+    return defaults.map((project, displayOrder) => ({ ...project, status: "published", displayOrder }));
+  }
+}
+
+export async function getManagedProject(defaults: Project[], id: string) {
+  const projects = await listPortfolioProjects(defaults);
+  return projects.find((project) => project.id === id) ?? null;
+}
+
+export async function updateManagedProject(
+  id: string,
+  input: Partial<Project> & { status: string; displayOrder: number },
+  actor: { userId: string; email: string },
+) {
+  await ensureSchema();
+  const db = await database();
+  const now = new Date().toISOString();
+  const { status, displayOrder, ...content } = input;
+  const result = await db.prepare("UPDATE projects SET slug = ?, title = ?, status = ?, featured = ?, display_order = ?, updated_at = ? WHERE id = ?")
+    .bind(content.slug, content.title, status, content.featured ? 1 : 0, displayOrder, now, id).run();
+  if (!result.meta.changes) return false;
+  await db.batch([
+    db.prepare("INSERT INTO project_content (project_id, content_json, updated_at) VALUES (?, ?, ?) ON CONFLICT(project_id) DO UPDATE SET content_json = excluded.content_json, updated_at = excluded.updated_at").bind(id, JSON.stringify(content), now),
+    db.prepare("INSERT INTO audit_logs (id, actor_id, actor_email, action, entity_type, entity_id, created_at) VALUES (?, ?, ?, 'project.content.updated', 'project', ?, ?)").bind(crypto.randomUUID(), actor.userId, actor.email, id, now),
+  ]);
+  return true;
 }
 
 export async function updateProjectStatus(id: string, status: string, actor: { userId: string; email: string }) {

@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { ArrowUp, ArrowUpRight } from "lucide-react";
-import { brand } from "@/lib/brand";
+import type { SiteContent } from "@/lib/site-content";
 
-export function SiteFooter() {
+export function SiteFooter({ content: brand }: { content: SiteContent }) {
   return (
     <footer className="site-footer">
       <div className="footer-lead">
@@ -26,4 +26,3 @@ export function SiteFooter() {
     </footer>
   );
 }
-

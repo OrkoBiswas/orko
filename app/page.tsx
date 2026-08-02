@@ -1,20 +1,24 @@
 import Link from "next/link";
 import { ArrowDown, ArrowRight, ArrowUpRight, Asterisk, Sparkles } from "lucide-react";
-import { brand } from "@/lib/brand";
 import { projects, services } from "@/lib/portfolio";
+import { getSiteContent, listPortfolioProjects } from "@/db/repository";
 import { ProjectCard } from "@/components/ProjectCard";
 import { ProjectArtwork } from "@/components/ProjectArtwork";
 import { ShowreelDialog } from "@/components/ShowreelDialog";
 
-export default function Home() {
-  const featured = projects.filter((project) => project.featured).slice(0, 6);
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const [brand, liveProjects] = await Promise.all([getSiteContent(), listPortfolioProjects(projects, { publishedOnly: true })]);
+  const featured = liveProjects.filter((project) => project.featured).slice(0, 6);
+  const proofProject = liveProjects[8] ?? liveProjects.at(-1);
   return (
     <>
       <section className="home-hero section-shell">
         <div className="hero-meta"><p><span className="status-dot" />{brand.availability}</p><p>{brand.location}<br />{brand.timezone}</p></div>
         <div className="hero-title" aria-label={brand.headline}>
-          <span className="hero-line"><span data-hero-line>Visual stories,</span></span>
-          <span className="hero-line hero-line-accent"><span data-hero-line>built to <em>move.</em></span></span>
+          <span className="hero-line"><span data-hero-line>{brand.heroLineOne}</span></span>
+          <span className="hero-line hero-line-accent"><span data-hero-line>{brand.heroLineTwo}</span></span>
         </div>
         <div className="hero-bottom">
           <p>{brand.intro}</p>
@@ -27,18 +31,18 @@ export default function Home() {
       <div className="discipline-rail" aria-label="Disciplines"><div><span>VIDEO EDITING</span><Asterisk /><span>2D MOTION</span><Asterisk /><span>GRAPHIC DESIGN</span><Asterisk /><span>VISUAL SYSTEMS</span><Asterisk /><span>VIDEO EDITING</span></div></div>
 
       <section id="selected-work" className="selected-work section-shell section-space">
-        <div className="section-heading" data-reveal><div><p className="eyebrow"><span>01</span>Selected work</p><h2>Work worth<br /><em>stalking.</em></h2></div><div><p>A growing library of edits, motion systems, campaigns, and visual experiments—built to be explored, not skimmed.</p><Link className="text-link" href="/work">Enter the full archive <ArrowUpRight aria-hidden="true" /></Link></div></div>
+        <div className="section-heading" data-reveal><div><p className="eyebrow"><span>01</span>Selected work</p><h2>{brand.workHeading}</h2></div><div><p>{brand.workIntro}</p><Link className="text-link" href="/work">Enter the full archive <ArrowUpRight aria-hidden="true" /></Link></div></div>
         <div className="featured-grid">{featured.map((project, index) => <ProjectCard project={project} key={project.id} priority={index < 2} />)}</div>
-        <div className="archive-callout" data-reveal><p><span>{projects.length}</span> curated case studies</p><p>Filter by discipline, industry, and year. Every project opens into the decisions behind the final frame.</p><Link className="button button-light" href="/work">Browse everything <ArrowRight aria-hidden="true" /></Link></div>
+        <div className="archive-callout" data-reveal><p><span>{liveProjects.length}</span> curated case studies</p><p>Filter by discipline, industry, and year. Every project opens into the decisions behind the final frame.</p><Link className="button button-light" href="/work">Browse everything <ArrowRight aria-hidden="true" /></Link></div>
       </section>
 
       <section className="showreel-section section-shell section-space">
-        <div className="section-heading light" data-reveal><div><p className="eyebrow"><span>02</span>Showreel</p><h2>Seventy-two seconds<br />of <em>controlled energy.</em></h2></div><p>The final reel will use licensed work only. Until then, the project library carries every frame honestly.</p></div>
+        <div className="section-heading light" data-reveal><div><p className="eyebrow"><span>02</span>Showreel</p><h2>{brand.showreelHeading}</h2></div><p>{brand.showreelIntro}</p></div>
         <div className="showreel-poster" data-reveal><div className="poster-art" aria-hidden="true"><span>SHOW</span><span>REEL</span><i>00:00:00</i><b /></div><div className="showreel-controls"><ShowreelDialog /><div><span>01:12</span><span>Motion · Edit · Design</span></div></div></div>
       </section>
 
       <section className="services-section section-shell section-space">
-        <div className="section-heading" data-reveal><div><p className="eyebrow"><span>03</span>Capabilities</p><h2>One visual partner.<br /><em>More momentum.</em></h2></div><p>From the first story beat to the final export matrix, the work stays connected by one clear idea.</p></div>
+        <div className="section-heading" data-reveal><div><p className="eyebrow"><span>03</span>Capabilities</p><h2>{brand.capabilitiesHeading}</h2></div><p>{brand.capabilitiesIntro}</p></div>
         <div className="service-index">{services.map((service) => <Link key={service.slug} href={`/services/${service.slug}`}><span>{service.number}</span><h3>{service.title}</h3><p>{service.short}</p><ArrowUpRight aria-hidden="true" /></Link>)}</div>
         <Link className="button button-dark" href="/services">View all services <ArrowRight aria-hidden="true" /></Link>
       </section>
@@ -57,7 +61,7 @@ export default function Home() {
       </section>
 
       <section className="proof-section section-shell section-space">
-        <div className="proof-art"><ProjectArtwork project={projects[8]} compact /></div>
+        {proofProject && <div className="proof-art"><ProjectArtwork project={proofProject} compact /></div>}
         <div data-reveal><p className="eyebrow">Proof without theatre</p><h2>No invented metrics.<br />No borrowed praise.</h2><p>Verified results and testimonials will appear only when supplied and approved. Until then, the portfolio earns trust through process clarity, craft, and transparent project framing.</p><Link className="text-link" href="/about">Meet Orko <ArrowUpRight aria-hidden="true" /></Link></div>
       </section>
     </>

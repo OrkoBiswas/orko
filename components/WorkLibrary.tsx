@@ -4,15 +4,15 @@ import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Grid2X2, List, Search, SlidersHorizontal, X } from "lucide-react";
 import gsap from "gsap";
 import { Flip } from "gsap/Flip";
-import { categories, filterProjects, projects } from "@/lib/portfolio";
+import { filterProjects, type Project } from "@/lib/portfolio";
 import { ProjectCard } from "@/components/ProjectCard";
 
 gsap.registerPlugin(Flip);
 
-const industries = ["All", ...Array.from(new Set(projects.map((project) => project.industry)))];
-const years = ["All", ...Array.from(new Set(projects.map((project) => String(project.year)))).sort().reverse()];
-
-export function WorkLibrary() {
+export function WorkLibrary({ projects }: { projects: Project[] }) {
+  const categories = useMemo(() => ["All", ...Array.from(new Set(projects.map((project) => project.category)))], [projects]);
+  const industries = useMemo(() => ["All", ...Array.from(new Set(projects.map((project) => project.industry)))], [projects]);
+  const years = useMemo(() => ["All", ...Array.from(new Set(projects.map((project) => String(project.year)))).sort().reverse()], [projects]);
   const root = useRef<HTMLDivElement>(null);
   const pendingFlip = useRef<ReturnType<typeof Flip.getState> | null>(null);
   const [query, setQuery] = useState("");
@@ -22,7 +22,7 @@ export function WorkLibrary() {
   const [view, setView] = useState<"grid" | "list">("grid");
   const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const visible = useMemo(() => filterProjects(projects, { query, category, industry, year }), [query, category, industry, year]);
+  const visible = useMemo(() => filterProjects(projects, { query, category, industry, year }), [projects, query, category, industry, year]);
   const isFiltered = query || category !== "All" || industry !== "All" || year !== "All";
 
   useLayoutEffect(() => {

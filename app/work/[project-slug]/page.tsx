@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
-import { getProject, projects } from "@/lib/portfolio";
+import { projects } from "@/lib/portfolio";
+import { listPortfolioProjects } from "@/db/repository";
 import { ProjectArtwork } from "@/components/ProjectArtwork";
 import { CtaBand } from "@/components/CtaBand";
 
@@ -10,17 +11,18 @@ export function generateStaticParams() { return projects.map((project) => ({ "pr
 
 export async function generateMetadata({ params }: { params: Promise<{ "project-slug": string }> }): Promise<Metadata> {
   const { "project-slug": slug } = await params;
-  const project = getProject(slug);
+  const project = (await listPortfolioProjects(projects, { publishedOnly: true })).find((item) => item.slug === slug);
   if (!project) return { title: "Project not found" };
   return { title: project.title, description: project.summary, openGraph: { title: `${project.title} — Orko Biswas`, description: project.summary } };
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ "project-slug": string }> }) {
   const { "project-slug": slug } = await params;
-  const project = getProject(slug);
+  const liveProjects = await listPortfolioProjects(projects, { publishedOnly: true });
+  const project = liveProjects.find((item) => item.slug === slug);
   if (!project) notFound();
-  const index = projects.findIndex((item) => item.id === project.id);
-  const next = projects[(index + 1) % projects.length];
+  const index = liveProjects.findIndex((item) => item.id === project.id);
+  const next = liveProjects[(index + 1) % liveProjects.length];
   return (
     <article>
       <header className="case-hero">
@@ -39,4 +41,3 @@ export default async function ProjectPage({ params }: { params: Promise<{ "proje
     </article>
   );
 }
-

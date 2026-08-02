@@ -74,3 +74,14 @@ export const rateLimits = sqliteTable(
   },
 );
 
+export const siteContent = sqliteTable("site_content", {
+  id: text("id").primaryKey(),
+  contentJson: text("content_json").notNull(),
+  updatedAt: text("updated_at").notNull(),
+});
+
+export const projectContent = sqliteTable("project_content", {
+  projectId: text("project_id").primaryKey(),
+  contentJson: text("content_json").notNull(),
+  updatedAt: text("updated_at").notNull(),
+});

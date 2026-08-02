@@ -4,7 +4,9 @@ The project targets OpenAI Sites on Cloudflare Workers. `.openai/hosting.json` d
 
 ## Optional hosted values
 
-- `OWNER_EMAILS` — comma-separated identities allowed into owner routes; if empty, any authenticated site owner can enter during initial setup
+- `ADMIN_USERNAME` — private administrator username
+- `ADMIN_PASSWORD` — private administrator password stored as a secret
+- `ADMIN_SESSION_SECRET` — random signing key of at least 32 characters stored as a secret
 - `RESEND_API_KEY`, `INQUIRY_NOTIFICATION_TO`, and a provider-verified `INQUIRY_FROM_EMAIL` — optional email adapter values
 - `NEXT_PUBLIC_SITE_URL` — optional canonical override
 
