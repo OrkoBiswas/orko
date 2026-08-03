@@ -1,15 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export function CustomCursor() {
   const cursor = useRef<HTMLDivElement>(null);
   const ring = useRef<HTMLSpanElement>(null);
   const dot = useRef<HTMLSpanElement>(null);
-  const [label, setLabel] = useState("");
 
   useEffect(() => {
-    if (!window.matchMedia("(pointer: fine)").matches) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches || document.documentElement.dataset.motion === "reduced";
+    if (!window.matchMedia("(pointer: fine)").matches || reduce) return;
 
     const root = cursor.current;
     const ringElement = ring.current;
@@ -42,12 +42,21 @@ export function CustomCursor() {
 
     const onOver = (event: PointerEvent) => {
       const target = event.target instanceof Element ? event.target : null;
-      const nativeControl = target?.closest("input, textarea, select, [contenteditable='true']");
-      const interactive = target?.closest<HTMLElement>("[data-cursor-label], a, button, summary");
+      const nativeControl = target?.closest("input, textarea, select, video[controls], iframe, [contenteditable='true']");
+      const interactive = target?.closest<HTMLElement>("[data-cursor], a, button, summary, [role='button']");
+      const requestedMode = interactive?.dataset.cursor;
+      const mode = requestedMode === "project" || requestedMode === "media"
+        ? "media"
+        : interactive?.matches("button, summary, [role='button']")
+          ? "button"
+          : interactive
+            ? "link"
+            : "idle";
       root.classList.toggle("is-native", Boolean(nativeControl));
-      root.classList.toggle("is-active", Boolean(interactive) && !nativeControl);
-      const fallbackLabel = interactive?.matches("button, summary") ? "Select" : interactive ? "Open" : "";
-      setLabel(interactive?.dataset.cursorLabel ?? fallbackLabel);
+      root.classList.toggle("is-interactive", mode !== "idle" && !nativeControl);
+      root.classList.toggle("is-link", mode === "link" && !nativeControl);
+      root.classList.toggle("is-button", mode === "button" && !nativeControl);
+      root.classList.toggle("is-media", mode === "media" && !nativeControl);
     };
 
     const hide = () => root.classList.remove("is-visible");
@@ -60,6 +69,7 @@ export function CustomCursor() {
     document.addEventListener("pointerdown", press, { passive: true });
     document.addEventListener("pointerup", release, { passive: true });
     document.documentElement.addEventListener("mouseleave", hide);
+    window.addEventListener("blur", hide);
     animationFrame = window.requestAnimationFrame(animate);
 
     return () => {
@@ -69,13 +79,14 @@ export function CustomCursor() {
       document.removeEventListener("pointerdown", press);
       document.removeEventListener("pointerup", release);
       document.documentElement.removeEventListener("mouseleave", hide);
+      window.removeEventListener("blur", hide);
       window.cancelAnimationFrame(animationFrame);
     };
   }, []);
 
   return (
     <div className="custom-cursor" ref={cursor} aria-hidden="true">
-      <span className="custom-cursor-ring" ref={ring}>{label && <b>{label}</b>}</span>
+      <span className="custom-cursor-ring" ref={ring}><b /></span>
       <span className="custom-cursor-dot" ref={dot} />
     </div>
   );
