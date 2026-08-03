@@ -11,10 +11,10 @@ Last updated: 2026-08-03
 - Server-validated inquiry flow with durable D1 storage, unique references, consent timestamp, honeypot, payload limit, rate limiting, safe errors, and optional email notifications.
 - Standalone administrator username/password authentication, signed HTTP-only sessions, login throttling, same-origin mutations, inquiry workflow, and audit logging.
 - Owner controls for public identity, homepage copy, biography, contact/social details, SEO, services, experience history, approved testimonials, and all project narratives and presentation settings.
-- Complete project creation and audited soft-deletion flows, duplicate-slug protection, a dedicated new-project editor, and project image/video fields without changing the D1 schema.
+- Complete project creation and audited soft-deletion flows, duplicate-slug protection, a dedicated new-project editor, and owner-only multi-image/video galleries with ordering, cover selection, descriptions, and direct signed uploads.
 - Dedicated testimonial workspace with add, edit, remove, limit, approval guidance, public heading control, and safe full-content validation.
 - Owner-only Cloudinary media workspace for direct signed multi-file uploads, tagged image/video/raw listing, secure URL copying, previews, and confirmed cache-invalidating deletion. The API secret remains server-only.
-- Uploaded project images and videos render inside the public responsive showcase frames, including reduced-motion-aware video playback and accessible descriptions.
+- Homepage Video, Motion, and Design category showreels deep-link into a pre-filtered public archive, while uploaded project galleries render every additional image and video with controls, responsive framing, reduced-motion-aware playback, and accessible descriptions.
 - Expanded dashboard overview, settings status, quick actions, responsive eight-item navigation, and 320px-safe media management.
 - Public testimonials use an auto-sliding editorial carousel with progress, direct selection, previous/next, play/pause, touch swiping, focus/hover pausing, visibility awareness, and reduced-motion behavior.
 - Redesigned testimonials as calmer editorial cards with smaller, lighter quote typography and optional client image/video layouts. The dedicated owner form supports direct signed upload, secure URL entry, accessible media descriptions, previews, replacement, and attachment removal.
@@ -25,7 +25,7 @@ Last updated: 2026-08-03
 
 - Lint: passed.
 - Typecheck: passed.
-- Automated tests: 12 passed.
+- Automated tests: 13 passed.
 - Production build: passed.
 - Prior desktop and mobile browser reviews passed for public navigation, archive filters, case studies, forms, animations, and inquiry persistence.
 

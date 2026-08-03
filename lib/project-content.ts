@@ -2,6 +2,12 @@ import { z } from "zod";
 import type { Project } from "@/lib/portfolio";
 
 const optionalMediaUrl = z.string().trim().max(1000).refine((value) => !value || /^https:\/\//i.test(value), "Use a secure https URL.");
+const galleryMediaSchema = z.object({
+  id: z.string().trim().min(1).max(120),
+  type: z.enum(["image", "video"]),
+  url: z.string().trim().min(1).max(1000).refine((value) => /^https:\/\//i.test(value), "Use a secure https URL."),
+  alt: z.string().trim().max(300),
+}).strict();
 
 export const projectContentSchema = z.object({
   id: z.string().trim().min(1).max(100),
@@ -26,6 +32,7 @@ export const projectContentSchema = z.object({
   mediaUrl: optionalMediaUrl.default(""),
   mediaType: z.enum(["generated", "image", "video"]).default("generated"),
   mediaAlt: z.string().trim().max(300).default(""),
+  gallery: z.array(galleryMediaSchema).max(24).default([]),
 });
 
 export const managedProjectSchema = projectContentSchema.extend({
@@ -65,6 +72,7 @@ export function createProjectTemplate(displayOrder: number): ManagedProjectInput
     mediaUrl: "",
     mediaType: "generated",
     mediaAlt: "",
+    gallery: [],
     status: "draft",
     displayOrder,
   };

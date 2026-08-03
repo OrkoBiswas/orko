@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { projects } from "@/lib/portfolio";
 import { listPortfolioProjects } from "@/db/repository";
 import { ProjectArtwork } from "@/components/ProjectArtwork";
+import { ProjectMedia } from "@/components/ProjectMedia";
 import { CtaBand } from "@/components/CtaBand";
 
 export function generateStaticParams() { return projects.map((project) => ({ "project-slug": project.slug })); }
@@ -23,6 +24,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ "proje
   if (!project) notFound();
   const index = liveProjects.findIndex((item) => item.id === project.id);
   const next = liveProjects[(index + 1) % liveProjects.length];
+  const gallery = (project.gallery ?? []).filter((item) => item.url !== project.mediaUrl);
   return (
     <article>
       <header className="case-hero">
@@ -33,6 +35,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ "proje
         </div>
       </header>
       <div className="case-art"><ProjectArtwork project={project} /></div>
+      {gallery.length > 0 && <section className="case-gallery section-shell"><div className="case-gallery-head"><div><p className="eyebrow">Project gallery</p><h2>More from this project.</h2></div><span>{String(gallery.length).padStart(2, "0")} files</span></div><div className="case-gallery-grid">{gallery.map((item, itemIndex) => <figure className={`case-gallery-item case-gallery-item-${(itemIndex % 4) + 1}`} key={item.id}><div><ProjectMedia url={item.url} type={item.type} alt={item.alt || `${project.title} gallery media ${itemIndex + 1}`} controls /></div><figcaption><span>{String(itemIndex + 1).padStart(2, "0")} / {item.type}</span>{item.alt || `${project.title} project media`}</figcaption></figure>)}</div></section>}
       <section className="case-overview"><div className="section-shell"><div className="case-statement" data-reveal><p>“{project.summary}”</p></div><div className="case-details"><div data-reveal><p className="eyebrow">The challenge</p><h2>Find the real point.</h2><p>{project.challenge}</p></div><div data-reveal><p className="eyebrow">Creative direction</p><h2>Give it one clear rule.</h2><p>{project.concept}</p></div></div></div></section>
       <section className="case-process"><div className="section-shell"><p className="eyebrow">Process / selected stages</p><ol>{project.approach.map((item, itemIndex) => <li key={item}><span>0{itemIndex + 1}</span><h3>{item}</h3></li>)}</ol></div></section>
       <section className="case-delivery"><div className="delivery-grid section-shell"><div><p className="eyebrow">Delivery system</p><h2>One idea.<br />Every required frame.</h2><p>This concept case study demonstrates the intended creative and production approach. Real performance metrics will only be added when verified.</p></div><div><div className="delivery-list">{project.deliverables.map((item) => <p key={item}>↳ {item}</p>)}</div><p className="eyebrow" style={{ marginTop: 40 }}>Tools / {project.tools.join(" · ")}</p><Link className="text-link" href={`/start-a-project?reference=${project.slug}`} style={{ marginTop: 34 }}>Reference this direction <ArrowUpRight aria-hidden="true" /></Link></div></div></section>

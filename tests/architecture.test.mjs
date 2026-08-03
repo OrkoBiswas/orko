@@ -63,3 +63,20 @@ test("testimonial media is validated, owner-managed, and rendered accessibly", a
   assert.match(nextConfig, /media-src[^;]+https:\/\/res\.cloudinary\.com/);
   assert.match(nextConfig, /connect-src[^;]+https:\/\/api\.cloudinary\.com/);
 });
+
+test("project galleries are validated, owner-uploaded, and publicly rendered", async () => {
+  const [contentModel, projectEditor, projectPage, workLibrary] = await Promise.all([
+    readFile(new URL("lib/project-content.ts", root), "utf8"),
+    readFile(new URL("components/AdminProjectEditor.tsx", root), "utf8"),
+    readFile(new URL("app/work/[project-slug]/page.tsx", root), "utf8"),
+    readFile(new URL("components/WorkLibrary.tsx", root), "utf8"),
+  ]);
+  assert.match(contentModel, /gallery: z\.array\(galleryMediaSchema\)\.max\(24\)/);
+  assert.match(projectEditor, /accept="image\/\*,video\/\*" multiple/);
+  assert.match(projectEditor, /\/api\/admin\/media\/signature/);
+  assert.match(projectEditor, /Set as cover/);
+  assert.match(projectPage, /case-gallery/);
+  assert.match(projectPage, /<ProjectMedia/);
+  assert.match(workLibrary, /discipline/);
+  assert.match(workLibrary, /workDisciplines/);
+});

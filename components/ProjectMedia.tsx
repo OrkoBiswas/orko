@@ -3,7 +3,7 @@
 
 import { useEffect, useRef } from "react";
 
-export function ProjectMedia({ url, type, alt }: { url: string; type: "image" | "video"; alt: string }) {
+export function ProjectMedia({ url, type, alt, controls = false }: { url: string; type: "image" | "video"; alt: string; controls?: boolean }) {
   const video = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -19,6 +19,6 @@ export function ProjectMedia({ url, type, alt }: { url: string; type: "image" | 
     return () => media.removeEventListener("change", sync);
   }, [type, url]);
 
-  if (type === "video") return <video ref={video} className="project-media" src={url} muted loop playsInline preload="metadata" aria-label={alt} />;
+  if (type === "video") return <video ref={video} className="project-media" src={url} muted loop playsInline controls={controls} preload="metadata" aria-label={alt} />;
   return <img className="project-media" src={url} alt={alt} loading="lazy" />;
 }

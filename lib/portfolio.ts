@@ -21,7 +21,29 @@ export type Project = {
   mediaUrl?: string;
   mediaType?: "generated" | "image" | "video";
   mediaAlt?: string;
+  gallery?: ProjectGalleryItem[];
 };
+
+export type ProjectGalleryItem = {
+  id: string;
+  type: "image" | "video";
+  url: string;
+  alt: string;
+};
+
+export const workDisciplines = [
+  { value: "video", label: "Video" },
+  { value: "motion", label: "Motion" },
+  { value: "design", label: "Design" },
+] as const;
+
+export type WorkDiscipline = (typeof workDisciplines)[number]["value"];
+
+export function projectMatchesDiscipline(project: Project, discipline: WorkDiscipline) {
+  if (discipline === "video") return project.services.some((service) => ["Video Editing", "YouTube"].includes(service));
+  if (discipline === "motion") return project.services.some((service) => service.includes("Motion"));
+  return project.services.some((service) => ["Graphic Design", "Brand Visuals", "Social Media"].includes(service));
+}
 
 export const projects: Project[] = [
   {
@@ -398,13 +420,14 @@ export function getService(slug: string) {
 
 export function filterProjects(
   items: Project[],
-  options: { query?: string; category?: string; industry?: string; year?: string },
+  options: { query?: string; discipline?: WorkDiscipline | "All"; category?: string; industry?: string; year?: string },
 ) {
   const query = options.query?.trim().toLowerCase() ?? "";
   return items.filter((project) => {
     const searchable = [project.title, project.category, project.industry, ...project.services].join(" ").toLowerCase();
     return (
       (!query || searchable.includes(query)) &&
+      (!options.discipline || options.discipline === "All" || projectMatchesDiscipline(project, options.discipline)) &&
       (!options.category || options.category === "All" || project.category === options.category) &&
       (!options.industry || options.industry === "All" || project.industry === options.industry) &&
       (!options.year || options.year === "All" || String(project.year) === options.year)

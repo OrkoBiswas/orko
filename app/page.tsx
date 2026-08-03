@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowDown, ArrowRight, ArrowUpRight, Asterisk, Sparkles } from "lucide-react";
-import { projects, services } from "@/lib/portfolio";
+import { projectMatchesDiscipline, projects, services, workDisciplines } from "@/lib/portfolio";
 import { getSiteContent, listPortfolioProjects, listPortfolioServices } from "@/db/repository";
 import { ShowcaseGrid } from "@/components/ShowcaseGrid";
 import { ShowreelDialog } from "@/components/ShowreelDialog";
@@ -13,11 +13,7 @@ export const dynamic = "force-dynamic";
 export default async function Home() {
   const [brand, liveProjects, liveServices] = await Promise.all([getSiteContent(), listPortfolioProjects(projects, { publishedOnly: true }), listPortfolioServices(services)]);
   const featured = liveProjects.filter((project) => project.featured).slice(0, 6);
-  const showcaseDisciplines = [
-    ["Video", featured.filter((project) => project.services.some((service) => ["Video Editing", "YouTube"].includes(service))).length],
-    ["Motion", featured.filter((project) => project.services.some((service) => service.includes("Motion"))).length],
-    ["Design", featured.filter((project) => project.services.some((service) => ["Graphic Design", "Brand Visuals", "Social Media"].includes(service))).length],
-  ] as const;
+  const showcaseDisciplines = workDisciplines.map((discipline) => ({ ...discipline, count: liveProjects.filter((project) => projectMatchesDiscipline(project, discipline.value)).length }));
   const processStages = [
     { title: "Discover", copy: "We discuss your goal, audience, content, deadline, and budget.", details: ["Goal", "Audience", "Scope"] },
     { title: "Plan", copy: "I prepare the story, visual direction, deliverables, and schedule.", details: ["Story", "Formats", "Schedule"] },
@@ -58,7 +54,7 @@ export default async function Home() {
         <div className="showcase-library">
           <div className="showcase-library-top" data-reveal>
             <div className="showcase-library-title"><span>Project runway</span><strong>{String(featured.length).padStart(2, "0")} featured chapters</strong></div>
-            <dl aria-label="Featured work disciplines">{showcaseDisciplines.map(([discipline, count]) => <div key={discipline}><dt>{discipline}</dt><dd>{String(count).padStart(2, "0")}</dd></div>)}</dl>
+            <dl aria-label="Browse category showreels">{showcaseDisciplines.map((discipline) => <div key={discipline.value}><dt><Link href={`/work?discipline=${discipline.value}`}>{discipline.label} <ArrowUpRight aria-hidden="true" /></Link></dt><dd>{String(discipline.count).padStart(2, "0")}</dd></div>)}</dl>
             <p>Move through each project as a full visual chapter. Every image and video keeps its correct frame.</p>
           </div>
           <ShowcaseGrid projects={featured} />
