@@ -1376,16 +1376,20 @@ html[data-data="low"] .hero-media { background: #181b15 url("https://res.cloudin
 .home-hero { grid-template-rows: auto minmax(0, 1fr) auto; }
 .home-hero::before { opacity: .08; mask-image: linear-gradient(90deg, #000, transparent 58%); }
 .home-hero::after { z-index: 1; width: 34vw; height: 34vw; left: 20vw; top: 40%; background: rgba(201,255,67,.055); filter: blur(110px); }
-.hero-light-rays { position: absolute; z-index: 1; inset: 0; overflow: hidden; pointer-events: none; transform-origin: 0 0; mix-blend-mode: screen; animation: hero-ray-drift 30s ease-in-out infinite alternate; }
+.hero-light-rays { position: absolute; z-index: 1; inset: 0; overflow: hidden; pointer-events: none; mix-blend-mode: screen; }
 .hero-light-rays::before,
-.hero-light-rays::after { content: ""; position: absolute; transform-origin: 50% 0; pointer-events: none; }
-.hero-light-rays::before { width: clamp(120px, 11vw, 210px); height: 145vh; left: -2vw; top: -31vh; opacity: .9; background: linear-gradient(180deg, rgba(201,255,67,.92) 0%, rgba(201,255,67,.4) 27%, rgba(201,255,67,.12) 63%, transparent 100%); filter: blur(14px); transform: rotate(-40deg); }
-.hero-light-rays::after { width: clamp(300px, 31vw, 590px); height: 132vh; left: -13vw; top: -25vh; opacity: .5; background: linear-gradient(180deg, rgba(201,255,67,.58) 0%, rgba(201,255,67,.2) 38%, rgba(201,255,67,.05) 72%, transparent 100%); filter: blur(40px); transform: rotate(-52deg); }
-.hero-light-rays span { position: absolute; width: clamp(390px, 39vw, 740px); aspect-ratio: 1; left: clamp(-330px, -16vw, -145px); top: clamp(-360px, -18vw, -165px); border-radius: 50%; opacity: .94; background: radial-gradient(circle, rgba(201,255,67,.88) 0%, rgba(201,255,67,.4) 19%, rgba(201,255,67,.12) 43%, rgba(201,255,67,.035) 60%, transparent 74%); filter: blur(10px); }
-@keyframes hero-ray-drift {
-  0% { transform: translate3d(-1%, -.5%, 0) rotate(-2.8deg); opacity: .72; }
-  52% { transform: translate3d(2.6%, 1.6%, 0) rotate(1.2deg); opacity: .94; }
-  100% { transform: translate3d(5.4%, 3.4%, 0) rotate(4.8deg); opacity: .8; }
+.hero-light-rays::after { content: ""; position: absolute; transform-origin: 50% 0; pointer-events: none; will-change: transform, opacity; }
+.hero-light-rays::before { --ray-angle: -40deg; width: clamp(120px, 11vw, 210px); height: 145vh; left: -2vw; top: -31vh; opacity: .9; background: linear-gradient(180deg, rgba(201,255,67,.92) 0%, rgba(201,255,67,.4) 27%, rgba(201,255,67,.12) 63%, transparent 100%); filter: blur(14px); transform: rotate(var(--ray-angle)); animation: hero-ray-sweep 14s ease-in-out infinite alternate; }
+.hero-light-rays::after { --ray-angle: -52deg; width: clamp(300px, 31vw, 590px); height: 132vh; left: -13vw; top: -25vh; opacity: .5; background: linear-gradient(180deg, rgba(201,255,67,.58) 0%, rgba(201,255,67,.2) 38%, rgba(201,255,67,.05) 72%, transparent 100%); filter: blur(40px); transform: rotate(var(--ray-angle)); animation: hero-ray-sweep 17s -4s ease-in-out infinite alternate; }
+.hero-light-rays span { position: absolute; width: clamp(390px, 39vw, 740px); aspect-ratio: 1; left: clamp(-330px, -16vw, -145px); top: clamp(-360px, -18vw, -165px); border-radius: 50%; opacity: .94; background: radial-gradient(circle, rgba(201,255,67,.88) 0%, rgba(201,255,67,.4) 19%, rgba(201,255,67,.12) 43%, rgba(201,255,67,.035) 60%, transparent 74%); filter: blur(10px); will-change: transform, opacity; animation: hero-glow-drift 16s ease-in-out infinite alternate; }
+@keyframes hero-ray-sweep {
+  0% { transform: translate3d(-1.5vw, -1vh, 0) rotate(var(--ray-angle)); opacity: .72; }
+  52% { transform: translate3d(3vw, 1.2vh, 0) rotate(var(--ray-angle)); opacity: 1; }
+  100% { transform: translate3d(7vw, 3vh, 0) rotate(var(--ray-angle)); opacity: .82; }
+}
+@keyframes hero-glow-drift {
+  0% { transform: translate3d(-1vw, -.5vh, 0) scale(.98); opacity: .82; }
+  100% { transform: translate3d(5vw, 2.5vh, 0) scale(1.04); opacity: 1; }
 }
 .hero-layout { position: relative; z-index: 2; display: block; min-height: 0; }
 .hero-copy { position: relative; z-index: 3; width: min(69vw, 1120px); height: 100%; justify-content: center; padding: clamp(16px, 4vh, 52px) 0; }
@@ -1439,9 +1443,11 @@ html[data-data="low"] .hero-media { background: #181b15 url("https://res.cloudin
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-light-rays { animation: none; }
+  .hero-light-rays::before, .hero-light-rays::after, .hero-light-rays span { animation: none; }
 }
-html[data-motion="reduced"] .hero-light-rays { animation: none; }
+html[data-motion="reduced"] .hero-light-rays::before,
+html[data-motion="reduced"] .hero-light-rays::after,
+html[data-motion="reduced"] .hero-light-rays span { animation: none; }
 
 @media print {
   .site-header, .site-footer, .settings-dock, .page-hero .button, .skip-link { display: none !important; }
