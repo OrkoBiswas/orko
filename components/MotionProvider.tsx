@@ -26,6 +26,15 @@ export function MotionProvider() {
         );
       }
 
+      const heroMedia = document.querySelector<HTMLElement>("[data-hero-media]");
+      if (heroMedia) {
+        gsap.fromTo(
+          heroMedia,
+          { clipPath: "inset(0 0 100% 0)", scale: 0.97 },
+          { clipPath: "inset(0 0 0% 0)", scale: 1, duration: 1.2, ease: "power4.out", delay: 0.2 },
+        );
+      }
+
       gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((element) => {
         gsap.fromTo(
           element,

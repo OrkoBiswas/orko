@@ -6,6 +6,7 @@ import { ShowcaseGrid } from "@/components/ShowcaseGrid";
 import { ShowreelDialog } from "@/components/ShowreelDialog";
 import { ExperienceSection } from "@/components/ExperienceSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
+import { HeroMotionMedia } from "@/components/HeroMotionMedia";
 
 export const dynamic = "force-dynamic";
 
@@ -29,16 +30,22 @@ export default async function Home() {
     <>
       <section className="home-hero section-shell">
         <div className="hero-meta"><p><span className="status-dot" />{brand.availability}</p><p>{brand.location}<br />{brand.timezone}</p></div>
-        <div className="hero-title" aria-label={brand.headline}>
-          <span className="hero-line"><span data-hero-line>{brand.heroLineOne}</span></span>
-          <span className="hero-line hero-line-accent"><span data-hero-line>{brand.heroLineTwo}</span></span>
+        <div className="hero-layout">
+          <div className="hero-copy">
+            <p className="hero-kicker"><span>Independent creative</span><span>Video / Motion / Design</span></p>
+            <h1 className="hero-title" aria-label={brand.headline}>
+              <span className="hero-line"><span data-hero-line>{brand.heroLineOne}</span></span>
+              <span className="hero-line hero-line-accent"><span data-hero-line>{brand.heroLineTwo}</span></span>
+            </h1>
+            <p className="hero-intro">{brand.intro}</p>
+            <div className="hero-actions"><Link className="button button-accent" href="/work">Explore the archive <ArrowRight aria-hidden="true" /></Link><Link className="text-link" href="/start-a-project">Start a project <ArrowUpRight aria-hidden="true" /></Link></div>
+          </div>
+          <HeroMotionMedia />
         </div>
-        <div className="hero-bottom">
-          <p>{brand.intro}</p>
-          <div className="hero-actions"><Link className="button button-accent" href="/work">Explore the archive <ArrowRight aria-hidden="true" /></Link><Link className="text-link" href="/start-a-project">Start a project <ArrowUpRight aria-hidden="true" /></Link></div>
+        <div className="hero-foot">
           <a className="scroll-note" href="#selected-work"><ArrowDown aria-hidden="true" /> Scroll to explore</a>
+          <p><span>Available worldwide</span><span>Clear ideas. Strong visual work.</span></p>
         </div>
-        <div className="hero-frame" data-parallax aria-hidden="true"><span>OB/26</span><span>EDIT</span><i /><i /><i /></div>
       </section>
 
       <div className="discipline-rail" aria-label="Disciplines"><div><span>VIDEO EDITING</span><Asterisk /><span>2D MOTION</span><Asterisk /><span>GRAPHIC DESIGN</span><Asterisk /><span>VISUAL SYSTEMS</span><Asterisk /><span>VIDEO EDITING</span></div></div>
