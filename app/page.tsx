@@ -17,6 +17,14 @@ export default async function Home() {
     ["Motion", featured.filter((project) => project.services.some((service) => service.includes("Motion"))).length],
     ["Design", featured.filter((project) => project.services.some((service) => ["Graphic Design", "Brand Visuals", "Social Media"].includes(service))).length],
   ] as const;
+  const processStages = [
+    { title: "Discover", copy: "We discuss your goal, audience, content, deadline, and budget.", details: ["Goal", "Audience", "Scope"] },
+    { title: "Plan", copy: "I prepare the story, visual direction, deliverables, and schedule.", details: ["Story", "Formats", "Schedule"] },
+    { title: "Create", copy: "I build the first edit, design, or motion direction.", details: ["Edit", "Design", "Motion"] },
+    { title: "Review", copy: "You share clear feedback and we agree on the next changes.", details: ["Notes", "Priorities", "Changes"] },
+    { title: "Refine", copy: "I improve timing, sound, color, text, and final details.", details: ["Timing", "Sound", "Color"] },
+    { title: "Deliver", copy: "You receive clean files in the correct formats and sizes.", details: ["Exports", "Sizes", "Source files"] },
+  ] as const;
   return (
     <>
       <section className="home-hero section-shell">
@@ -90,11 +98,11 @@ export default async function Home() {
       <section className="process-preview process-showcase section-shell" data-process-sequence>
         <div className="section-heading"><div><p className="eyebrow"><span>06</span>Process</p><h2>A clear path from idea to delivery.</h2></div><Link className="text-link" href="/process">See the full process <ArrowUpRight aria-hidden="true" /></Link></div>
         <div className="process-stage" data-process-stage>
-          <div className="process-track-head"><span>Project timeline</span><span>Scroll or swipe through the six stages</span></div>
+          <div className="process-track-head"><span>Project timeline · 01—06</span><span>From the first brief to organized final files</span></div>
           <div className="process-timeline" tabIndex={0} role="region" aria-label="Six-stage project timeline">
             <div className="process-timeline-canvas">
               <div className="process-line" aria-hidden="true"><span data-process-progress /></div>
-              <ol className="process-list">{[["Discover","We discuss your goal, audience, content, deadline, and budget."],["Plan","I prepare the story, visual direction, deliverables, and schedule."],["Create","I build the first edit, design, or motion direction."],["Review","You share clear feedback and we agree on the next changes."],["Refine","I improve timing, sound, color, text, and final details."],["Deliver","You receive clean files in the correct formats and sizes."]].map(([title,copy], index) => <li key={title} data-process-step><span className="process-node" data-process-node aria-hidden="true">0{index + 1}</span><div className="process-card" data-process-card><small>Stage 0{index + 1}</small><h3>{title}</h3><p>{copy}</p></div></li>)}</ol>
+              <ol className="process-list">{processStages.map((stage, index) => <li key={stage.title} data-process-step><span className="process-node" data-process-node aria-hidden="true">0{index + 1}</span><article className="process-card" data-process-card><small>Stage 0{index + 1}</small><h3>{stage.title}</h3><p>{stage.copy}</p><ul data-process-detail aria-label={`${stage.title} focus areas`}>{stage.details.map((detail) => <li key={detail}>{detail}</li>)}</ul></article></li>)}</ol>
             </div>
           </div>
         </div>

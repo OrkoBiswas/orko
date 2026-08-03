@@ -80,6 +80,7 @@ export function MotionProvider() {
         const stage = processSequence.querySelector<HTMLElement>("[data-process-stage]");
         const nodes = gsap.utils.toArray<HTMLElement>("[data-process-node]", processSequence);
         const cards = gsap.utils.toArray<HTMLElement>("[data-process-card]", processSequence);
+        const details = gsap.utils.toArray<HTMLElement>("[data-process-detail]", processSequence);
         const progress = processSequence.querySelector<HTMLElement>("[data-process-progress]");
         const sequence = gsap.timeline({
           scrollTrigger: {
@@ -94,7 +95,8 @@ export function MotionProvider() {
         if (stage) sequence.fromTo(stage, { y: 34, scale: 0.975 }, { y: 0, scale: 1, duration: 0.72, ease: "power3.out" }, 0.06);
         if (progress) sequence.fromTo(progress, { scaleX: 0 }, { scaleX: 1, duration: 1.35, ease: "none" }, 0.1);
         if (nodes.length) sequence.fromTo(nodes, { scale: 0.35, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.28, stagger: 0.14, ease: "back.out(2.2)" }, 0.13);
-        if (cards.length) sequence.fromTo(cards, { y: 34, clipPath: "inset(0 0 100% 0 round 10px)", autoAlpha: 0 }, { y: 0, clipPath: "inset(0% 0% 0% 0% round 10px)", autoAlpha: 1, duration: 0.62, stagger: 0.11, ease: "power3.out" }, 0.2);
+        if (cards.length) sequence.fromTo(cards, { y: (index) => index % 2 === 0 ? -38 : 38, clipPath: "inset(50% 0 50% 0)", autoAlpha: 0 }, { y: 0, clipPath: "inset(0% 0% 0% 0%)", autoAlpha: 1, duration: 0.62, stagger: 0.11, ease: "power3.out" }, 0.2);
+        if (details.length) sequence.fromTo(details, { x: -10, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.35, stagger: 0.08, ease: "power2.out" }, 0.48);
       }
     });
 
