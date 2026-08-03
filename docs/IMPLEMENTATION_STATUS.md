@@ -1,47 +1,39 @@
 # Implementation status
 
-Last updated: 2026-08-02
+Last updated: 2026-08-03
 
 ## Completed
 
-- Production Vinext/Next App Router foundation, TypeScript, Cloudflare Worker output, D1 binding, migration, design tokens, and project documentation
-- Cinematic responsive homepage, large searchable/filterable work library, twelve concept/sample projects, reusable case studies, seven service routes, about, process, showreel fallback, résumé, contact, brief builder, legal pages, sitemap, robots, and authored not-found state
-- GSAP hero, reveal, ScrollTrigger, and Flip animation architecture with cleanup, reduced-motion handling, low-data mode, and mobile alternatives
-- Server-validated inquiry flow with durable D1 storage, unique references, consent timestamp, honeypot, payload limit, privacy-minimized rate limiting, honest recovery errors, and optional notification adapter
-- Standalone administrator username/password authentication, signed HTTP-only sessions, login throttling, same-origin mutation checks, inquiry workflow, and audit logging
-- Professional dashboard-only owner workspace with editable public identity, homepage messaging, biography, contact/social details, SEO, complete project narratives, featured placement, ordering, publication status, and full service-offer editing
-- Custom social preview asset and host-derived Open Graph/X metadata
-- Keyboard/touch semantics, mobile menu, modal dialog, responsive layout, focus states, and 320px-safe overflow controls
-- Modernized display typography and full-bleed responsive section system with a comfortable 1520px content ceiling, wider desktop gutters, and balanced mobile spacing
-- Structured responsive showcase system with a category/count toolbar, balanced feature rows, neutral-grey demo previews, integrated card metadata and interaction cues, aligned section rules, route-aware staggered reveals, and smoother scrubbed scroll motion
-- Standardized compact showcase typography, format-neutral showcase language, and a site-wide fine-pointer custom cursor with native touch and form-control fallbacks
-- Format-aware homepage and archive media walls with five admin-selectable frame types, dense responsive packing, measured row spans, and elevated in-frame title positioning; the existing D1 schema remains unchanged
-- Moderated oversized headline scales, simplified professional copy across public pages, services, project samples, and legal pages, plus a new content-needs section covering promo videos, YouTube, short-form, motion, design, and creative bundles
-- Safe live-content refresh updates only untouched legacy default text in D1 while preserving any wording customized through the dashboard
-- Rebuilt the homepage showcase as a systematic paired-row library with equal-height card architecture, format-preserving preview stages, consistent metadata zones, discipline counts, and an integrated full-archive action
-- Added structured About & Experience content across the homepage, About page, and résumé, with current/past workplace, role, period, location, and responsibility fields managed from the secure dashboard
-- Added a managed testimonial section with approved quote, person, role, and company fields; when no real testimonials are published, the public section shows an intentional honest state instead of invented social proof
-- Upgraded approved testimonials into an auto-sliding editorial carousel with six-second pacing, animated progress, direct slide selection, previous/next and play/pause controls, touch swiping, pause-on-hover/focus, page-visibility awareness, and reduced-motion behavior
-- Extended the existing validated D1 JSON content record for experience and testimonials without changing the database schema; older stored content receives safe defaults and remains editable
+- Production Vinext/Next App Router foundation, TypeScript, Cloudflare Worker output, D1 binding, idempotent schema, design tokens, and project documentation.
+- Responsive public portfolio with homepage, filterable work library, project pages, services, about, experience, showreel fallback, résumé, contact, brief builder, legal pages, SEO routes, and authored recovery states.
+- Smooth GSAP/ScrollTrigger/Flip motion with cleanup, touch behavior, reduced-motion handling, low-data mode, and mobile alternatives.
+- Format-aware showcase system with five selectable frame types, responsive layout, compact metadata, route-aware reveals, and neutral generated previews.
+- Server-validated inquiry flow with durable D1 storage, unique references, consent timestamp, honeypot, payload limit, rate limiting, safe errors, and optional email notifications.
+- Standalone administrator username/password authentication, signed HTTP-only sessions, login throttling, same-origin mutations, inquiry workflow, and audit logging.
+- Owner controls for public identity, homepage copy, biography, contact/social details, SEO, services, experience history, approved testimonials, and all project narratives and presentation settings.
+- Complete project creation and audited soft-deletion flows, duplicate-slug protection, a dedicated new-project editor, and project image/video fields without changing the D1 schema.
+- Dedicated testimonial workspace with add, edit, remove, limit, approval guidance, public heading control, and safe full-content validation.
+- Owner-only Cloudinary media workspace for direct signed multi-file uploads, tagged image/video/raw listing, secure URL copying, previews, and confirmed cache-invalidating deletion. The API secret remains server-only.
+- Uploaded project images and videos render inside the public responsive showcase frames, including reduced-motion-aware video playback and accessible descriptions.
+- Expanded dashboard overview, settings status, quick actions, responsive eight-item navigation, and 320px-safe media management.
+- Public testimonials use an auto-sliding editorial carousel with progress, direct selection, previous/next, play/pause, touch swiping, focus/hover pausing, visibility awareness, and reduced-motion behavior.
 
 ## Validation
 
-- Lint: passed
-- Typecheck: passed
-- Automated tests: 8 passed
-- Production build: passed
-- Browser review: desktop and 390×844 mobile passed; archive search/filter/empty/reset, case study, showreel dialog, brief progression, contact validation, and a durable synthetic inquiry submission verified
-- Browser console: no new warnings or errors after animation cleanup
+- Lint: passed.
+- Typecheck: passed.
+- Automated tests: 11 passed.
+- Production build: passed.
+- Prior desktop and mobile browser reviews passed for public navigation, archive filters, case studies, forms, animations, and inquiry persistence.
 
 ## External values still required
 
-- `ADMIN_USERNAME`, `ADMIN_PASSWORD`, and `ADMIN_SESSION_SECRET` as protected hosted values
-- `RESEND_API_KEY`, `INQUIRY_NOTIFICATION_TO`, and verified `INQUIRY_FROM_EMAIL` for email notifications
-- Final social profiles, direct email, résumé file, licensed showreel, captions/transcript, and approved portfolio media
+- `CLOUDINARY_CLOUD_NAME` is still needed to complete the Cloudinary connection. The supplied API key and API secret are stored only as protected hosted values.
+- `RESEND_API_KEY`, `INQUIRY_NOTIFICATION_TO`, and a verified `INQUIRY_FROM_EMAIL` are optional for inquiry notifications.
+- Final social profiles, direct email, résumé file, licensed showreel, captions/transcript, approved testimonials, and portfolio media remain content tasks.
 
 ## Honest remaining extensions
 
-- The owner area manages public profile content, experience history, approved testimonials, homepage messaging, service offers, project narratives and presentation, publication status, and inquiries; media uploads, analytics, and role-granular multi-user permissions remain future modules.
-- Real client logos, testimonials, performance metrics, and project footage are intentionally absent until supplied and approved.
-- Public uploads remain disabled until an R2 MIME, file-size, authorization, and in-use deletion policy is reviewed.
-- Drizzle Kit encountered a host-level credential lookup failure in this Windows sandbox, so the equivalent inspected SQL migration was added directly and runtime initialization uses the same idempotent schema.
+- The owner area now manages content, experience, testimonials, services, project creation/deletion/publication, Cloudinary media, and inquiries. Analytics and role-granular multi-user permissions remain future modules.
+- Public uploads remain intentionally disabled; every media control requires an authenticated owner session.
+- Drizzle Kit encountered a host-level credential lookup failure in the Windows sandbox, so the inspected equivalent SQL migration remains the source of truth and runtime initialization uses the same idempotent schema.

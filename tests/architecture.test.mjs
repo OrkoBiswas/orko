@@ -27,3 +27,19 @@ test("required project documentation exists", async () => {
     assert.ok(contents.length > 200, `${file} should contain substantive guidance`);
   }
 });
+
+test("Cloudinary signatures and destructive media controls stay owner-only and server-side", async () => {
+  const [cloudinary, signatureRoute, mediaRoute, mediaClient] = await Promise.all([
+    readFile(new URL("lib/cloudinary.ts", root), "utf8"),
+    readFile(new URL("app/api/admin/media/signature/route.ts", root), "utf8"),
+    readFile(new URL("app/api/admin/media/route.ts", root), "utf8"),
+    readFile(new URL("components/AdminMediaLibrary.tsx", root), "utf8"),
+  ]);
+  assert.match(cloudinary, /CLOUDINARY_API_SECRET/);
+  assert.match(cloudinary, /apiSecret/);
+  assert.match(signatureRoute, /getOwner/);
+  assert.match(signatureRoute, /requireSameOrigin/);
+  assert.match(mediaRoute, /getOwner/);
+  assert.match(mediaRoute, /requireSameOrigin/);
+  assert.doesNotMatch(mediaClient, /CLOUDINARY_API_SECRET|process\.env/);
+});

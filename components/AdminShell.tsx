@@ -1,11 +1,13 @@
 import Link from "next/link";
-import { BarChart3, BriefcaseBusiness, ExternalLink, FilePenLine, Inbox, LayoutDashboard, LogOut, PanelsTopLeft, Settings, ShieldCheck } from "lucide-react";
+import { BarChart3, BriefcaseBusiness, ExternalLink, FilePenLine, Images, Inbox, LayoutDashboard, LogOut, MessageSquareQuote, PanelsTopLeft, Settings, ShieldCheck } from "lucide-react";
 import type { AdminUser } from "@/lib/admin";
 
 const links = [
   ["Overview", "/admin", LayoutDashboard],
   ["Content", "/admin/content", FilePenLine],
   ["Projects", "/admin/projects", BriefcaseBusiness],
+  ["Media", "/admin/media", Images],
+  ["Testimonials", "/admin/testimonials", MessageSquareQuote],
   ["Services", "/admin/services", PanelsTopLeft],
   ["Inquiries", "/admin/inquiries", Inbox],
   ["Settings", "/admin/settings", Settings],

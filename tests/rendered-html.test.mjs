@@ -73,6 +73,23 @@ test("owner mutation endpoint rejects anonymous requests", async () => {
   assert.equal(json.ok, false);
 });
 
+test("project creation rejects anonymous requests", async () => {
+  const response = await request("/api/admin/projects", {
+    method: "POST",
+    headers: { "content-type": "application/json", accept: "application/json" },
+    body: JSON.stringify({}),
+  });
+  assert.equal(response.status, 401);
+});
+
+test("Cloudinary upload signatures reject anonymous requests", async () => {
+  const response = await request("/api/admin/media/signature", {
+    method: "POST",
+    headers: { accept: "application/json" },
+  });
+  assert.equal(response.status, 401);
+});
+
 test("unknown routes use the authored recovery state", async () => {
   const response = await request("/missing-frame");
   assert.equal(response.status, 404);

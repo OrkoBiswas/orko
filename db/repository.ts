@@ -1,5 +1,6 @@
 import type { InquiryInput } from "@/lib/inquiry";
 import type { Project, Service } from "@/lib/portfolio";
+import { normalizeProject, type ManagedProjectInput } from "@/lib/project-content";
 import { defaultSiteContent, parseSiteContent, type SiteContent } from "@/lib/site-content";
 
 type DatabaseEnv = { DB?: D1Database };
@@ -278,13 +279,22 @@ function mergeProject(base: Project, record?: ProjectStateRecord): Project {
   if (record?.content_json) {
     try { overrides = JSON.parse(record.content_json) as Partial<Project>; } catch { overrides = {}; }
   }
-  return {
+  const merged = {
     ...base,
     ...overrides,
     slug: record?.slug ?? base.slug,
     title: record?.title ?? base.title,
     featured: record ? Boolean(record.featured) : base.featured,
   };
+  return normalizeProject(merged) ?? merged;
+}
+
+function customProject(record: ProjectStateRecord) {
+  if (!record.content_json) return null;
+  try {
+    const parsed = normalizeProject(JSON.parse(record.content_json));
+    return parsed ? { ...parsed, slug: record.slug, title: record.title, featured: Boolean(record.featured) } : null;
+  } catch { return null; }
 }
 
 export async function listPortfolioProjects(defaults: Project[], options: { publishedOnly?: boolean } = {}) {
@@ -292,12 +302,13 @@ export async function listPortfolioProjects(defaults: Project[], options: { publ
     await seedProjects(defaults);
     const rows = await (await database()).prepare(`SELECT p.id, p.slug, p.title, p.status, p.featured, p.display_order, p.updated_at, c.content_json
       FROM projects p LEFT JOIN project_content c ON c.project_id = p.id
-      ${options.publishedOnly ? "WHERE p.status = 'published'" : ""}
+      ${options.publishedOnly ? "WHERE p.status = 'published'" : "WHERE p.status != 'deleted'"}
       ORDER BY p.display_order ASC`).all<ProjectStateRecord>();
     const byId = new Map(defaults.map((project) => [project.id, project]));
     return (rows.results ?? []).flatMap((row) => {
       const base = byId.get(row.id);
-      return base ? [{ ...mergeProject(base, row), status: row.status, displayOrder: row.display_order }] : [];
+      const project = base ? mergeProject(base, row) : customProject(row);
+      return project ? [{ ...project, status: row.status, displayOrder: row.display_order }] : [];
     });
   } catch {
     return defaults.map((project, displayOrder) => ({ ...project, status: "published", displayOrder }));
@@ -325,6 +336,33 @@ export async function updateManagedProject(
     db.prepare("INSERT INTO project_content (project_id, content_json, updated_at) VALUES (?, ?, ?) ON CONFLICT(project_id) DO UPDATE SET content_json = excluded.content_json, updated_at = excluded.updated_at").bind(id, JSON.stringify(content), now),
     db.prepare("INSERT INTO audit_logs (id, actor_id, actor_email, action, entity_type, entity_id, created_at) VALUES (?, ?, ?, 'project.content.updated', 'project', ?, ?)").bind(crypto.randomUUID(), actor.userId, actor.email, id, now),
   ]);
+  return true;
+}
+
+export async function createManagedProject(input: ManagedProjectInput, actor: { userId: string; email: string }) {
+  await ensureSchema();
+  const db = await database();
+  const now = new Date().toISOString();
+  const duplicate = await db.prepare("SELECT id FROM projects WHERE id = ? OR slug = ? LIMIT 1").bind(input.id, input.slug).first<{ id: string }>();
+  if (duplicate) return false;
+  const { status, displayOrder, ...content } = input;
+  await db.batch([
+    db.prepare("INSERT INTO projects (id, slug, title, status, featured, display_order, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)").bind(input.id, input.slug, input.title, status, input.featured ? 1 : 0, displayOrder, now, now),
+    db.prepare("INSERT INTO project_content (project_id, content_json, updated_at) VALUES (?, ?, ?)").bind(input.id, JSON.stringify(content), now),
+    db.prepare("INSERT INTO audit_logs (id, actor_id, actor_email, action, entity_type, entity_id, created_at) VALUES (?, ?, ?, 'project.created', 'project', ?, ?)").bind(crypto.randomUUID(), actor.userId, actor.email, input.id, now),
+  ]);
+  return true;
+}
+
+export async function deleteManagedProject(id: string, actor: { userId: string; email: string }) {
+  await ensureSchema();
+  const db = await database();
+  const now = new Date().toISOString();
+  const result = await db.prepare("UPDATE projects SET status = 'deleted', updated_at = ? WHERE id = ? AND status != 'deleted'").bind(now, id).run();
+  if (!result.meta.changes) return false;
+  await db.prepare("INSERT INTO audit_logs (id, actor_id, actor_email, action, entity_type, entity_id, created_at) VALUES (?, ?, ?, 'project.deleted', 'project', ?, ?)")
+    .bind(crypto.randomUUID(), actor.userId, actor.email, id, now)
+    .run();
   return true;
 }
 

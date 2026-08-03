@@ -18,6 +18,9 @@ export type Project = {
   approach: string[];
   deliverables: string[];
   tools: string[];
+  mediaUrl?: string;
+  mediaType?: "generated" | "image" | "video";
+  mediaAlt?: string;
 };
 
 export const projects: Project[] = [
