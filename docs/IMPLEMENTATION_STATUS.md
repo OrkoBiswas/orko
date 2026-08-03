@@ -18,6 +18,7 @@ Last updated: 2026-08-03
 - Expanded dashboard overview, settings status, quick actions, responsive eight-item navigation, and 320px-safe media management.
 - Added an owner-only growth settings workspace for full brand assets, metadata, SEO/AEO/GEO context, crawler controls, Google/Bing verification, optional GTM, and visible highlighted marketplace/profile links.
 - Kept GTM injection inside the Vinext-supported document body so compiled stylesheet links remain runtime-managed and every public route retains its complete visual system.
+- Added persisted navbar logo sizing with a 28–64px dashboard control and an independent switch for showing or hiding the public name beside the logo; the default header now uses a larger 48px mark without duplicate name text.
 - Public testimonials use an auto-sliding editorial carousel with progress, direct selection, previous/next, play/pause, touch swiping, focus/hover pausing, visibility awareness, and reduced-motion behavior.
 - Redesigned testimonials as calmer editorial cards with smaller, lighter quote typography and optional client image/video layouts. The dedicated owner form supports direct signed upload, secure URL entry, accessible media descriptions, previews, replacement, and attachment removal.
 - Fixed external testimonial media delivery and dashboard uploads in the content security policy, added automatic publishing after valid uploads, media-type inference for pasted URLs, and a shorter media-dominant testimonial composition.

@@ -84,6 +84,8 @@ export function AdminGrowthSettings({ initial }: { initial: SiteContent }) {
       <label><span>Hero headline — first line</span><input value={content.heroLineOne} onChange={(event) => change("heroLineOne", event.target.value)} /></label>
       <label><span>Hero headline — accent line</span><input value={content.heroLineTwo} onChange={(event) => change("heroLineTwo", event.target.value)} /></label>
       <label><span>Theme color</span><input type="color" value={content.themeColor} onChange={(event) => change("themeColor", event.target.value)} /></label>
+      <label className="admin-field-wide"><span>Navbar logo size — {content.logoHeight}px</span><input type="range" min="28" max="64" step="1" value={content.logoHeight} onChange={(event) => change("logoHeight", Number(event.target.value))} /></label>
+      <label className="admin-check-field admin-field-wide"><input type="checkbox" checked={content.showHeaderName} onChange={(event) => change("showHeaderName", event.target.checked)} /><span>Show “{content.name}” text beside the navbar logo</span></label>
       <label className="admin-field-wide"><span>Logo description</span><input value={content.logoAlt} onChange={(event) => change("logoAlt", event.target.value)} /></label>
       {(["logoUrl", "faviconUrl", "socialImageUrl"] as AssetField[]).map((field) => {
         const labels: Record<AssetField, string> = { logoUrl: "Website logo", faviconUrl: "Favicon", socialImageUrl: "Social share image" };

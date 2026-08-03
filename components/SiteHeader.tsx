@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import type { CSSProperties } from "react";
 import type { SiteContent } from "@/lib/site-content";
 
 const navigation = [
@@ -24,9 +25,9 @@ export function SiteHeader({ content: brand }: { content: SiteContent }) {
 
   return (
     <header className="site-header">
-      <Link className="wordmark" href="/" aria-label={`${brand.name}, home`} onClick={() => setOpen(false)}>
+      <Link className="wordmark" href="/" aria-label={`${brand.name}, home`} onClick={() => setOpen(false)} style={{ "--header-logo-size": `${brand.logoHeight}px` } as CSSProperties}>
         {brand.logoUrl ? <img className="wordmark-logo" src={brand.logoUrl} alt={brand.logoAlt || `${brand.name} logo`} /> : <span className="wordmark-mark">{brand.monogram}</span>}
-        <span>{brand.name}</span>
+        {brand.showHeaderName && <span>{brand.name}</span>}
       </Link>
       <nav className="desktop-nav" aria-label="Primary navigation">
         {navigation.map(([label, href]) => <Link href={href} key={href}>{label}</Link>)}
