@@ -1824,8 +1824,8 @@ html[data-motion="reduced"] .hero-light-rays span { animation: none; }
 .case-gallery-item dd { margin: 0; color: #30342e; font-size: 10px; text-align: right; overflow-wrap: anywhere; }
 
 /* Owner-managed identity, discovery, analytics, and public profile links */
-.wordmark-logo { width: auto; height: var(--header-logo-size, 48px); max-width: 180px; display: block; object-fit: contain; }
-.site-header .wordmark-mark { width: var(--header-logo-size, 48px); height: var(--header-logo-size, 48px); font-size: 11px; }
+.wordmark-logo { width: min(var(--header-logo-width, 180px), 42vw); height: auto; max-height: 56px; display: block; object-fit: contain; }
+.site-header .wordmark-mark { width: 48px; height: 48px; font-size: 11px; }
 .footer-logo { width: auto; height: 54px; max-width: 180px; display: block; margin-bottom: 18px; object-fit: contain; }
 .profile-links-band { padding-block: clamp(58px, 7vw, 100px); display: grid; grid-template-columns: minmax(240px, .72fr) minmax(0, 1.28fr); gap: clamp(36px, 7vw, 110px); align-items: start; border-bottom: 1px solid var(--line-light); }
 .profile-links-band h2 { max-width: 520px; margin: 16px 0 0; font-family: var(--display); font-size: clamp(2.8rem, 5vw, 5.4rem); line-height: .88; letter-spacing: -.045em; text-transform: uppercase; }

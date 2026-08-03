@@ -25,7 +25,7 @@ export function SiteHeader({ content: brand }: { content: SiteContent }) {
 
   return (
     <header className="site-header">
-      <Link className="wordmark" href="/" aria-label={`${brand.name}, home`} onClick={() => setOpen(false)} style={{ "--header-logo-size": `${brand.logoHeight}px` } as CSSProperties}>
+      <Link className="wordmark" href="/" aria-label={`${brand.name}, home`} onClick={() => setOpen(false)} style={{ "--header-logo-width": `${brand.logoWidth}px` } as CSSProperties}>
         {brand.logoUrl ? <img className="wordmark-logo" src={brand.logoUrl} alt={brand.logoAlt || `${brand.name} logo`} /> : <span className="wordmark-mark">{brand.monogram}</span>}
       </Link>
       <nav className="desktop-nav" aria-label="Primary navigation">

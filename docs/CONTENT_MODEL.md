@@ -1,6 +1,6 @@
 # Content model
 
-Brand configuration contains identity, role, biography, location, availability, contact links, calls to action, logo/favicon/share assets, navbar logo sizing, theme color, SEO/AEO/GEO fields, crawler controls, verification tokens, optional GTM ID, and ordered marketplace/profile links with visibility and highlight controls.
+Brand configuration contains identity, role, biography, location, availability, contact links, calls to action, logo/favicon/share assets, navbar logo width up to 350px, theme color, SEO/AEO/GEO fields, crawler controls, verification tokens, optional GTM ID, and ordered marketplace/profile links with visibility and highlight controls.
 
 Projects contain opaque ID, slug, title, index, category, services, industry, year, client label, featured order, accent, summary, challenge, concept, approach, deliverables, tools, responsive frame ratio, generated-art style, optional secure cover media, and an ordered gallery of up to 24 image/video records. Every gallery record has its own title, category, client, industry, year, media type, secure URL, and accessible description. New projects start as drafts. Deletion sets an internal deleted state so public queries omit the record while audit and content history remain recoverable.
 
