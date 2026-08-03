@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { ArrowUpRight } from "lucide-react";
 
 export function CustomCursor() {
   const cursor = useRef<HTMLDivElement>(null);
@@ -44,8 +45,10 @@ export function CustomCursor() {
       const target = event.target instanceof Element ? event.target : null;
       const nativeControl = target?.closest("input, textarea, select, video[controls], iframe, [contenteditable='true']");
       const interactive = target?.closest<HTMLElement>("[data-cursor], a, button, summary, [role='button']");
+      const openTarget = target?.closest<HTMLElement>("[data-cursor='project'], [data-cursor='showreel']");
       root.classList.toggle("is-native", Boolean(nativeControl));
       root.classList.toggle("is-interactive", Boolean(interactive) && !nativeControl);
+      root.classList.toggle("is-open", Boolean(openTarget) && !nativeControl);
     };
 
     const hide = () => root.classList.remove("is-visible");
@@ -75,7 +78,7 @@ export function CustomCursor() {
 
   return (
     <div className="custom-cursor" ref={cursor} aria-hidden="true">
-      <span className="custom-cursor-ring" ref={ring} />
+      <span className="custom-cursor-ring" ref={ring}><ArrowUpRight className="custom-cursor-arrow" strokeWidth={3.4} /></span>
       <span className="custom-cursor-dot" ref={dot} />
     </div>
   );
