@@ -1901,24 +1901,18 @@ html[data-motion="reduced"] .hero-light-rays span { animation: none; }
 }
 
 /* Owner-controlled full logo sizing and dashboard notifications */
-:root { --site-header-height: max(76px, calc(var(--website-logo-height, 56px) + 16px)); }
+:root { --site-header-height: 76px; }
 html { scroll-padding-top: var(--site-header-height); }
 .site-header { min-height: var(--site-header-height); }
-.wordmark-logo,
-.site-header .wordmark-mark {
-  width: clamp(20px, var(--website-logo-width, 180px), 200px);
-  height: clamp(20px, var(--website-logo-height, 56px), 200px);
-  max-width: none;
-  max-height: none;
+.wordmark-logo {
+  width: min(var(--header-logo-width, 180px), 42vw);
+  height: auto;
+  max-width: 200px;
+  max-height: 56px;
   flex: 0 0 auto;
   object-fit: contain;
 }
-.footer-logo {
-  width: clamp(20px, var(--website-logo-width, 180px), 200px);
-  height: clamp(20px, var(--website-logo-height, 56px), 200px);
-  max-width: none;
-  max-height: none;
-}
+.site-header .wordmark-mark { width: 48px; height: 48px; }
 .home-hero { padding-top: max(112px, calc(var(--site-header-height) + 36px)); }
 .page-hero,
 .case-hero { padding-top: max(145px, calc(var(--site-header-height) + 44px)); }
@@ -1948,7 +1942,7 @@ html { scroll-padding-top: var(--site-header-height); }
 }
 
 @media (max-width: 700px) {
-  :root { --site-header-height: max(68px, calc(var(--website-logo-height, 56px) + 16px)); }
+  :root { --site-header-height: 68px; }
   .home-hero { padding-top: max(96px, calc(var(--site-header-height) + 24px)); }
   .page-hero,
   .case-hero { padding-top: max(115px, calc(var(--site-header-height) + 34px)); }
