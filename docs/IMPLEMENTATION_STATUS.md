@@ -17,12 +17,13 @@ Last updated: 2026-08-03
 - Uploaded project images and videos render inside the public responsive showcase frames, including reduced-motion-aware video playback and accessible descriptions.
 - Expanded dashboard overview, settings status, quick actions, responsive eight-item navigation, and 320px-safe media management.
 - Public testimonials use an auto-sliding editorial carousel with progress, direct selection, previous/next, play/pause, touch swiping, focus/hover pausing, visibility awareness, and reduced-motion behavior.
+- Redesigned testimonials as calmer editorial cards with smaller, lighter quote typography and optional client image/video layouts. The dedicated owner form supports direct signed upload, secure URL entry, accessible media descriptions, previews, replacement, and attachment removal.
 
 ## Validation
 
 - Lint: passed.
 - Typecheck: passed.
-- Automated tests: 11 passed.
+- Automated tests: 12 passed.
 - Production build: passed.
 - Prior desktop and mobile browser reviews passed for public navigation, archive filters, case studies, forms, animations, and inquiry persistence.
 

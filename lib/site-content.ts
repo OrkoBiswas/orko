@@ -21,6 +21,9 @@ const testimonialSchema = z.object({
   name: textField.max(160),
   role: optionalTextField.max(160),
   company: optionalTextField.max(180),
+  mediaType: z.enum(["none", "image", "video"]).default("none"),
+  mediaUrl: optionalUrl.default(""),
+  mediaAlt: optionalTextField.max(300).default(""),
 });
 
 export const siteContentSchema = z.object({

@@ -58,7 +58,7 @@ export function AdminContentForm({ initial }: { initial: SiteContent }) {
   function addTestimonial() {
     setContent((current) => ({
       ...current,
-      testimonials: [...current.testimonials, { id: recordId("testimonial"), quote: "", name: "", role: "", company: "" }],
+      testimonials: [...current.testimonials, { id: recordId("testimonial"), quote: "", name: "", role: "", company: "", mediaType: "none", mediaUrl: "", mediaAlt: "" }],
     }));
   }
 
@@ -96,6 +96,9 @@ export function AdminContentForm({ initial }: { initial: SiteContent }) {
               <label><span>Person’s name</span><input value={testimonial.name} onChange={(event) => updateTestimonial(testimonial.id, "name", event.target.value)} /></label>
               <label><span>Role (optional)</span><input value={testimonial.role} onChange={(event) => updateTestimonial(testimonial.id, "role", event.target.value)} /></label>
               <label><span>Company (optional)</span><input value={testimonial.company} onChange={(event) => updateTestimonial(testimonial.id, "company", event.target.value)} /></label>
+              <label><span>Client media</span><select value={testimonial.mediaType} onChange={(event) => updateTestimonial(testimonial.id, "mediaType", event.target.value)}><option value="none">No media</option><option value="image">Image</option><option value="video">Video</option></select></label>
+              <label className="admin-field-wide"><span>Secure media URL (optional)</span><input type="url" value={testimonial.mediaUrl} onChange={(event) => updateTestimonial(testimonial.id, "mediaUrl", event.target.value)} /></label>
+              <label className="admin-field-wide"><span>Media description</span><input value={testimonial.mediaAlt} onChange={(event) => updateTestimonial(testimonial.id, "mediaAlt", event.target.value)} /></label>
             </div>
           </fieldset>) : <div className="admin-record-empty"><p>No testimonials published.</p><span>The public site will show an honest approved-feedback notice instead of a fake quote.</span></div>}
         </div>

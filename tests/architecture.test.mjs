@@ -43,3 +43,17 @@ test("Cloudinary signatures and destructive media controls stay owner-only and s
   assert.match(mediaRoute, /requireSameOrigin/);
   assert.doesNotMatch(mediaClient, /CLOUDINARY_API_SECRET|process\.env/);
 });
+
+test("testimonial media is validated, owner-managed, and rendered accessibly", async () => {
+  const [contentModel, adminForm, carousel] = await Promise.all([
+    readFile(new URL("lib/site-content.ts", root), "utf8"),
+    readFile(new URL("components/AdminTestimonialsForm.tsx", root), "utf8"),
+    readFile(new URL("components/TestimonialCarousel.tsx", root), "utf8"),
+  ]);
+  assert.match(contentModel, /mediaType: z\.enum\(\["none", "image", "video"\]\)/);
+  assert.match(contentModel, /mediaUrl: optionalUrl/);
+  assert.match(adminForm, /\/api\/admin\/media\/signature/);
+  assert.match(adminForm, /accept="image\/\*,video\/\*"/);
+  assert.match(carousel, /aria-label=\{testimonial\.mediaAlt/);
+  assert.match(carousel, /<video/);
+});
