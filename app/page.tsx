@@ -35,7 +35,7 @@ export default async function Home() {
             <p className="hero-name"><span>Creative portfolio</span><strong>{brand.name}</strong></p>
             <h1 className="hero-title" aria-label={brand.headline}>
               <span className="hero-line"><span data-hero-line>{brand.heroLineOne}</span></span>
-              <span className="hero-line hero-line-accent"><span data-hero-line>{brand.heroLineTwo}</span></span>
+              <span className="hero-line hero-line-accent"><span data-hero-line><em>{brand.heroLineTwo}</em></span></span>
             </h1>
             <div className="hero-support">
               <p className="hero-intro">{brand.intro}</p>

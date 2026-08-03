@@ -1365,8 +1365,9 @@ html[data-data="low"] .hero-media { background: #181b15 url("https://res.cloudin
 .hero-name span { color: #8f9488; font-size: 9px; font-weight: 800; letter-spacing: .16em; }
 .hero-name span::after { content: ""; display: inline-block; width: clamp(34px, 5vw, 80px); height: 1px; margin-left: clamp(14px, 2vw, 30px); vertical-align: middle; background: rgba(242,240,233,.38); }
 .hero-name strong { color: var(--paper); font-family: var(--display); font-size: clamp(1.2rem, 1.8vw, 2rem); font-weight: 780; letter-spacing: -.025em; }
-.home-hero .hero-title { width: min(100%, 1100px); font-size: clamp(4.6rem, 8.5vw, 10.2rem); line-height: .8; text-shadow: 0 2px 30px rgba(0,0,0,.24); }
+.home-hero .hero-title { width: min(100%, 1100px); font-size: clamp(4.5rem, 7.3vw, 8.8rem); line-height: .82; letter-spacing: -.06em; text-shadow: 0 2px 30px rgba(0,0,0,.24); }
 .home-hero .hero-line-accent { padding-left: clamp(20px, 6vw, 110px); }
+.home-hero .hero-line-accent em { display: inline-block; color: var(--accent); font-size: .96em; font-style: italic; line-height: .88; }
 .hero-support { width: min(100%, 810px); display: grid; grid-template-columns: minmax(250px, 1fr) auto; align-items: end; gap: clamp(28px, 5vw, 74px); margin-top: clamp(24px, 4vh, 46px); }
 .hero-support .hero-intro { width: auto; margin: 0; }
 .hero-support .hero-actions { margin: 0; }
@@ -1378,7 +1379,7 @@ html[data-data="low"] .hero-media { background: #181b15 url("https://res.cloudin
 
 @media (max-width: 1024px) {
   .hero-copy { width: 76vw; }
-  .home-hero .hero-title { font-size: clamp(4rem, 9.2vw, 7.3rem); }
+  .home-hero .hero-title { font-size: clamp(3.8rem, 8.4vw, 6.8rem); }
   .hero-media { width: 66vw; opacity: .85; }
   .hero-support { width: min(100%, 720px); }
 }
@@ -1391,7 +1392,7 @@ html[data-data="low"] .hero-media { background: #181b15 url("https://res.cloudin
   .hero-name { margin-bottom: 16px; }
   .hero-name span { font-size: 8px; }
   .hero-name strong { font-size: 1.1rem; }
-  .home-hero .hero-title { font-size: clamp(3.2rem, 15.2vw, 5rem); line-height: .83; }
+  .home-hero .hero-title { font-size: clamp(3rem, 11.5vw, 4.4rem); line-height: .86; }
   .home-hero .hero-line-accent { padding-left: 0; }
   .hero-support { width: 100%; display: block; margin-top: 22px; }
   .hero-support .hero-intro { max-width: 410px; }
@@ -1403,7 +1404,7 @@ html[data-data="low"] .hero-media { background: #181b15 url("https://res.cloudin
 @media (max-width: 380px) {
   .home-hero { min-height: 680px; }
   .hero-name span::after { width: 20px; }
-  .home-hero .hero-title { font-size: clamp(2.9rem, 14.5vw, 3.6rem); }
+  .home-hero .hero-title { font-size: clamp(2.65rem, 11vw, 3.1rem); }
 }
 
 @media print {

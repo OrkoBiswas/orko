@@ -17,9 +17,9 @@ let schemaReady: Promise<void> | null = null;
 const legacySiteCopy: Partial<Record<keyof SiteContent, string>> = {
   title: "Video Editor · Motion Designer · Visual Storyteller",
   shortTitle: "Editor, motion artist & visual designer",
-  headline: "Visual stories, built to move.",
-  heroLineOne: "Visual stories,",
-  heroLineTwo: "built to move.",
+  headline: "Strong visuals, clear stories.",
+  heroLineOne: "Strong visuals,",
+  heroLineTwo: "clear stories.",
   intro: "I shape raw ideas into cinematic edits, precise motion systems, and campaign visuals people remember.",
   biography: "Orko Biswas is a multidisciplinary visual designer focused on the space where story, rhythm, and graphic clarity meet. From a single launch film to a complete social content system, every decision is made to give the message more momentum.",
   availability: "Booking select projects",
