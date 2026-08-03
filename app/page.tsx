@@ -32,19 +32,21 @@ export default async function Home() {
         <div className="hero-meta"><p><span className="status-dot" />{brand.availability}</p><p>{brand.location}<br />{brand.timezone}</p></div>
         <div className="hero-layout">
           <div className="hero-copy">
-            <p className="hero-kicker"><span>Independent creative</span><span>Video / Motion / Design</span></p>
+            <p className="hero-name"><span>Creative portfolio</span><strong>{brand.name}</strong></p>
             <h1 className="hero-title" aria-label={brand.headline}>
               <span className="hero-line"><span data-hero-line>{brand.heroLineOne}</span></span>
               <span className="hero-line hero-line-accent"><span data-hero-line>{brand.heroLineTwo}</span></span>
             </h1>
-            <p className="hero-intro">{brand.intro}</p>
-            <div className="hero-actions"><Link className="button button-accent" href="/work">Explore the archive <ArrowRight aria-hidden="true" /></Link><Link className="text-link" href="/start-a-project">Start a project <ArrowUpRight aria-hidden="true" /></Link></div>
+            <div className="hero-support">
+              <p className="hero-intro">{brand.intro}</p>
+              <div className="hero-actions"><Link className="button button-accent" href="/work">Explore the archive <ArrowRight aria-hidden="true" /></Link><Link className="text-link" href="/start-a-project">Start a project <ArrowUpRight aria-hidden="true" /></Link></div>
+            </div>
           </div>
           <HeroMotionMedia />
         </div>
         <div className="hero-foot">
           <a className="scroll-note" href="#selected-work"><ArrowDown aria-hidden="true" /> Scroll to explore</a>
-          <p><span>Available worldwide</span><span>Clear ideas. Strong visual work.</span></p>
+          <p><span>Orko Biswas</span><span>Portfolio / 2026</span></p>
         </div>
       </section>
 

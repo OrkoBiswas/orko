@@ -30,8 +30,8 @@ export function MotionProvider() {
       if (heroMedia) {
         gsap.fromTo(
           heroMedia,
-          { clipPath: "inset(0 0 100% 0)", scale: 0.97 },
-          { clipPath: "inset(0 0 0% 0)", scale: 1, duration: 1.2, ease: "power4.out", delay: 0.2 },
+          { autoAlpha: 0, scale: 1.06, xPercent: 5 },
+          { autoAlpha: 1, scale: 1, xPercent: 0, duration: 1.35, ease: "power4.out", delay: 0.12 },
         );
       }
 

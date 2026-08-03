@@ -35,14 +35,11 @@ export function HeroMotionMedia() {
   }, []);
 
   return (
-    <div className="hero-media" data-hero-media>
+    <div className="hero-media" data-hero-media aria-hidden="true">
       <video ref={video} muted loop playsInline preload="metadata" poster={heroPoster} aria-hidden="true">
         <source src={heroVideo} type="video/mp4" />
       </video>
       <div className="hero-media-wash" aria-hidden="true" />
-      <div className="hero-media-top"><span>Moving image</span><span>Loop / 01</span></div>
-      <div className="hero-media-index" aria-hidden="true">OB</div>
-      <div className="hero-media-bottom"><span>Video</span><span>Motion</span><span>Design</span></div>
     </div>
   );
 }
