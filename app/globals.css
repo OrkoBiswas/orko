@@ -1823,6 +1823,37 @@ html[data-motion="reduced"] .hero-light-rays span { animation: none; }
 .case-gallery-item dt { color: #777b72; font-size: 8px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
 .case-gallery-item dd { margin: 0; color: #30342e; font-size: 10px; text-align: right; overflow-wrap: anywhere; }
 
+/* Owner-managed identity, discovery, analytics, and public profile links */
+.wordmark-logo { width: auto; height: 34px; max-width: 128px; display: block; object-fit: contain; }
+.footer-logo { width: auto; height: 54px; max-width: 180px; display: block; margin-bottom: 18px; object-fit: contain; }
+.profile-links-band { padding-block: clamp(58px, 7vw, 100px); display: grid; grid-template-columns: minmax(240px, .72fr) minmax(0, 1.28fr); gap: clamp(36px, 7vw, 110px); align-items: start; border-bottom: 1px solid var(--line-light); }
+.profile-links-band h2 { max-width: 520px; margin: 16px 0 0; font-family: var(--display); font-size: clamp(2.8rem, 5vw, 5.4rem); line-height: .88; letter-spacing: -.045em; text-transform: uppercase; }
+.profile-links-list { border-top: 1px solid var(--line-light); }
+.profile-links-list a { min-height: 86px; display: grid; grid-template-columns: 92px minmax(0, 1fr) 24px; gap: 18px; align-items: center; padding: 15px 8px; color: var(--ink); border-bottom: 1px solid var(--line-light); transition: padding .25s ease, background .25s ease; }
+.profile-links-list a:hover, .profile-links-list a:focus-visible { padding-inline: 18px; background: rgba(201,255,67,.18); }
+.profile-links-list a.is-featured { background: var(--accent); border-color: #aecf3f; }
+.profile-links-list a.is-featured:hover, .profile-links-list a.is-featured:focus-visible { background: #d6ff71; }
+.profile-links-list span { font-size: 8px; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
+.profile-links-list strong { font-size: clamp(1rem, 2vw, 1.45rem); }
+.profile-links-list svg { width: 18px; }
+.admin-growth-editor { margin-top: 22px; }
+.admin-brand-asset { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 16px; align-items: center; padding: 14px; border: 1px solid #d5dbde; background: #fafbfb; }
+.admin-brand-asset > div { width: 110px; min-height: 76px; display: grid; place-items: center; overflow: hidden; color: #7b8781; background: #ecefed; font-size: 9px; text-transform: uppercase; }
+.admin-brand-asset img { width: 100%; max-height: 96px; display: block; object-fit: contain; }
+.admin-brand-asset label { min-width: 0; }
+.admin-upload-button { position: relative; width: fit-content; min-height: 36px; display: inline-flex; align-items: center; gap: 7px; margin-top: 8px; padding: 0 11px; overflow: hidden; color: #26332e !important; border: 1px solid #c8d0d3; background: white; cursor: pointer; font-size: 9px !important; }
+.admin-upload-button svg { width: 14px; }
+.admin-upload-button input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.admin-check-field { min-height: 44px; flex-direction: row !important; align-items: center; gap: 10px !important; padding: 10px 12px; border: 1px solid #d5dbde; background: #fafbfb; }
+.admin-check-field input { width: 18px !important; min-height: 18px !important; accent-color: #8aaa24; }
+.admin-check-field span { line-height: 1.4; }
+.admin-profile-record { margin-top: 14px; }
+.admin-profile-actions { display: flex; align-items: center; gap: 8px; }
+.admin-profile-actions button { width: 38px; height: 36px; display: grid; place-items: center; color: #35423d; border: 1px solid #c8d0d3; background: white; }
+.admin-profile-actions button:disabled { opacity: .4; }
+.admin-profile-actions button svg { width: 14px; }
+.admin-profile-actions .admin-inline-link { margin-left: auto; }
+
 @media (max-width: 900px) {
   .filter-panel { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .admin-project-gallery-item { grid-template-columns: 210px minmax(0, 1fr); }
@@ -1842,6 +1873,10 @@ html[data-motion="reduced"] .hero-light-rays span { animation: none; }
   .case-gallery-grid { columns: 1; column-gap: 0; }
   .case-gallery-item { margin-bottom: 44px; }
   .case-gallery-item figcaption { gap: 20px; }
+  .profile-links-band { grid-template-columns: 1fr; gap: 34px; }
+  .profile-links-list a { grid-template-columns: 74px minmax(0, 1fr) 20px; }
+  .admin-brand-asset { grid-template-columns: 1fr; }
+  .admin-brand-asset > div { width: 100%; }
 }
 
 @media (max-width: 380px) {

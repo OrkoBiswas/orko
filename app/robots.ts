@@ -1,2 +1,8 @@
 import type { MetadataRoute } from "next";
-export default function robots(): MetadataRoute.Robots { const base = process.env.NEXT_PUBLIC_SITE_URL || "https://orkobiswas.com"; return { rules: [{ userAgent: "*", allow: "/", disallow: ["/admin", "/api"] }], sitemap: `${base}/sitemap.xml` }; }
+import { getSiteContent } from "@/db/repository";
+
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  const content = await getSiteContent();
+  const base = (content.canonicalUrl || process.env.NEXT_PUBLIC_SITE_URL || "https://orkobiswas.com").replace(/\/$/, "");
+  return { rules: [{ userAgent: "*", allow: content.searchIndexing ? "/" : undefined, disallow: content.searchIndexing ? ["/admin", "/api"] : "/" }], sitemap: `${base}/sitemap.xml`, host: base };
+}

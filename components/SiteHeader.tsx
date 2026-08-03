@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @next/next/no-img-element -- Owner-controlled logo URLs are validated before storage. */
 
 import Link from "next/link";
 import { ArrowUpRight, Menu, X } from "lucide-react";
@@ -24,7 +25,7 @@ export function SiteHeader({ content: brand }: { content: SiteContent }) {
   return (
     <header className="site-header">
       <Link className="wordmark" href="/" aria-label={`${brand.name}, home`} onClick={() => setOpen(false)}>
-        <span className="wordmark-mark">{brand.monogram}</span>
+        {brand.logoUrl ? <img className="wordmark-logo" src={brand.logoUrl} alt={brand.logoAlt || `${brand.name} logo`} /> : <span className="wordmark-mark">{brand.monogram}</span>}
         <span>{brand.name}</span>
       </Link>
       <nav className="desktop-nav" aria-label="Primary navigation">

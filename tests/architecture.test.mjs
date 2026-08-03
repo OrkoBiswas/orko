@@ -28,6 +28,24 @@ test("required project documentation exists", async () => {
   }
 });
 
+test("growth metadata and profile controls remain owner-managed and server-rendered", async () => {
+  const [schema, settings, layout, robots, llms] = await Promise.all([
+    readFile(new URL("lib/site-content.ts", root), "utf8"),
+    readFile(new URL("components/AdminGrowthSettings.tsx", root), "utf8"),
+    readFile(new URL("app/layout.tsx", root), "utf8"),
+    readFile(new URL("app/robots.ts", root), "utf8"),
+    readFile(new URL("app/llms.txt/route.ts", root), "utf8"),
+  ]);
+  assert.match(schema, /gtmContainerId/);
+  assert.match(schema, /profileLinks/);
+  assert.match(settings, /SEO, AEO & GEO/);
+  assert.match(settings, /Google Tag Manager/);
+  assert.match(layout, /ProfessionalService/);
+  assert.match(layout, /googletagmanager/);
+  assert.match(robots, /searchIndexing/);
+  assert.match(llms, /Verified public profiles/);
+});
+
 test("Cloudinary signatures and destructive media controls stay owner-only and server-side", async () => {
   const [cloudinary, signatureRoute, mediaRoute, mediaClient] = await Promise.all([
     readFile(new URL("lib/cloudinary.ts", root), "utf8"),

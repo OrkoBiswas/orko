@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { ArrowDown, ArrowRight, ArrowUpRight, Asterisk, Sparkles } from "lucide-react";
 import { projectMatchesDiscipline, projects, services, workDisciplines } from "@/lib/portfolio";
 import { getSiteContent, listPortfolioProjects, listPortfolioServices } from "@/db/repository";
@@ -7,8 +8,15 @@ import { ShowreelDialog } from "@/components/ShowreelDialog";
 import { ExperienceSection } from "@/components/ExperienceSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { HeroMotionMedia } from "@/components/HeroMotionMedia";
+import { ProfileLinksBand } from "@/components/ProfileLinksBand";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getSiteContent();
+  const canonical = (content.canonicalUrl || process.env.NEXT_PUBLIC_SITE_URL || "https://orkobiswas.com").replace(/\/$/, "");
+  return { alternates: { canonical } };
+}
 
 export default async function Home() {
   const [brand, liveProjects, liveServices] = await Promise.all([getSiteContent(), listPortfolioProjects(projects, { publishedOnly: true }), listPortfolioServices(services)]);
@@ -48,6 +56,8 @@ export default async function Home() {
       </section>
 
       <div className="discipline-rail" aria-label="Disciplines"><div><span>VIDEO EDITING</span><Asterisk /><span>2D MOTION</span><Asterisk /><span>GRAPHIC DESIGN</span><Asterisk /><span>VISUAL SYSTEMS</span><Asterisk /><span>VIDEO EDITING</span></div></div>
+
+      <ProfileLinksBand content={brand} />
 
       <section id="selected-work" className="selected-work section-shell section-space">
         <div className="section-heading" data-reveal><div><p className="eyebrow"><span>01</span>Selected work</p><h2>{brand.workHeading}</h2></div><div><p>{brand.workIntro}</p><Link className="text-link" href="/work">Enter the full archive <ArrowUpRight aria-hidden="true" /></Link></div></div>

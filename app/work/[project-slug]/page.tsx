@@ -14,7 +14,8 @@ export async function generateMetadata({ params }: { params: Promise<{ "project-
   const { "project-slug": slug } = await params;
   const project = (await listPortfolioProjects(projects, { publishedOnly: true })).find((item) => item.slug === slug);
   if (!project) return { title: "Project not found" };
-  return { title: project.title, description: project.summary, openGraph: { title: `${project.title} — Orko Biswas`, description: project.summary } };
+  const images = project.mediaType === "image" && project.mediaUrl ? [{ url: project.mediaUrl, alt: project.mediaAlt || project.title }] : undefined;
+  return { title: project.title, description: project.summary, alternates: { canonical: `/work/${project.slug}` }, openGraph: { type: "article", title: `${project.title} — Orko Biswas`, description: project.summary, url: `/work/${project.slug}`, images }, twitter: { card: "summary_large_image", title: project.title, description: project.summary, images: images?.map((image) => image.url) } };
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ "project-slug": string }> }) {
@@ -25,8 +26,10 @@ export default async function ProjectPage({ params }: { params: Promise<{ "proje
   const index = liveProjects.findIndex((item) => item.id === project.id);
   const next = liveProjects[(index + 1) % liveProjects.length];
   const gallery = (project.gallery ?? []).filter((item) => item.url !== project.mediaUrl);
+  const projectSchema = { "@context": "https://schema.org", "@type": "CreativeWork", name: project.title, description: project.summary, creator: { "@type": "Person", name: "Orko Biswas" }, dateCreated: String(project.year), genre: project.category, about: project.industry, image: project.mediaType === "image" ? project.mediaUrl || undefined : undefined, video: project.mediaType === "video" && project.mediaUrl ? { "@type": "VideoObject", name: project.title, description: project.mediaAlt || project.summary, contentUrl: project.mediaUrl } : undefined };
   return (
     <article>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(projectSchema).replaceAll("<", "\\u003c") }} />
       <header className="case-hero">
         <div className="section-shell">
           <div className="case-hero-head"><Link className="text-link" href="/work"><ArrowLeft aria-hidden="true" /> Back to archive</Link><p className="eyebrow">Case study / {project.index}</p></div>
