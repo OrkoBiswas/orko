@@ -9,8 +9,8 @@ export function CustomCursor() {
   const dot = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches || document.documentElement.dataset.motion === "reduced";
-    if (!window.matchMedia("(pointer: fine)").matches || reduce) return;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!window.matchMedia("(pointer: fine)").matches || prefersReducedMotion) return;
 
     const root = cursor.current;
     const ringElement = ring.current;
@@ -21,31 +21,43 @@ export function CustomCursor() {
       element.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
     };
 
-    const onMove = (event: PointerEvent) => {
-      place(ringElement, event.clientX, event.clientY);
-      place(dotElement, event.clientX, event.clientY);
-      root.classList.add("is-visible");
-    };
-
-    const onOver = (event: PointerEvent) => {
-      const target = event.target instanceof Element ? event.target : null;
-      const nativeControl = target?.closest("input, textarea, select, video[controls], iframe, [contenteditable='true']");
-      const interactive = target?.closest<HTMLElement>("[data-cursor], a, button, summary, [role='button']");
-      const openTarget = target?.closest<HTMLElement>("[data-cursor='project'], [data-cursor='showreel']");
+    const setMode = (target: EventTarget | null) => {
+      const element = target instanceof Element ? target : null;
+      const nativeControl = element?.closest("input, textarea, select, video[controls], iframe, [contenteditable='true'], [data-native-cursor]");
+      const interactive = element?.closest<HTMLElement>("[data-cursor], a, button, summary, label[for], [role='button']");
+      const openTarget = element?.closest<HTMLElement>("[data-cursor='project'], [data-cursor='showreel']");
       root.classList.toggle("is-native", Boolean(nativeControl));
       root.classList.toggle("is-interactive", Boolean(interactive) && !nativeControl);
       root.classList.toggle("is-open", Boolean(openTarget) && !nativeControl);
     };
 
-    const hide = () => root.classList.remove("is-visible");
-    const press = () => root.classList.add("is-pressed");
+    const onMove = (event: PointerEvent) => {
+      if (!event.isPrimary || (event.pointerType !== "mouse" && event.pointerType !== "pen")) return;
+      place(ringElement, event.clientX, event.clientY);
+      place(dotElement, event.clientX, event.clientY);
+      setMode(event.target);
+      root.classList.add("is-visible");
+    };
+
+    const onOver = (event: PointerEvent) => setMode(event.target);
+
+    const hide = () => root.classList.remove("is-visible", "is-interactive", "is-open", "is-native", "is-pressed");
+    const press = (event: PointerEvent) => {
+      if (event.isPrimary && event.button === 0 && root.classList.contains("is-visible")) root.classList.add("is-pressed");
+    };
     const release = () => root.classList.remove("is-pressed");
+    const onVisibilityChange = () => { if (document.hidden) hide(); };
 
     document.documentElement.classList.add("cursor-ready");
     window.addEventListener("pointermove", onMove, { passive: true });
     document.addEventListener("pointerover", onOver, { passive: true });
     document.addEventListener("pointerdown", press, { passive: true });
     document.addEventListener("pointerup", release, { passive: true });
+    document.addEventListener("pointercancel", release, { passive: true });
+    document.addEventListener("lostpointercapture", release, { passive: true });
+    document.addEventListener("dragend", release, { passive: true });
+    document.addEventListener("contextmenu", release);
+    document.addEventListener("visibilitychange", onVisibilityChange);
     document.documentElement.addEventListener("mouseleave", hide);
     window.addEventListener("blur", hide);
 
@@ -55,6 +67,11 @@ export function CustomCursor() {
       document.removeEventListener("pointerover", onOver);
       document.removeEventListener("pointerdown", press);
       document.removeEventListener("pointerup", release);
+      document.removeEventListener("pointercancel", release);
+      document.removeEventListener("lostpointercapture", release);
+      document.removeEventListener("dragend", release);
+      document.removeEventListener("contextmenu", release);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       document.documentElement.removeEventListener("mouseleave", hide);
       window.removeEventListener("blur", hide);
     };

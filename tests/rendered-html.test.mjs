@@ -17,7 +17,7 @@ test("server-renders the finished portfolio homepage", async () => {
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /<title>Orko Biswas/);
-  assert.match(html, /Strong visuals/);
+  assert.match(html, /Visual ideas/);
   assert.match(html, /Selected creative work/);
   assert.match(html, /Featured library/);
   assert.match(html, /items in the full library/);
