@@ -21,7 +21,7 @@ export function ProjectCard({ project, priority = false, variant = "default" }: 
           <div className="showcase-card-info">
             <div><h3>{project.title}</h3><span>{project.industry} · {project.year}</span></div>
             <p>{project.summary}</p>
-            <div className="showcase-card-foot"><span>{project.services.slice(0, 2).join(" + ")}</span><span>Open item <ArrowUpRight aria-hidden="true" /></span></div>
+            <div className="showcase-card-foot"><span>{project.services.slice(0, 2).join(" + ")}</span><span>Explore work <ArrowUpRight aria-hidden="true" /></span></div>
           </div>
         </Link>
       </article>

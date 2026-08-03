@@ -57,9 +57,9 @@ export default async function Home() {
         <div className="section-heading" data-reveal><div><p className="eyebrow"><span>01</span>Selected work</p><h2>{brand.workHeading}</h2></div><div><p>{brand.workIntro}</p><Link className="text-link" href="/work">Enter the full archive <ArrowUpRight aria-hidden="true" /></Link></div></div>
         <div className="showcase-library">
           <div className="showcase-library-top" data-reveal>
-            <div className="showcase-library-title"><span>Featured library</span><strong>{String(featured.length).padStart(2, "0")} selected works</strong></div>
+            <div className="showcase-library-title"><span>Curated selection</span><strong>{String(featured.length).padStart(2, "0")} works across every format</strong></div>
             <dl aria-label="Featured work disciplines">{showcaseDisciplines.map(([discipline, count]) => <div key={discipline}><dt>{discipline}</dt><dd>{String(count).padStart(2, "0")}</dd></div>)}</dl>
-            <p>Each preview keeps the correct frame shape for video, vertical content, posters, squares, and banners.</p>
+            <p>Every preview keeps its real frame—from wide video and vertical motion to square posts, posters, and banners.</p>
           </div>
           <ShowcaseGrid projects={featured} />
           <div className="showcase-library-footer" data-reveal>

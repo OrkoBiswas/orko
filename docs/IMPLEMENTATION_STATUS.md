@@ -7,7 +7,7 @@ Last updated: 2026-08-03
 - Production Vinext/Next App Router foundation, TypeScript, Cloudflare Worker output, D1 binding, idempotent schema, design tokens, and project documentation.
 - Responsive public portfolio with homepage, filterable work library, project pages, services, about, experience, showreel fallback, résumé, contact, brief builder, legal pages, SEO routes, and authored recovery states.
 - Smooth GSAP/ScrollTrigger/Flip motion with cleanup, touch behavior, reduced-motion handling, low-data mode, and mobile alternatives.
-- Format-aware showcase system with five selectable frame types, responsive layout, compact metadata, route-aware reveals, and neutral generated previews.
+- Format-aware showcase system with five selectable frame types, a polished editorial mosaic, strong lead-work hierarchy, responsive metadata, route-aware reveals, and neutral generated previews that preserve each project frame.
 - Server-validated inquiry flow with durable D1 storage, unique references, consent timestamp, honeypot, payload limit, rate limiting, safe errors, and optional email notifications.
 - Standalone administrator username/password authentication, signed HTTP-only sessions, login throttling, same-origin mutations, inquiry workflow, and audit logging.
 - Owner controls for public identity, homepage copy, biography, contact/social details, SEO, services, experience history, approved testimonials, and all project narratives and presentation settings.
