@@ -102,7 +102,7 @@ export default async function Home() {
           <div className="process-timeline" tabIndex={0} role="region" aria-label="Six-stage project timeline">
             <div className="process-timeline-canvas">
               <div className="process-line" aria-hidden="true"><span data-process-progress /></div>
-              <ol className="process-list">{processStages.map((stage, index) => <li key={stage.title} data-process-step><span className="process-node" data-process-node aria-hidden="true">0{index + 1}</span><article className="process-card" data-process-card><small>Stage 0{index + 1}</small><h3>{stage.title}</h3><p>{stage.copy}</p><ul data-process-detail aria-label={`${stage.title} focus areas`}>{stage.details.map((detail) => <li key={detail}>{detail}</li>)}</ul></article></li>)}</ol>
+              <ol className="process-milestones">{processStages.map((stage, index) => <li key={stage.title} data-process-step><span className="process-node" data-process-node aria-hidden="true">0{index + 1}</span><article className="process-detail" data-process-entry><small>Stage 0{index + 1}</small><h3>{stage.title}</h3><p>{stage.copy}</p><ul className="process-focus" data-process-detail aria-label={`${stage.title} focus areas`}>{stage.details.map((detail) => <li key={detail}>{detail}</li>)}</ul></article></li>)}</ol>
             </div>
           </div>
         </div>
