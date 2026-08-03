@@ -19,7 +19,7 @@ export function ShowreelDialog({ triggerLabel = "Play showreel" }: { triggerLabe
 
   return (
     <>
-      <button className="reel-trigger" type="button" onClick={() => dialog.current?.showModal()}><span><Play aria-hidden="true" fill="currentColor" /></span>{triggerLabel}</button>
+      <button className="reel-trigger" type="button" data-cursor="showreel" onClick={() => dialog.current?.showModal()}><span><Play aria-hidden="true" fill="currentColor" /></span>{triggerLabel}</button>
       <dialog className="reel-dialog" ref={dialog} aria-labelledby="reel-title">
         <div className="reel-dialog-inner">
           <button className="dialog-close" type="button" onClick={() => dialog.current?.close()} aria-label="Close showreel"><X aria-hidden="true" /></button>
@@ -35,4 +35,3 @@ export function ShowreelDialog({ triggerLabel = "Play showreel" }: { triggerLabe
     </>
   );
 }
-

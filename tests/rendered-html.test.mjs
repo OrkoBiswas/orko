@@ -17,9 +17,12 @@ test("server-renders the finished portfolio homepage", async () => {
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /<title>Orko Biswas/);
-  assert.match(html, /Strong visuals/);
+  assert.match(html, /Visual ideas/);
   assert.match(html, /Selected creative work/);
-  assert.match(html, /Featured library/);
+  assert.match(html, /Project runway/);
+  assert.match(html, /\/work\?discipline=video/);
+  assert.match(html, /\/work\?discipline=motion/);
+  assert.match(html, /\/work\?discipline=design/);
   assert.match(html, /items in the full library/);
   assert.match(html, /About &amp; experience/);
   assert.match(html, /Independent creative practice/);
@@ -71,6 +74,23 @@ test("owner mutation endpoint rejects anonymous requests", async () => {
   assert.equal(response.status, 401);
   const json = await response.json();
   assert.equal(json.ok, false);
+});
+
+test("project creation rejects anonymous requests", async () => {
+  const response = await request("/api/admin/projects", {
+    method: "POST",
+    headers: { "content-type": "application/json", accept: "application/json" },
+    body: JSON.stringify({}),
+  });
+  assert.equal(response.status, 401);
+});
+
+test("Cloudinary upload signatures reject anonymous requests", async () => {
+  const response = await request("/api/admin/media/signature", {
+    method: "POST",
+    headers: { accept: "application/json" },
+  });
+  assert.equal(response.status, 401);
 });
 
 test("unknown routes use the authored recovery state", async () => {

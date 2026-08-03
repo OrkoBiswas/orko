@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SettingsDock } from "@/components/SettingsDock";
 import { MotionProvider } from "@/components/MotionProvider";
 import { CustomCursor } from "@/components/CustomCursor";
+import { AdminNotificationCenter } from "@/components/AdminNotificationCenter";
 import type { SiteContent } from "@/lib/site-content";
 
 export function AppFrame({ content, children }: { content: SiteContent; children: React.ReactNode }) {
@@ -13,7 +14,7 @@ export function AppFrame({ content, children }: { content: SiteContent; children
   const isAdmin = pathname === "/admin" || pathname.startsWith("/admin/");
 
   if (isAdmin) {
-    return <main id="main-content" className="admin-route-main">{children}</main>;
+    return <><AdminNotificationCenter /><main id="main-content" className="admin-route-main">{children}</main></>;
   }
 
   return (

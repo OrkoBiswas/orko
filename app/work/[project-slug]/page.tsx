@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { projects } from "@/lib/portfolio";
 import { listPortfolioProjects } from "@/db/repository";
 import { ProjectArtwork } from "@/components/ProjectArtwork";
+import { ProjectMedia } from "@/components/ProjectMedia";
 import { CtaBand } from "@/components/CtaBand";
 
 export function generateStaticParams() { return projects.map((project) => ({ "project-slug": project.slug })); }
@@ -13,7 +14,8 @@ export async function generateMetadata({ params }: { params: Promise<{ "project-
   const { "project-slug": slug } = await params;
   const project = (await listPortfolioProjects(projects, { publishedOnly: true })).find((item) => item.slug === slug);
   if (!project) return { title: "Project not found" };
-  return { title: project.title, description: project.summary, openGraph: { title: `${project.title} — Orko Biswas`, description: project.summary } };
+  const images = project.mediaType === "image" && project.mediaUrl ? [{ url: project.mediaUrl, alt: project.mediaAlt || project.title }] : undefined;
+  return { title: project.title, description: project.summary, alternates: { canonical: `/work/${project.slug}` }, openGraph: { type: "article", title: `${project.title} — Orko Biswas`, description: project.summary, url: `/work/${project.slug}`, images }, twitter: { card: "summary_large_image", title: project.title, description: project.summary, images: images?.map((image) => image.url) } };
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ "project-slug": string }> }) {
@@ -23,8 +25,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ "proje
   if (!project) notFound();
   const index = liveProjects.findIndex((item) => item.id === project.id);
   const next = liveProjects[(index + 1) % liveProjects.length];
+  const gallery = (project.gallery ?? []).filter((item) => item.url !== project.mediaUrl);
+  const projectSchema = { "@context": "https://schema.org", "@type": "CreativeWork", name: project.title, description: project.summary, creator: { "@type": "Person", name: "Orko Biswas" }, dateCreated: String(project.year), genre: project.category, about: project.industry, image: project.mediaType === "image" ? project.mediaUrl || undefined : undefined, video: project.mediaType === "video" && project.mediaUrl ? { "@type": "VideoObject", name: project.title, description: project.mediaAlt || project.summary, contentUrl: project.mediaUrl } : undefined };
   return (
     <article>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(projectSchema).replaceAll("<", "\\u003c") }} />
       <header className="case-hero">
         <div className="section-shell">
           <div className="case-hero-head"><Link className="text-link" href="/work"><ArrowLeft aria-hidden="true" /> Back to archive</Link><p className="eyebrow">Case study / {project.index}</p></div>
@@ -33,6 +38,20 @@ export default async function ProjectPage({ params }: { params: Promise<{ "proje
         </div>
       </header>
       <div className="case-art"><ProjectArtwork project={project} /></div>
+      {gallery.length > 0 && <section className="case-gallery section-shell">
+        <div className="case-gallery-head"><div><p className="eyebrow">Project gallery</p><h2>More from this project.</h2></div><span>{String(gallery.length).padStart(2, "0")} files</span></div>
+        <div className="case-gallery-grid">{gallery.map((item, itemIndex) => {
+          const title = item.title || `${project.title} / ${String(itemIndex + 1).padStart(2, "0")}`;
+          const category = item.category || project.category;
+          const client = item.client || project.client;
+          const industry = item.industry || project.industry;
+          const year = item.year ?? project.year;
+          return <figure className="case-gallery-item" key={item.id}>
+            <div className="case-gallery-media"><ProjectMedia url={item.url} type={item.type} alt={item.alt || `${title} project media`} controls /></div>
+            <figcaption><div className="case-gallery-title"><span>{String(itemIndex + 1).padStart(2, "0")} / {item.type}</span><h3>{title}</h3><p>{item.alt || `${category} work for ${client}.`}</p></div><dl><div><dt>Category</dt><dd>{category}</dd></div><div><dt>Client</dt><dd>{client}</dd></div><div><dt>Industry</dt><dd>{industry}</dd></div><div><dt>Year</dt><dd>{year}</dd></div></dl></figcaption>
+          </figure>;
+        })}</div>
+      </section>}
       <section className="case-overview"><div className="section-shell"><div className="case-statement" data-reveal><p>“{project.summary}”</p></div><div className="case-details"><div data-reveal><p className="eyebrow">The challenge</p><h2>Find the real point.</h2><p>{project.challenge}</p></div><div data-reveal><p className="eyebrow">Creative direction</p><h2>Give it one clear rule.</h2><p>{project.concept}</p></div></div></div></section>
       <section className="case-process"><div className="section-shell"><p className="eyebrow">Process / selected stages</p><ol>{project.approach.map((item, itemIndex) => <li key={item}><span>0{itemIndex + 1}</span><h3>{item}</h3></li>)}</ol></div></section>
       <section className="case-delivery"><div className="delivery-grid section-shell"><div><p className="eyebrow">Delivery system</p><h2>One idea.<br />Every required frame.</h2><p>This concept case study demonstrates the intended creative and production approach. Real performance metrics will only be added when verified.</p></div><div><div className="delivery-list">{project.deliverables.map((item) => <p key={item}>↳ {item}</p>)}</div><p className="eyebrow" style={{ marginTop: 40 }}>Tools / {project.tools.join(" · ")}</p><Link className="text-link" href={`/start-a-project?reference=${project.slug}`} style={{ marginTop: 34 }}>Reference this direction <ArrowUpRight aria-hidden="true" /></Link></div></div></section>

@@ -5,6 +5,16 @@ const textField = z.string().trim().min(1).max(500);
 const longTextField = z.string().trim().min(1).max(3000);
 const optionalTextField = z.string().trim().max(500);
 const optionalUrl = z.string().trim().max(500).refine((value) => !value || /^https?:\/\//i.test(value), "Enter a complete http(s) URL.");
+const optionalAssetUrl = z.string().trim().max(500).refine((value) => !value || /^https:\/\/res\.cloudinary\.com\//i.test(value) || /^\/[a-z0-9/_.,?=&%-]+$/i.test(value), "Use a secure Cloudinary URL or root-relative asset path.");
+
+const profileLinkSchema = z.object({
+  id: textField.max(120),
+  platform: z.enum(["fiverr", "dribbble", "behance", "discord", "linkedin", "instagram", "youtube", "custom"]),
+  label: textField.max(80),
+  url: optionalUrl.refine(Boolean, "Enter a complete profile or service URL."),
+  enabled: z.boolean().default(true),
+  featured: z.boolean().default(false),
+});
 
 const experienceSchema = z.object({
   id: textField.max(120),
@@ -21,6 +31,9 @@ const testimonialSchema = z.object({
   name: textField.max(160),
   role: optionalTextField.max(160),
   company: optionalTextField.max(180),
+  mediaType: z.enum(["none", "image", "video"]).default("none"),
+  mediaUrl: optionalUrl.default(""),
+  mediaAlt: optionalTextField.max(300).default(""),
 });
 
 export const siteContentSchema = z.object({
@@ -43,6 +56,13 @@ export const siteContentSchema = z.object({
   instagram: optionalUrl,
   linkedin: optionalUrl,
   behance: optionalUrl,
+  logoUrl: optionalAssetUrl.default(""),
+  logoAlt: optionalTextField.max(160).default(""),
+  logoWidth: z.number().int().min(20).max(200).default(180),
+  faviconUrl: optionalAssetUrl.default(""),
+  socialImageUrl: optionalAssetUrl.default(""),
+  profileLinksHeading: textField.max(120).default("Find me and hire me online."),
+  profileLinks: z.array(profileLinkSchema).max(10).default([]),
   workHeading: textField.max(180),
   workIntro: longTextField.max(800),
   showreelHeading: textField.max(180),
@@ -57,6 +77,17 @@ export const siteContentSchema = z.object({
   testimonials: z.array(testimonialSchema).max(8),
   seoTitle: textField.max(120),
   seoDescription: longTextField.max(320),
+  seoKeywords: optionalTextField.max(500).default(""),
+  canonicalUrl: optionalUrl.default(""),
+  siteLanguage: z.string().trim().regex(/^[a-z]{2}(?:-[A-Z]{2})?$/, "Use a language code such as en or en-US.").default("en"),
+  themeColor: z.string().trim().regex(/^#[0-9a-f]{6}$/i, "Use a six-digit hex color.").default("#C9FF43"),
+  searchIndexing: z.boolean().default(true),
+  aeoSummary: longTextField.max(700).default(brand.intro),
+  expertiseAreas: optionalTextField.max(500).default("Video editing, 2D motion graphics, graphic design, social media creative"),
+  serviceArea: optionalTextField.max(200).default("Worldwide"),
+  googleSiteVerification: optionalTextField.max(200).default(""),
+  bingSiteVerification: optionalTextField.max(200).default(""),
+  gtmContainerId: z.string().trim().max(30).refine((value) => !value || /^GTM-[A-Z0-9]+$/i.test(value), "Use a valid GTM container ID such as GTM-XXXXXXX.").default(""),
 });
 
 export type SiteContent = z.infer<typeof siteContentSchema>;
@@ -67,8 +98,8 @@ export const defaultSiteContent: SiteContent = {
   title: brand.title,
   shortTitle: brand.shortTitle,
   headline: brand.headline,
-  heroLineOne: "Strong visuals,",
-  heroLineTwo: "clear stories.",
+  heroLineOne: "Visual ideas.",
+  heroLineTwo: "Made to connect.",
   intro: brand.intro,
   biography: brand.biography,
   location: brand.location,
@@ -81,6 +112,13 @@ export const defaultSiteContent: SiteContent = {
   instagram: brand.social.instagram,
   linkedin: brand.social.linkedin,
   behance: brand.social.behance,
+  logoUrl: "",
+  logoAlt: "Orko Biswas logo",
+  logoWidth: 180,
+  faviconUrl: "",
+  socialImageUrl: "/og.png",
+  profileLinksHeading: "Find me and hire me online.",
+  profileLinks: [],
   workHeading: "Selected creative work.",
   workIntro: "Explore video edits, motion graphics, posters, social content, brand visuals, and project bundles.",
   showreelHeading: "A quick look at my work.",
@@ -104,10 +142,23 @@ export const defaultSiteContent: SiteContent = {
   testimonials: [],
   seoTitle: `${brand.name} — Video Editor, Motion Designer & Graphic Designer`,
   seoDescription: brand.intro,
+  seoKeywords: "Orko Biswas, video editor, motion designer, graphic designer, Bangladesh, freelance visual designer",
+  canonicalUrl: "",
+  siteLanguage: "en",
+  themeColor: "#C9FF43",
+  searchIndexing: true,
+  aeoSummary: "Orko Biswas is a Bangladesh-based video editor, motion designer, and graphic designer working with brands and creators worldwide.",
+  expertiseAreas: "Video editing, 2D motion graphics, graphic design, promotional videos, social media creative, visual systems",
+  serviceArea: "Worldwide",
+  googleSiteVerification: "",
+  bingSiteVerification: "",
+  gtmContainerId: "",
 };
 
 export function parseSiteContent(value: unknown): SiteContent {
-  const candidate = typeof value === "object" && value ? { ...defaultSiteContent, ...value } : defaultSiteContent;
+  const stored = typeof value === "object" && value ? value as Record<string, unknown> : {};
+  const normalizedLogoWidth = typeof stored.logoWidth === "number" ? Math.min(200, Math.max(20, Math.round(stored.logoWidth))) : defaultSiteContent.logoWidth;
+  const candidate = { ...defaultSiteContent, ...stored, logoWidth: normalizedLogoWidth };
   const parsed = siteContentSchema.safeParse(candidate);
   return parsed.success ? parsed.data : defaultSiteContent;
 }

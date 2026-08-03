@@ -27,3 +27,94 @@ test("required project documentation exists", async () => {
     assert.ok(contents.length > 200, `${file} should contain substantive guidance`);
   }
 });
+
+test("growth metadata and profile controls remain owner-managed and server-rendered", async () => {
+  const [schema, settings, layout, robots, llms] = await Promise.all([
+    readFile(new URL("lib/site-content.ts", root), "utf8"),
+    readFile(new URL("components/AdminGrowthSettings.tsx", root), "utf8"),
+    readFile(new URL("app/layout.tsx", root), "utf8"),
+    readFile(new URL("app/robots.ts", root), "utf8"),
+    readFile(new URL("app/llms.txt/route.ts", root), "utf8"),
+  ]);
+  assert.match(schema, /gtmContainerId/);
+  assert.match(schema, /profileLinks/);
+  assert.match(schema, /logoWidth: z\.number\(\)\.int\(\)\.min\(20\)\.max\(200\)/);
+  assert.doesNotMatch(schema, /logoHeight/);
+  assert.doesNotMatch(schema, /showHeaderName/);
+  assert.match(settings, /SEO, AEO & GEO/);
+  assert.match(settings, /Google Tag Manager/);
+  assert.match(layout, /ProfessionalService/);
+  assert.match(layout, /googletagmanager/);
+  assert.doesNotMatch(layout, /<head>/);
+  assert.match(robots, /searchIndexing/);
+  assert.match(llms, /Verified public profiles/);
+});
+
+test("dashboard mutations use one accessible global notification system", async () => {
+  const [frame, notifications] = await Promise.all([
+    readFile(new URL("components/AppFrame.tsx", root), "utf8"),
+    readFile(new URL("components/AdminNotificationCenter.tsx", root), "utf8"),
+  ]);
+  assert.match(frame, /<AdminNotificationCenter/);
+  assert.match(notifications, /aria-live/);
+  assert.match(notifications, /\/api\/admin\/media\/signature/);
+  assert.match(notifications, /Change not saved/);
+});
+
+test("Cloudinary signatures and destructive media controls stay owner-only and server-side", async () => {
+  const [cloudinary, signatureRoute, mediaRoute, mediaClient] = await Promise.all([
+    readFile(new URL("lib/cloudinary.ts", root), "utf8"),
+    readFile(new URL("app/api/admin/media/signature/route.ts", root), "utf8"),
+    readFile(new URL("app/api/admin/media/route.ts", root), "utf8"),
+    readFile(new URL("components/AdminMediaLibrary.tsx", root), "utf8"),
+  ]);
+  assert.match(cloudinary, /CLOUDINARY_API_SECRET/);
+  assert.match(cloudinary, /apiSecret/);
+  assert.match(signatureRoute, /getOwner/);
+  assert.match(signatureRoute, /requireSameOrigin/);
+  assert.match(mediaRoute, /getOwner/);
+  assert.match(mediaRoute, /requireSameOrigin/);
+  assert.doesNotMatch(mediaClient, /CLOUDINARY_API_SECRET|process\.env/);
+});
+
+test("testimonial media is validated, owner-managed, and rendered accessibly", async () => {
+  const [contentModel, adminForm, carousel, nextConfig] = await Promise.all([
+    readFile(new URL("lib/site-content.ts", root), "utf8"),
+    readFile(new URL("components/AdminTestimonialsForm.tsx", root), "utf8"),
+    readFile(new URL("components/TestimonialCarousel.tsx", root), "utf8"),
+    readFile(new URL("next.config.ts", root), "utf8"),
+  ]);
+  assert.match(contentModel, /mediaType: z\.enum\(\["none", "image", "video"\]\)/);
+  assert.match(contentModel, /mediaUrl: optionalUrl/);
+  assert.match(adminForm, /\/api\/admin\/media\/signature/);
+  assert.match(adminForm, /accept="image\/\*,video\/\*"/);
+  assert.match(adminForm, /await persist\(nextContent\)/);
+  assert.match(carousel, /resolveMediaType/);
+  assert.match(carousel, /aria-label=\{testimonial\.mediaAlt/);
+  assert.match(carousel, /<video/);
+  assert.match(nextConfig, /img-src[^;]+https:\/\/res\.cloudinary\.com/);
+  assert.match(nextConfig, /media-src[^;]+https:\/\/res\.cloudinary\.com/);
+  assert.match(nextConfig, /connect-src[^;]+https:\/\/api\.cloudinary\.com/);
+});
+
+test("project galleries are validated, owner-uploaded, and publicly rendered", async () => {
+  const [contentModel, projectEditor, projectPage, workLibrary] = await Promise.all([
+    readFile(new URL("lib/project-content.ts", root), "utf8"),
+    readFile(new URL("components/AdminProjectEditor.tsx", root), "utf8"),
+    readFile(new URL("app/work/[project-slug]/page.tsx", root), "utf8"),
+    readFile(new URL("components/WorkLibrary.tsx", root), "utf8"),
+  ]);
+  assert.match(contentModel, /gallery: z\.array\(galleryMediaSchema\)\.max\(24\)/);
+  assert.match(contentModel, /title: z\.string\(\).*default\(""\)/);
+  assert.match(contentModel, /year: z\.number\(\).*nullable\(\)\.default\(null\)/);
+  assert.match(projectEditor, /accept="image\/\*,video\/\*" multiple/);
+  assert.match(projectEditor, /\/api\/admin\/media\/signature/);
+  assert.match(projectEditor, /Set as cover/);
+  assert.match(projectEditor, /Work title/);
+  assert.match(projectEditor, /Client/);
+  assert.match(projectEditor, /Industry/);
+  assert.match(projectPage, /case-gallery/);
+  assert.match(projectPage, /<ProjectMedia/);
+  assert.match(workLibrary, /discipline/);
+  assert.match(workLibrary, /workDisciplines/);
+});

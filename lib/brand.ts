@@ -3,7 +3,7 @@ export const brand = {
   monogram: "OB",
   title: "Video Editor · Motion Designer · Graphic Designer",
   shortTitle: "Video editor, motion designer & graphic designer",
-  headline: "Strong visuals, clear stories.",
+  headline: "Visual ideas. Made to connect.",
   intro:
     "I turn raw ideas into clear videos, smooth motion graphics, and strong visual content for brands and creators.",
   biography:

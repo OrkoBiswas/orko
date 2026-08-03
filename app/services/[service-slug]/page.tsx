@@ -9,7 +9,7 @@ import { ProjectCard } from "@/components/ProjectCard";
 import { CtaBand } from "@/components/CtaBand";
 
 export function generateStaticParams() { return services.map((service) => ({ "service-slug": service.slug })); }
-export async function generateMetadata({ params }: { params: Promise<{ "service-slug": string }> }): Promise<Metadata> { const { "service-slug": slug } = await params; const service = (await listPortfolioServices(services)).find((item) => item.slug === slug); return service ? { title: service.title, description: service.promise } : { title: "Service not found" }; }
+export async function generateMetadata({ params }: { params: Promise<{ "service-slug": string }> }): Promise<Metadata> { const { "service-slug": slug } = await params; const service = (await listPortfolioServices(services)).find((item) => item.slug === slug); return service ? { title: service.title, description: service.promise, alternates: { canonical: `/services/${service.slug}` }, openGraph: { type: "website", title: service.title, description: service.promise, url: `/services/${service.slug}` } } : { title: "Service not found" }; }
 
 export default async function ServicePage({ params }: { params: Promise<{ "service-slug": string }> }) {
   const { "service-slug": slug } = await params;
@@ -17,7 +17,9 @@ export default async function ServicePage({ params }: { params: Promise<{ "servi
   const service = liveServices.find((item) => item.slug === slug);
   if (!service) notFound();
   const related = service.related.map((relatedSlug) => liveProjects.find((project) => project.slug === relatedSlug)).filter((item) => item !== undefined);
+  const faqSchema = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: service.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })) };
   return <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema).replaceAll("<", "\\u003c") }} />
     <PageHero index={service.number} eyebrow="Service" title={<>{service.title.split(" ").slice(0,-1).join(" ")}<br /><em>{service.title.split(" ").at(-1)}</em></>} intro={service.promise} />
     <section className="service-detail-intro section-shell"><h2>{service.short}</h2><div className="service-facts"><div><span>Typical timing</span><p>{service.timeline}</p></div><div><span>Pricing mode</span><p>{service.pricing}</p></div><div><span>Starting point</span><p>Focused discovery and a clear scope</p></div></div></section>
     <section className="service-lists"><div className="service-lists-inner section-shell"><div><p className="eyebrow">Typical deliverables</p><ul className="numbered-list">{service.deliverables.map((item) => <li key={item}>{item}</li>)}</ul></div><div><p className="eyebrow">A strong fit for</p><ul className="numbered-list">{service.idealFor.map((item) => <li key={item}>{item}</li>)}</ul></div></div></section>

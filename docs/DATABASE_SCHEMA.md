@@ -9,7 +9,7 @@ Cloudflare D1/SQLite is the production persistence layer because it is native to
 - `audit_logs` — owner mutations with actor, action, entity, and timestamp
 - `rate_limits` — privacy-minimized hashed request bucket and rolling count
 - `site_content` — editable public profile, homepage, contact, social, and SEO content stored as a validated document
-- `project_content` — editable case-study narrative and presentation data keyed to durable project records
+- `project_content` — editable case-study narrative, cover presentation, and ordered Cloudinary gallery metadata keyed to durable project records
 - `service_content` — editable service positioning, deliverables, fit, commercial framing, related work, and FAQs
 
 Schema initialization uses idempotent prepared statements, one statement per call, followed by `PRAGMA optimize`. IDs are random UUIDs; public inquiry references are separate non-sequential values.

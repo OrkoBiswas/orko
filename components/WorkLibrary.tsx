@@ -1,29 +1,42 @@
 "use client";
 
-import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Grid2X2, List, Search, SlidersHorizontal, X } from "lucide-react";
 import gsap from "gsap";
 import { Flip } from "gsap/Flip";
-import { filterProjects, type Project } from "@/lib/portfolio";
+import { filterProjects, workDisciplines, type Project, type WorkDiscipline } from "@/lib/portfolio";
 import { ProjectCard } from "@/components/ProjectCard";
 
 gsap.registerPlugin(Flip);
 
-export function WorkLibrary({ projects }: { projects: Project[] }) {
+type InitialWorkFilters = { query?: string; discipline?: WorkDiscipline | "All"; category?: string; industry?: string; year?: string };
+
+export function WorkLibrary({ projects, initialFilters = {} }: { projects: Project[]; initialFilters?: InitialWorkFilters }) {
   const categories = useMemo(() => ["All", ...Array.from(new Set(projects.map((project) => project.category)))], [projects]);
   const industries = useMemo(() => ["All", ...Array.from(new Set(projects.map((project) => project.industry)))], [projects]);
   const years = useMemo(() => ["All", ...Array.from(new Set(projects.map((project) => String(project.year)))).sort().reverse()], [projects]);
   const root = useRef<HTMLDivElement>(null);
   const pendingFlip = useRef<ReturnType<typeof Flip.getState> | null>(null);
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("All");
-  const [industry, setIndustry] = useState("All");
-  const [year, setYear] = useState("All");
+  const [query, setQuery] = useState(initialFilters.query ?? "");
+  const [discipline, setDiscipline] = useState<WorkDiscipline | "All">(initialFilters.discipline ?? "All");
+  const [category, setCategory] = useState(categories.includes(initialFilters.category ?? "") ? initialFilters.category! : "All");
+  const [industry, setIndustry] = useState(industries.includes(initialFilters.industry ?? "") ? initialFilters.industry! : "All");
+  const [year, setYear] = useState(years.includes(initialFilters.year ?? "") ? initialFilters.year! : "All");
   const [view, setView] = useState<"grid" | "list">("grid");
   const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const visible = useMemo(() => filterProjects(projects, { query, category, industry, year }), [projects, query, category, industry, year]);
-  const isFiltered = query || category !== "All" || industry !== "All" || year !== "All";
+  const visible = useMemo(() => filterProjects(projects, { query, discipline, category, industry, year }), [projects, query, discipline, category, industry, year]);
+  const isFiltered = query || discipline !== "All" || category !== "All" || industry !== "All" || year !== "All";
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (query.trim()) params.set("q", query.trim());
+    if (discipline !== "All") params.set("discipline", discipline);
+    if (category !== "All") params.set("category", category);
+    if (industry !== "All") params.set("industry", industry);
+    if (year !== "All") params.set("year", year);
+    window.history.replaceState(null, "", params.size ? `/work?${params}` : "/work");
+  }, [query, discipline, category, industry, year]);
 
   useLayoutEffect(() => {
     if (!pendingFlip.current || !root.current) return;
@@ -70,18 +83,12 @@ export function WorkLibrary({ projects }: { projects: Project[] }) {
   function changeFilter(update: () => void) {
     if (root.current) pendingFlip.current = Flip.getState(root.current.querySelectorAll("[data-project-card]"));
     update();
-    window.requestAnimationFrame(() => {
-      const params = new URLSearchParams();
-      const nextQuery = (document.querySelector<HTMLInputElement>("#work-search")?.value ?? "").trim();
-      if (nextQuery) params.set("q", nextQuery);
-      const url = params.size ? `/work?${params}` : "/work";
-      window.history.replaceState(null, "", url);
-    });
   }
 
   function clearFilters() {
     changeFilter(() => {
       setQuery("");
+      setDiscipline("All");
       setCategory("All");
       setIndustry("All");
       setYear("All");
@@ -100,6 +107,7 @@ export function WorkLibrary({ projects }: { projects: Project[] }) {
       </div>
 
       <div className={`filter-panel ${filtersOpen ? "is-open" : ""}`}>
+        <div><p>Showreel</p><div className="filter-options"><button type="button" aria-pressed={discipline === "All"} onClick={() => changeFilter(() => setDiscipline("All"))}>All work</button>{workDisciplines.map((item) => <button type="button" key={item.value} aria-pressed={discipline === item.value} onClick={() => changeFilter(() => setDiscipline(item.value))}>{item.label}</button>)}</div></div>
         <div><p>Category</p><div className="filter-options">{categories.map((item) => <button type="button" key={item} aria-pressed={category === item} onClick={() => changeFilter(() => setCategory(item))}>{item}</button>)}</div></div>
         <div><p>Industry</p><div className="filter-options">{industries.map((item) => <button type="button" key={item} aria-pressed={industry === item} onClick={() => changeFilter(() => setIndustry(item))}>{item}</button>)}</div></div>
         <div><p>Year</p><div className="filter-options">{years.map((item) => <button type="button" key={item} aria-pressed={year === item} onClick={() => changeFilter(() => setYear(item))}>{item}</button>)}</div></div>
