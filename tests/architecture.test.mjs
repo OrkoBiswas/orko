@@ -38,7 +38,8 @@ test("growth metadata and profile controls remain owner-managed and server-rende
   ]);
   assert.match(schema, /gtmContainerId/);
   assert.match(schema, /profileLinks/);
-  assert.match(schema, /logoWidth/);
+  assert.match(schema, /logoWidth: z\.number\(\)\.int\(\)\.min\(20\)\.max\(200\)/);
+  assert.match(schema, /logoHeight: z\.number\(\)\.int\(\)\.min\(20\)\.max\(200\)/);
   assert.doesNotMatch(schema, /showHeaderName/);
   assert.match(settings, /SEO, AEO & GEO/);
   assert.match(settings, /Google Tag Manager/);
@@ -47,6 +48,17 @@ test("growth metadata and profile controls remain owner-managed and server-rende
   assert.doesNotMatch(layout, /<head>/);
   assert.match(robots, /searchIndexing/);
   assert.match(llms, /Verified public profiles/);
+});
+
+test("dashboard mutations use one accessible global notification system", async () => {
+  const [frame, notifications] = await Promise.all([
+    readFile(new URL("components/AppFrame.tsx", root), "utf8"),
+    readFile(new URL("components/AdminNotificationCenter.tsx", root), "utf8"),
+  ]);
+  assert.match(frame, /<AdminNotificationCenter/);
+  assert.match(notifications, /aria-live/);
+  assert.match(notifications, /\/api\/admin\/media\/signature/);
+  assert.match(notifications, /Change not saved/);
 });
 
 test("Cloudinary signatures and destructive media controls stay owner-only and server-side", async () => {

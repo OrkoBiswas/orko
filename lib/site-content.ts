@@ -58,7 +58,8 @@ export const siteContentSchema = z.object({
   behance: optionalUrl,
   logoUrl: optionalAssetUrl.default(""),
   logoAlt: optionalTextField.max(160).default(""),
-  logoWidth: z.number().int().min(48).max(350).default(180),
+  logoWidth: z.number().int().min(20).max(200).default(180),
+  logoHeight: z.number().int().min(20).max(200).default(56),
   faviconUrl: optionalAssetUrl.default(""),
   socialImageUrl: optionalAssetUrl.default(""),
   profileLinksHeading: textField.max(120).default("Find me and hire me online."),
@@ -115,6 +116,7 @@ export const defaultSiteContent: SiteContent = {
   logoUrl: "",
   logoAlt: "Orko Biswas logo",
   logoWidth: 180,
+  logoHeight: 56,
   faviconUrl: "",
   socialImageUrl: "/og.png",
   profileLinksHeading: "Find me and hire me online.",
@@ -156,7 +158,9 @@ export const defaultSiteContent: SiteContent = {
 };
 
 export function parseSiteContent(value: unknown): SiteContent {
-  const candidate = typeof value === "object" && value ? { ...defaultSiteContent, ...value } : defaultSiteContent;
+  const stored = typeof value === "object" && value ? value as Record<string, unknown> : {};
+  const normalizedLogoWidth = typeof stored.logoWidth === "number" ? Math.min(200, Math.max(20, Math.round(stored.logoWidth))) : defaultSiteContent.logoWidth;
+  const candidate = { ...defaultSiteContent, ...stored, logoWidth: normalizedLogoWidth };
   const parsed = siteContentSchema.safeParse(candidate);
   return parsed.success ? parsed.data : defaultSiteContent;
 }

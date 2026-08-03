@@ -4,6 +4,7 @@
 import { useState } from "react";
 import { ArrowDown, ArrowUp, Check, ExternalLink, ImageUp, LoaderCircle, Plus, Save, Trash2 } from "lucide-react";
 import type { SiteContent } from "@/lib/site-content";
+import { notifyAdmin } from "@/components/AdminNotificationCenter";
 
 type ProfileLink = SiteContent["profileLinks"][number];
 type AssetField = "logoUrl" | "faviconUrl" | "socialImageUrl";
@@ -60,8 +61,10 @@ export function AdminGrowthSettings({ initial }: { initial: SiteContent }) {
       if (!response.ok || !uploaded.secure_url || uploaded.resource_type !== "image") throw new Error(uploaded.error?.message ?? "The brand asset could not be uploaded.");
       change(field, uploaded.secure_url);
       setMessage("Upload complete. Save settings to publish it.");
+      notifyAdmin({ tone: "success", title: "Brand asset uploaded", message: "The image is ready. Save settings to publish it on the website." });
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "The brand asset could not be uploaded.");
+      notifyAdmin({ tone: "error", title: "Upload not completed", message: "The brand image could not be uploaded. Please try again." });
     } finally {
       setUploading("");
     }
@@ -87,7 +90,7 @@ export function AdminGrowthSettings({ initial }: { initial: SiteContent }) {
       <label className="admin-field-wide"><span>Logo description</span><input value={content.logoAlt} onChange={(event) => change("logoAlt", event.target.value)} /></label>
       {(["logoUrl", "faviconUrl", "socialImageUrl"] as AssetField[]).map((field) => {
         const labels: Record<AssetField, string> = { logoUrl: "Website logo", faviconUrl: "Favicon", socialImageUrl: "Social share image" };
-        return <div className="admin-brand-asset admin-field-wide" key={field}><div>{content[field] ? <img src={content[field]} alt="" /> : <span>No file</span>}</div><label><span>{labels[field]} URL</span><input type="url" value={content[field]} onChange={(event) => change(field, event.target.value)} /><span className="admin-upload-button"><ImageUp aria-hidden="true" />{uploading === field ? "Uploading…" : "Upload image"}<input type="file" accept="image/*,.ico" disabled={Boolean(uploading)} onChange={(event) => void uploadAsset(field, event.target.files?.[0])} /></span>{field === "logoUrl" && <span className="admin-logo-size-control"><span>Navbar logo width — {content.logoWidth}px</span><input type="range" min="48" max="350" step="1" value={content.logoWidth} onChange={(event) => change("logoWidth", Number(event.target.value))} /></span>}</label></div>;
+        return <div className="admin-brand-asset admin-field-wide" key={field}><div>{content[field] ? <img src={content[field]} alt="" /> : <span>No file</span>}</div><label><span>{labels[field]} URL</span><input type="url" value={content[field]} onChange={(event) => change(field, event.target.value)} /><span className="admin-upload-button"><ImageUp aria-hidden="true" />{uploading === field ? "Uploading…" : "Upload image"}<input type="file" accept="image/*,.ico" disabled={Boolean(uploading)} onChange={(event) => void uploadAsset(field, event.target.files?.[0])} /></span>{field === "logoUrl" && <span className="admin-logo-size-control"><span>Website logo width — {content.logoWidth}px</span><input type="range" min="20" max="200" step="1" value={content.logoWidth} aria-label="Website logo width in pixels" onChange={(event) => change("logoWidth", Number(event.target.value))} /><span>Website logo height — {content.logoHeight}px</span><input type="range" min="20" max="200" step="1" value={content.logoHeight} aria-label="Website logo height in pixels" onChange={(event) => change("logoHeight", Number(event.target.value))} /><small>Both dimensions support 20–200 px. The artwork keeps its original proportions without stretching.</small></span>}</label></div>;
       })}
     </div></section>
 

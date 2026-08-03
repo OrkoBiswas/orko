@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ArrowDown, ArrowUp, Check, Image as ImageIcon, LoaderCircle, Save, Star, Trash2, Upload } from "lucide-react";
 import type { Project, ProjectGalleryItem } from "@/lib/portfolio";
+import { notifyAdmin } from "@/components/AdminNotificationCenter";
 
 type EditableProject = Project & { status: string; displayOrder: number };
 type SignatureResponse = { ok?: boolean; cloudName?: string; apiKey?: string; signature?: string; params?: Record<string, string>; message?: string };
@@ -97,9 +98,11 @@ export function AdminProjectEditor({ initial, mode = "edit" }: { initial: Editab
         completed += 1;
       }
       setMessage(`${completed} file${completed === 1 ? "" : "s"} uploaded. Choose Save project to publish the gallery.`);
+      notifyAdmin({ tone: "success", title: completed === 1 ? "Project media uploaded" : "Project media files uploaded", message: `${completed} file${completed === 1 ? " is" : "s are"} ready. Save the project to publish the gallery.` });
     } catch (error) {
       const detail = error instanceof Error ? error.message : "The project files could not be uploaded.";
       setMessage(completed ? `${completed} file${completed === 1 ? " was" : "s were"} uploaded before a problem occurred. ${detail}` : detail);
+      notifyAdmin({ tone: "error", title: "Upload not completed", message: completed ? `${completed} file${completed === 1 ? " was" : "s were"} uploaded before the upload stopped.` : "The project media could not be uploaded. Please try again." });
     } finally { setUploading(false); setUploadStatus(""); }
   }
 

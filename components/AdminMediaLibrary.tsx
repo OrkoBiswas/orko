@@ -4,6 +4,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Check, Clipboard, CloudUpload, File, Image as ImageIcon, LoaderCircle, RefreshCw, Trash2, Video } from "lucide-react";
 import type { CloudinaryAsset } from "@/lib/cloudinary";
+import { notifyAdmin } from "@/components/AdminNotificationCenter";
 
 type LibraryResponse = { ok?: boolean; configured?: boolean; missing?: string[]; assets?: CloudinaryAsset[]; message?: string };
 type SignatureResponse = { ok?: boolean; cloudName?: string; apiKey?: string; signature?: string; params?: Record<string, string>; message?: string };
@@ -69,9 +70,11 @@ export function AdminMediaLibrary({ initiallyConfigured, initialMissing }: { ini
       }
       if (input.current) input.current.value = "";
       setSuccess(true); setMessage(`${selected.length} file${selected.length === 1 ? "" : "s"} uploaded successfully.`);
+      notifyAdmin({ tone: "success", title: selected.length === 1 ? "Media uploaded" : "Media files uploaded", message: `${selected.length} file${selected.length === 1 ? " is" : "s are"} now available in your library.` });
       await load();
     } catch (error) {
       setSuccess(false); setMessage(error instanceof Error ? error.message : "The upload could not be completed.");
+      notifyAdmin({ tone: "error", title: "Upload not completed", message: "The selected media could not be uploaded. Please try again." });
     } finally { setUploading(false); }
   }
 
