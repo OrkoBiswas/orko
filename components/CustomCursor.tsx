@@ -44,19 +44,8 @@ export function CustomCursor() {
       const target = event.target instanceof Element ? event.target : null;
       const nativeControl = target?.closest("input, textarea, select, video[controls], iframe, [contenteditable='true']");
       const interactive = target?.closest<HTMLElement>("[data-cursor], a, button, summary, [role='button']");
-      const requestedMode = interactive?.dataset.cursor;
-      const mode = requestedMode === "project" || requestedMode === "media"
-        ? "media"
-        : interactive?.matches("button, summary, [role='button']")
-          ? "button"
-          : interactive
-            ? "link"
-            : "idle";
       root.classList.toggle("is-native", Boolean(nativeControl));
-      root.classList.toggle("is-interactive", mode !== "idle" && !nativeControl);
-      root.classList.toggle("is-link", mode === "link" && !nativeControl);
-      root.classList.toggle("is-button", mode === "button" && !nativeControl);
-      root.classList.toggle("is-media", mode === "media" && !nativeControl);
+      root.classList.toggle("is-interactive", Boolean(interactive) && !nativeControl);
     };
 
     const hide = () => root.classList.remove("is-visible");
@@ -86,7 +75,7 @@ export function CustomCursor() {
 
   return (
     <div className="custom-cursor" ref={cursor} aria-hidden="true">
-      <span className="custom-cursor-ring" ref={ring}><b /></span>
+      <span className="custom-cursor-ring" ref={ring} />
       <span className="custom-cursor-dot" ref={dot} />
     </div>
   );
