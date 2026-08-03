@@ -7,6 +7,11 @@ const galleryMediaSchema = z.object({
   type: z.enum(["image", "video"]),
   url: z.string().trim().min(1).max(1000).refine((value) => /^https:\/\//i.test(value), "Use a secure https URL."),
   alt: z.string().trim().max(300),
+  title: z.string().trim().max(160).default(""),
+  category: z.string().trim().max(100).default(""),
+  client: z.string().trim().max(160).default(""),
+  industry: z.string().trim().max(100).default(""),
+  year: z.number().int().min(2000).max(2100).nullable().default(null),
 }).strict();
 
 export const projectContentSchema = z.object({

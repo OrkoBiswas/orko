@@ -29,6 +29,11 @@ export type ProjectGalleryItem = {
   type: "image" | "video";
   url: string;
   alt: string;
+  title: string;
+  category: string;
+  client: string;
+  industry: string;
+  year: number | null;
 };
 
 export const workDisciplines = [

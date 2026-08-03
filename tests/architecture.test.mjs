@@ -72,9 +72,14 @@ test("project galleries are validated, owner-uploaded, and publicly rendered", a
     readFile(new URL("components/WorkLibrary.tsx", root), "utf8"),
   ]);
   assert.match(contentModel, /gallery: z\.array\(galleryMediaSchema\)\.max\(24\)/);
+  assert.match(contentModel, /title: z\.string\(\).*default\(""\)/);
+  assert.match(contentModel, /year: z\.number\(\).*nullable\(\)\.default\(null\)/);
   assert.match(projectEditor, /accept="image\/\*,video\/\*" multiple/);
   assert.match(projectEditor, /\/api\/admin\/media\/signature/);
   assert.match(projectEditor, /Set as cover/);
+  assert.match(projectEditor, /Work title/);
+  assert.match(projectEditor, /Client/);
+  assert.match(projectEditor, /Industry/);
   assert.match(projectPage, /case-gallery/);
   assert.match(projectPage, /<ProjectMedia/);
   assert.match(workLibrary, /discipline/);

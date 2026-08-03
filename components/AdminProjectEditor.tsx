@@ -37,7 +37,7 @@ export function AdminProjectEditor({ initial, mode = "edit" }: { initial: Editab
     setProject((current) => ({ ...current, [key]: value }));
   }
 
-  function updateGallery(id: string, field: "alt" | "type", value: string) {
+  function updateGallery(id: string, field: "alt" | "type" | "title" | "category" | "client" | "industry" | "year", value: string | number | null) {
     setProject((current) => ({ ...current, gallery: (current.gallery ?? []).map((item) => item.id === id ? { ...item, [field]: value } as ProjectGalleryItem : item) }));
   }
 
@@ -88,7 +88,8 @@ export function AdminProjectEditor({ initial, mode = "edit" }: { initial: Editab
         const response = await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(signed.cloudName)}/auto/upload`, { method: "POST", body: form });
         const uploaded = await response.json().catch(() => ({})) as UploadResponse;
         if (!response.ok || !uploaded.secure_url || (uploaded.resource_type !== "image" && uploaded.resource_type !== "video")) throw new Error(uploaded.error?.message ?? `${file.name} could not be uploaded.`);
-        const item: ProjectGalleryItem = { id: galleryId(), type: uploaded.resource_type, url: uploaded.secure_url, alt: `${project.title} â€” ${file.name.replace(/\.[^.]+$/, "")}` };
+        const itemTitle = file.name.replace(/\.[^.]+$/, "").replaceAll(/[-_]+/g, " ").trim();
+        const item: ProjectGalleryItem = { id: galleryId(), type: uploaded.resource_type, url: uploaded.secure_url, alt: `${project.title} â€” ${itemTitle}`, title: itemTitle, category: project.category, client: project.client, industry: project.industry, year: project.year };
         setProject((current) => {
           const useAsCover = !current.mediaUrl || current.mediaType === "generated";
           return { ...current, gallery: [...(current.gallery ?? []), item], ...(useAsCover ? { mediaUrl: item.url, mediaType: item.type, mediaAlt: item.alt } : {}) };
@@ -156,7 +157,12 @@ export function AdminProjectEditor({ initial, mode = "edit" }: { initial: Editab
               <div className="admin-project-gallery-fields">
                 <div><strong>Media {String(index + 1).padStart(2, "0")}</strong><small>{item.type}</small></div>
                 <label><span>Media type</span><select value={item.type} onChange={(event) => updateGallery(item.id, "type", event.target.value)}><option value="image">Image</option><option value="video">Video</option></select></label>
-                <label className="admin-field-wide"><span>Media description</span><input value={item.alt} placeholder="Describe this image or video" onChange={(event) => updateGallery(item.id, "alt", event.target.value)} /></label>
+                <label className="admin-field-wide"><span>Work title</span><input value={item.title} placeholder="Name this individual work" onChange={(event) => updateGallery(item.id, "title", event.target.value)} /></label>
+                <label><span>Category</span><input value={item.category} placeholder="Example: Motion design" onChange={(event) => updateGallery(item.id, "category", event.target.value)} /></label>
+                <label><span>Client</span><input value={item.client} placeholder="Client or project name" onChange={(event) => updateGallery(item.id, "client", event.target.value)} /></label>
+                <label><span>Industry</span><input value={item.industry} placeholder="Example: Technology" onChange={(event) => updateGallery(item.id, "industry", event.target.value)} /></label>
+                <label><span>Year</span><input type="number" min="2000" max="2100" value={item.year ?? ""} placeholder="2026" onChange={(event) => updateGallery(item.id, "year", event.target.value ? Number(event.target.value) : null)} /></label>
+                <label className="admin-field-wide"><span>Image/video description</span><input value={item.alt} placeholder="Describe what visitors can see" onChange={(event) => updateGallery(item.id, "alt", event.target.value)} /></label>
                 <div className="admin-project-gallery-actions"><button type="button" disabled={index === 0} onClick={() => moveGalleryItem(item.id, -1)} aria-label={`Move media ${index + 1} earlier`}><ArrowUp aria-hidden="true" /></button><button type="button" disabled={index === (project.gallery?.length ?? 0) - 1} onClick={() => moveGalleryItem(item.id, 1)} aria-label={`Move media ${index + 1} later`}><ArrowDown aria-hidden="true" /></button><button type="button" className={isCover ? "is-cover" : ""} disabled={isCover} onClick={() => setCover(item)}><Star aria-hidden="true" />{isCover ? "Current cover" : "Set as cover"}</button><button type="button" className="is-remove" onClick={() => removeGalleryItem(item.id)}><Trash2 aria-hidden="true" /> Remove</button></div>
               </div>
             </article>;
