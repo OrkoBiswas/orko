@@ -57,15 +57,15 @@ export default async function Home() {
         <div className="section-heading" data-reveal><div><p className="eyebrow"><span>01</span>Selected work</p><h2>{brand.workHeading}</h2></div><div><p>{brand.workIntro}</p><Link className="text-link" href="/work">Enter the full archive <ArrowUpRight aria-hidden="true" /></Link></div></div>
         <div className="showcase-library">
           <div className="showcase-library-top" data-reveal>
-            <div className="showcase-library-title"><span>Curated selection</span><strong>{String(featured.length).padStart(2, "0")} works across every format</strong></div>
+            <div className="showcase-library-title"><span>Project runway</span><strong>{String(featured.length).padStart(2, "0")} featured chapters</strong></div>
             <dl aria-label="Featured work disciplines">{showcaseDisciplines.map(([discipline, count]) => <div key={discipline}><dt>{discipline}</dt><dd>{String(count).padStart(2, "0")}</dd></div>)}</dl>
-            <p>Every preview keeps its real frame—from wide video and vertical motion to square posts, posters, and banners.</p>
+            <p>Move through each project as a full visual chapter. Every image and video keeps its correct frame.</p>
           </div>
           <ShowcaseGrid projects={featured} />
           <div className="showcase-library-footer" data-reveal>
             <div><strong>{String(liveProjects.length).padStart(2, "0")}</strong><span>items in the full library</span></div>
             <p>Browse all video edits, motion work, posters, campaigns, social content, and creative bundles.</p>
-            <Link className="button button-accent" href="/work">Browse everything <ArrowRight aria-hidden="true" /></Link>
+            <Link className="button button-dark" href="/work">Browse everything <ArrowRight aria-hidden="true" /></Link>
           </div>
         </div>
       </section>

@@ -14,7 +14,7 @@ const frameLabels: Record<Project["ratio"], string> = {
 export function ProjectCard({ project, priority = false, variant = "default" }: { project: Project; priority?: boolean; variant?: "default" | "showcase" }) {
   if (variant === "showcase") {
     return (
-      <article className={`project-card showcase-card ratio-${project.ratio}`} data-project-card data-priority={priority || undefined}>
+      <article className={`project-card showcase-card ratio-${project.ratio}`} data-project-card data-index={project.index} data-priority={priority || undefined}>
         <Link href={`/work/${project.slug}`} aria-label={`Open ${project.title} showcase item`} data-cursor="project">
           <div className="showcase-card-bar"><span>{project.index}</span><span>{project.category}</span><span>{frameLabels[project.ratio]}</span></div>
           <div className="showcase-card-stage"><ProjectArtwork project={project} /></div>
