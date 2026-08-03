@@ -1376,6 +1376,17 @@ html[data-data="low"] .hero-media { background: #181b15 url("https://res.cloudin
 .home-hero { grid-template-rows: auto minmax(0, 1fr) auto; }
 .home-hero::before { opacity: .08; mask-image: linear-gradient(90deg, #000, transparent 58%); }
 .home-hero::after { z-index: 1; width: 34vw; height: 34vw; left: 20vw; top: 40%; background: rgba(201,255,67,.055); filter: blur(110px); }
+.hero-light-rays { position: absolute; z-index: 1; inset: 0; overflow: hidden; pointer-events: none; transform-origin: 100% 0; mix-blend-mode: screen; animation: hero-ray-drift 28s ease-in-out infinite alternate; }
+.hero-light-rays::before,
+.hero-light-rays::after { content: ""; position: absolute; transform-origin: 50% 0; pointer-events: none; }
+.hero-light-rays::before { width: clamp(100px, 10vw, 190px); height: 138vh; right: 1vw; top: -34vh; opacity: .68; background: linear-gradient(180deg, rgba(201,255,67,.72) 0%, rgba(201,255,67,.28) 26%, rgba(201,255,67,.085) 62%, transparent 100%); filter: blur(16px); transform: rotate(32deg); }
+.hero-light-rays::after { width: clamp(260px, 28vw, 540px); height: 124vh; right: -10vw; top: -27vh; opacity: .34; background: linear-gradient(180deg, rgba(201,255,67,.38) 0%, rgba(201,255,67,.14) 36%, rgba(201,255,67,.035) 72%, transparent 100%); filter: blur(38px); transform: rotate(43deg); }
+.hero-light-rays span { position: absolute; width: clamp(300px, 31vw, 590px); aspect-ratio: 1; right: clamp(-280px, -13vw, -120px); top: clamp(-290px, -15vw, -130px); border-radius: 50%; opacity: .72; background: radial-gradient(circle, rgba(201,255,67,.6) 0%, rgba(201,255,67,.22) 22%, rgba(201,255,67,.055) 48%, transparent 72%); filter: blur(12px); }
+@keyframes hero-ray-drift {
+  0% { transform: translate3d(0, 0, 0) rotate(-1.5deg); opacity: .72; }
+  52% { transform: translate3d(-1.2%, 1%, 0) rotate(.6deg); opacity: .88; }
+  100% { transform: translate3d(-2.8%, 2.2%, 0) rotate(2.2deg); opacity: .76; }
+}
 .hero-layout { position: relative; z-index: 2; display: block; min-height: 0; }
 .hero-copy { position: relative; z-index: 3; width: min(69vw, 1120px); height: 100%; justify-content: center; padding: clamp(16px, 4vh, 52px) 0; }
 .hero-name { display: flex; align-items: center; gap: clamp(14px, 2vw, 30px); margin: 0 0 clamp(18px, 2.8vh, 30px); text-transform: uppercase; }
@@ -1404,6 +1415,9 @@ html[data-data="low"] .hero-media { background: #181b15 url("https://res.cloudin
 @media (max-width: 700px) {
   .home-hero { height: 100svh; min-height: 720px; }
   .home-hero::before { mask-image: linear-gradient(#000, transparent 78%); }
+  .hero-light-rays { opacity: .58; }
+  .hero-light-rays::before { right: -10vw; width: 100px; filter: blur(18px); }
+  .hero-light-rays::after { right: -42vw; width: 78vw; opacity: .27; }
   .hero-layout { display: block; }
   .hero-copy { width: 100%; height: 100%; justify-content: center; padding: 10px 0 26px; }
   .hero-name { margin-bottom: 16px; }
@@ -1423,6 +1437,11 @@ html[data-data="low"] .hero-media { background: #181b15 url("https://res.cloudin
   .hero-name span::after { width: 20px; }
   .home-hero .hero-title { font-size: clamp(2.65rem, 11vw, 3.1rem); }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-light-rays { animation: none; }
+}
+html[data-motion="reduced"] .hero-light-rays { animation: none; }
 
 @media print {
   .site-header, .site-footer, .settings-dock, .page-hero .button, .skip-link { display: none !important; }

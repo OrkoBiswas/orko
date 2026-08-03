@@ -30,6 +30,7 @@ export default async function Home() {
     <>
       <section className="home-hero section-shell">
         <div className="hero-meta"><p><span className="status-dot" />{brand.availability}</p><p>{brand.location}<br />{brand.timezone}</p></div>
+        <div className="hero-light-rays" aria-hidden="true"><span /></div>
         <div className="hero-layout">
           <div className="hero-copy">
             <p className="hero-name"><span>Creative portfolio</span><strong>{brand.name}</strong></p>
