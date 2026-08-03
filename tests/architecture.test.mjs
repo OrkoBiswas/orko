@@ -42,6 +42,7 @@ test("growth metadata and profile controls remain owner-managed and server-rende
   assert.match(settings, /Google Tag Manager/);
   assert.match(layout, /ProfessionalService/);
   assert.match(layout, /googletagmanager/);
+  assert.doesNotMatch(layout, /<head>/);
   assert.match(robots, /searchIndexing/);
   assert.match(llms, /Verified public profiles/);
 });
