@@ -79,8 +79,12 @@ export function CustomCursor() {
 
   return (
     <div className="custom-cursor" ref={cursor} aria-hidden="true">
-      <span className="custom-cursor-ring" ref={ring}><ArrowUpRight className="custom-cursor-arrow" strokeWidth={3.4} /></span>
-      <span className="custom-cursor-dot" ref={dot} />
+      <span className="custom-cursor-position custom-cursor-ring-position" ref={ring}>
+        <span className="custom-cursor-ring"><ArrowUpRight className="custom-cursor-arrow" strokeWidth={3.4} /></span>
+      </span>
+      <span className="custom-cursor-position custom-cursor-dot-position" ref={dot}>
+        <span className="custom-cursor-dot" />
+      </span>
     </div>
   );
 }
