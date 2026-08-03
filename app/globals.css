@@ -1845,6 +1845,9 @@ html[data-motion="reduced"] .hero-light-rays span { animation: none; }
 .admin-upload-button { position: relative; width: fit-content; min-height: 36px; display: inline-flex; align-items: center; gap: 7px; margin-top: 8px; padding: 0 11px; overflow: hidden; color: #26332e !important; border: 1px solid #c8d0d3; background: white; cursor: pointer; font-size: 9px !important; }
 .admin-upload-button svg { width: 14px; }
 .admin-upload-button input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.admin-logo-size-control { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid #d5dbde; }
+.admin-logo-size-control > span { color: #6d7973; font-size: 9px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+.admin-logo-size-control input { width: 100%; accent-color: #8aaa24; }
 .admin-check-field { min-height: 44px; flex-direction: row !important; align-items: center; gap: 10px !important; padding: 10px 12px; border: 1px solid #d5dbde; background: #fafbfb; }
 .admin-check-field input { width: 18px !important; min-height: 18px !important; accent-color: #8aaa24; }
 .admin-check-field span { line-height: 1.4; }
