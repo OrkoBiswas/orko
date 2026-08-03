@@ -8,6 +8,12 @@ import type { SiteContent } from "@/lib/site-content";
 type Testimonial = SiteContent["testimonials"][number];
 const slideDuration = 7000;
 
+function resolveMediaType(testimonial: Testimonial): "image" | "video" | null {
+  if (!testimonial.mediaUrl) return null;
+  if (testimonial.mediaType === "image" || testimonial.mediaType === "video") return testimonial.mediaType;
+  return /\/video\/upload\/|\.(mp4|webm|mov|m4v)(?:$|[?#])/i.test(testimonial.mediaUrl) ? "video" : "image";
+}
+
 export function TestimonialCarousel({ testimonials }: { testimonials: Testimonial[] }) {
   const [active, setActive] = useState(0);
   const [manualPause, setManualPause] = useState(false);
@@ -72,9 +78,10 @@ export function TestimonialCarousel({ testimonials }: { testimonials: Testimonia
       <div className="testimonial-viewport" onTouchStart={(event) => { touchStart.current = event.touches[0]?.clientX ?? null; }} onTouchEnd={(event) => finishSwipe(event.changedTouches[0]?.clientX ?? 0)}>
         <div className="testimonial-track" style={{ transform: `translate3d(-${active * 100}%, 0, 0)` }}>
           {testimonials.map((testimonial, index) => {
-            const hasMedia = Boolean(testimonial.mediaUrl && testimonial.mediaType !== "none");
+            const mediaType = resolveMediaType(testimonial);
+            const hasMedia = Boolean(mediaType);
             return <figure className={`testimonial-slide${hasMedia ? " has-testimonial-media" : " is-quote-only"}`} key={testimonial.id} aria-hidden={index !== active} inert={index !== active ? true : undefined}>
-              {hasMedia && <div className="testimonial-media">{testimonial.mediaType === "video" ? <video src={testimonial.mediaUrl} controls playsInline preload="metadata" aria-label={testimonial.mediaAlt || `${testimonial.name} testimonial video`} onPlay={() => setMediaPlaying(true)} onPause={() => setMediaPlaying(false)} onEnded={() => setMediaPlaying(false)} /> : <img src={testimonial.mediaUrl} alt={testimonial.mediaAlt || `${testimonial.name} testimonial`} loading="lazy" />}</div>}
+              {hasMedia && <div className="testimonial-media"><span className="testimonial-media-label">{mediaType === "video" ? "Client video" : "Client portrait"}</span>{mediaType === "video" ? <video src={testimonial.mediaUrl} controls playsInline preload="metadata" aria-label={testimonial.mediaAlt || `${testimonial.name} testimonial video`} onPlay={() => setMediaPlaying(true)} onPause={() => setMediaPlaying(false)} onEnded={() => setMediaPlaying(false)} /> : <img src={testimonial.mediaUrl} alt={testimonial.mediaAlt || `${testimonial.name} testimonial`} loading="lazy" />}</div>}
               <div className="testimonial-copy"><div className="testimonial-slide-mark"><Quote aria-hidden="true" /><span>{String(index + 1).padStart(2, "0")} / {String(testimonials.length).padStart(2, "0")}</span></div><blockquote>{testimonial.quote}</blockquote><figcaption><span className="testimonial-avatar" aria-hidden="true">{testimonial.name.slice(0, 1)}</span><span><strong>{testimonial.name}</strong>{[testimonial.role, testimonial.company].filter(Boolean).length > 0 && <small>{[testimonial.role, testimonial.company].filter(Boolean).join(" · ")}</small>}</span></figcaption></div>
             </figure>;
           })}

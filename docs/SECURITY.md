@@ -11,3 +11,5 @@
 - External notification providers remain disabled until their credentials are configured.
 
 Uploads are not accepted by the public form. Authenticated dashboard uploads receive short-lived server signatures, go directly to Cloudinary, and are limited to 100 MB per file in the dashboard. Cloudinary listing and deletion stay server-side. Deletion requires a same-origin owner request plus a visible confirmation, and provider errors are replaced with safe messages. Project deletion is a recoverable soft delete with an audit record.
+
+The content security policy permits Cloudinary only on the minimum required surfaces: delivery from `res.cloudinary.com` for images and video, and authenticated dashboard upload requests to `api.cloudinary.com`. Other external image, media, and connection origins remain blocked.

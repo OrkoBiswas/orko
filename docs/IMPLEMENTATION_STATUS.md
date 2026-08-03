@@ -18,6 +18,7 @@ Last updated: 2026-08-03
 - Expanded dashboard overview, settings status, quick actions, responsive eight-item navigation, and 320px-safe media management.
 - Public testimonials use an auto-sliding editorial carousel with progress, direct selection, previous/next, play/pause, touch swiping, focus/hover pausing, visibility awareness, and reduced-motion behavior.
 - Redesigned testimonials as calmer editorial cards with smaller, lighter quote typography and optional client image/video layouts. The dedicated owner form supports direct signed upload, secure URL entry, accessible media descriptions, previews, replacement, and attachment removal.
+- Fixed external testimonial media delivery and dashboard uploads in the content security policy, added automatic publishing after valid uploads, media-type inference for pasted URLs, and a shorter media-dominant testimonial composition.
 
 ## Validation
 
