@@ -17,27 +17,13 @@ export function CustomCursor() {
     const dotElement = dot.current;
     if (!root || !ringElement || !dotElement) return;
 
-    let targetX = -100;
-    let targetY = -100;
-    let ringX = -100;
-    let ringY = -100;
-    let animationFrame = 0;
-
     const place = (element: HTMLElement, x: number, y: number) => {
       element.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
     };
 
-    const animate = () => {
-      ringX += (targetX - ringX) * 0.18;
-      ringY += (targetY - ringY) * 0.18;
-      place(ringElement, ringX, ringY);
-      animationFrame = window.requestAnimationFrame(animate);
-    };
-
     const onMove = (event: PointerEvent) => {
-      targetX = event.clientX;
-      targetY = event.clientY;
-      place(dotElement, targetX, targetY);
+      place(ringElement, event.clientX, event.clientY);
+      place(dotElement, event.clientX, event.clientY);
       root.classList.add("is-visible");
     };
 
@@ -62,7 +48,6 @@ export function CustomCursor() {
     document.addEventListener("pointerup", release, { passive: true });
     document.documentElement.addEventListener("mouseleave", hide);
     window.addEventListener("blur", hide);
-    animationFrame = window.requestAnimationFrame(animate);
 
     return () => {
       document.documentElement.classList.remove("cursor-ready");
@@ -72,7 +57,6 @@ export function CustomCursor() {
       document.removeEventListener("pointerup", release);
       document.documentElement.removeEventListener("mouseleave", hide);
       window.removeEventListener("blur", hide);
-      window.cancelAnimationFrame(animationFrame);
     };
   }, []);
 
