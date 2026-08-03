@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 /* eslint-disable @next/next/next-script-for-ga -- The Vinext worker loads an optional owner-configured GTM ID without adding a browser package. */
 import { headers } from "next/headers";
 import "./globals.css";
@@ -24,23 +24,14 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { default: content.seoTitle, template: `%s — ${content.name}` },
     description: content.seoDescription,
     applicationName: `${content.name} Portfolio`,
-    authors: [{ name: content.name, url: origin }],
+    authors: [{ name: content.name }],
     creator: content.name,
-    publisher: content.name,
-    category: "Design portfolio",
     keywords: content.seoKeywords.split(",").map((item) => item.trim()).filter(Boolean),
     icons: content.faviconUrl ? { icon: content.faviconUrl, shortcut: content.faviconUrl, apple: content.faviconUrl } : undefined,
-    openGraph: { type: "website", url: origin, title: content.seoTitle, description: content.seoDescription, siteName: `${content.name} Portfolio`, locale: content.siteLanguage.replace("-", "_"), images: shareImage },
+    openGraph: { type: "website", title: content.seoTitle, description: content.seoDescription, siteName: `${content.name} Portfolio`, images: shareImage },
     twitter: { card: "summary_large_image", title: content.seoTitle, description: content.seoDescription, images: content.socialImageUrl ? [content.socialImageUrl] : undefined },
-    robots: { index: content.searchIndexing, follow: content.searchIndexing, googleBot: { index: content.searchIndexing, follow: content.searchIndexing, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
-    verification: { google: content.googleSiteVerification || undefined, other: content.bingSiteVerification ? { "msvalidate.01": content.bingSiteVerification } : undefined },
-    formatDetection: { telephone: false, address: false, email: false },
+    robots: { index: content.searchIndexing, follow: content.searchIndexing },
   };
-}
-
-export async function generateViewport(): Promise<Viewport> {
-  const content = await getSiteContent();
-  return { themeColor: content.themeColor, colorScheme: "dark light", width: "device-width", initialScale: 1 };
 }
 
 export const dynamic = "force-dynamic";
