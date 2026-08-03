@@ -73,6 +73,27 @@ export function MotionProvider() {
           scrollTrigger: { trigger: element, start: "top bottom", end: "bottom top", scrub: 0.9 },
         });
       });
+
+      const processSequence = document.querySelector<HTMLElement>("[data-process-sequence]");
+      if (processSequence) {
+        const heading = processSequence.querySelector<HTMLElement>(".section-heading");
+        const stage = processSequence.querySelector<HTMLElement>("[data-process-stage]");
+        const steps = gsap.utils.toArray<HTMLElement>("[data-process-step]", processSequence);
+        const progress = processSequence.querySelector<HTMLElement>("[data-process-progress]");
+        const sequence = gsap.timeline({
+          scrollTrigger: {
+            trigger: processSequence,
+            start: "top 86%",
+            end: "top 34%",
+            scrub: 0.75,
+          },
+        });
+
+        if (heading) sequence.fromTo(heading, { y: 24, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.45, ease: "power2.out" }, 0);
+        if (stage) sequence.fromTo(stage, { y: 42, scale: 0.965 }, { y: 0, scale: 1, duration: 0.8, ease: "power3.out" }, 0.08);
+        if (steps.length) sequence.fromTo(steps, { y: 46, rotateX: -14, autoAlpha: 0 }, { y: 0, rotateX: 0, autoAlpha: 1, duration: 0.72, stagger: 0.1, ease: "power3.out" }, 0.12);
+        if (progress) sequence.fromTo(progress, { scaleX: 0 }, { scaleX: 1, duration: 1.25, ease: "none" }, 0.08);
+      }
     });
 
     const refreshFrame = window.requestAnimationFrame(() => ScrollTrigger.refresh());

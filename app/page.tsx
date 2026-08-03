@@ -2,7 +2,6 @@ import Link from "next/link";
 import { ArrowDown, ArrowRight, ArrowUpRight, Asterisk, Sparkles } from "lucide-react";
 import { projects, services } from "@/lib/portfolio";
 import { getSiteContent, listPortfolioProjects, listPortfolioServices } from "@/db/repository";
-import { ProjectArtwork } from "@/components/ProjectArtwork";
 import { ShowcaseGrid } from "@/components/ShowcaseGrid";
 import { ShowreelDialog } from "@/components/ShowreelDialog";
 import { ExperienceSection } from "@/components/ExperienceSection";
@@ -18,7 +17,6 @@ export default async function Home() {
     ["Motion", featured.filter((project) => project.services.some((service) => service.includes("Motion"))).length],
     ["Design", featured.filter((project) => project.services.some((service) => ["Graphic Design", "Brand Visuals", "Social Media"].includes(service))).length],
   ] as const;
-  const proofProject = liveProjects[8] ?? liveProjects.at(-1);
   return (
     <>
       <section className="home-hero section-shell">
@@ -89,17 +87,16 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="process-preview section-shell section-space">
-        <div className="section-heading" data-reveal><div><p className="eyebrow"><span>06</span>Process</p><h2>A simple process with room for ideas.</h2></div><Link className="text-link" href="/process">See the full process <ArrowUpRight aria-hidden="true" /></Link></div>
-        <ol className="process-list">{[["Discover","We discuss your goal, audience, content, deadline, and budget."],["Plan","I prepare the story, visual direction, deliverables, and schedule."],["Create","I build the first edit, design, or motion direction."],["Review","You share clear feedback and we agree on the next changes."],["Refine","I improve timing, sound, color, text, and final details."],["Deliver","You receive clean files in the correct formats and sizes."]].map(([title,copy], index) => <li key={title} data-reveal><span>0{index + 1}</span><h3>{title}</h3><p>{copy}</p><i /></li>)}</ol>
+      <section className="process-preview process-showcase section-shell" data-process-sequence>
+        <div className="section-heading"><div><p className="eyebrow"><span>06</span>Process</p><h2>A clear path from idea to delivery.</h2></div><Link className="text-link" href="/process">See the full process <ArrowUpRight aria-hidden="true" /></Link></div>
+        <div className="process-stage" data-process-stage>
+          <div className="process-track-head"><span>Project workflow</span><span>Six focused steps · 01—06</span></div>
+          <ol className="process-list" data-process-rail tabIndex={0} aria-label="Six project process steps">{[["Discover","We discuss your goal, audience, content, deadline, and budget."],["Plan","I prepare the story, visual direction, deliverables, and schedule."],["Create","I build the first edit, design, or motion direction."],["Review","You share clear feedback and we agree on the next changes."],["Refine","I improve timing, sound, color, text, and final details."],["Deliver","You receive clean files in the correct formats and sizes."]].map(([title,copy], index) => <li key={title} data-process-step><span>0{index + 1}</span><h3>{title}</h3><p>{copy}</p><i /></li>)}</ol>
+          <div className="process-progress" aria-hidden="true"><span data-process-progress /></div>
+        </div>
       </section>
 
       <TestimonialsSection content={brand} />
-
-      <section className="proof-section section-shell section-space">
-        {proofProject && <div className="proof-art"><ProjectArtwork project={proofProject} compact /></div>}
-        <div data-reveal><p className="eyebrow">Honest presentation</p><h2>Real work. Clear details.</h2><p>This portfolio shows the type of work, process, tools, and deliverables clearly. Client results and testimonials will be added only when they are approved.</p><Link className="text-link" href="/about">Meet Orko <ArrowUpRight aria-hidden="true" /></Link></div>
-      </section>
     </>
   );
 }
