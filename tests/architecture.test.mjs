@@ -118,3 +118,25 @@ test("project galleries are validated, owner-uploaded, and publicly rendered", a
   assert.match(workLibrary, /discipline/);
   assert.match(workLibrary, /workDisciplines/);
 });
+
+test("showreel replacement is owner-managed, signed, and rendered from durable content", async () => {
+  const [contentModel, manager, route, home, showreel] = await Promise.all([
+    readFile(new URL("lib/site-content.ts", root), "utf8"),
+    readFile(new URL("components/AdminShowreelManager.tsx", root), "utf8"),
+    readFile(new URL("app/api/admin/showreel/route.ts", root), "utf8"),
+    readFile(new URL("app/page.tsx", root), "utf8"),
+    readFile(new URL("components/ShowreelLoop.tsx", root), "utf8"),
+  ]);
+  assert.match(contentModel, /showreelVideoUrl: optionalAssetUrl/);
+  assert.match(contentModel, /showreelPosterUrl: optionalAssetUrl/);
+  assert.match(manager, /\/api\/admin\/media\/signature/);
+  assert.match(manager, /video\/upload/);
+  assert.match(manager, /accept="video\/mp4,video\/webm,video\/quicktime,video\/\*"/);
+  assert.match(manager, /await persist\(next/);
+  assert.match(route, /getOwner/);
+  assert.match(route, /requireSameOrigin/);
+  assert.match(route, /getSiteContent/);
+  assert.match(route, /updateSiteContent/);
+  assert.match(home, /videoUrl=\{brand\.showreelVideoUrl\}/);
+  assert.match(showreel, /posterUrl \|\| undefined/);
+});

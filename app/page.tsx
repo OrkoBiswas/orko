@@ -76,7 +76,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <ShowreelLoop heading={brand.showreelHeading} intro={brand.showreelIntro} />
+      <ShowreelLoop heading={brand.showreelHeading} intro={brand.showreelIntro} videoUrl={brand.showreelVideoUrl} posterUrl={brand.showreelPosterUrl} />
 
       <section className="services-section section-shell section-space">
         <div className="section-heading" data-reveal><div><p className="eyebrow"><span>03</span>Capabilities</p><h2>{brand.capabilitiesHeading}</h2></div><p>{brand.capabilitiesIntro}</p></div>

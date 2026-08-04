@@ -20,6 +20,7 @@ export function notifyAdmin(notification: AdminNotification) {
 
 function mutationCopy(pathname: string, method: string): Omit<AdminNotification, "tone"> {
   if (pathname === "/api/admin/content") return { title: "Website updated", message: "Your dashboard changes are saved and published." };
+  if (pathname === "/api/admin/showreel") return { title: "Showreel published", message: "The replacement video is now active in the public Showreel section." };
   if (pathname.startsWith("/api/admin/projects")) {
     if (method === "POST") return { title: "Project added", message: "The new project is saved in your portfolio." };
     if (method === "DELETE") return { title: "Project removed", message: "The project was removed successfully." };

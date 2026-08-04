@@ -14,8 +14,10 @@
 
 - `/admin` — authenticated overview
 - `/admin/projects` — project visibility and publication management
+- `/admin/showreel` — current reel preview, direct video replacement, poster URL, and original-media restoration
+- `/admin/media` — signed Cloudinary upload and media library management
+- `/admin/testimonials` — approved feedback and client media management
 - `/admin/inquiries` — durable inquiry review
 - `/admin/settings` — deployment and brand readiness
 
 Primary navigation keeps Work first. Every major route includes a direct hiring action and returns to related work.
-

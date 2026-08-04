@@ -15,7 +15,7 @@ Last updated: 2026-08-04
 - Dedicated testimonial workspace with add, edit, remove, limit, approval guidance, public heading control, and safe full-content validation.
 - Owner-only Cloudinary media workspace for direct signed multi-file uploads, tagged image/video/raw listing, secure URL copying, previews, and confirmed cache-invalidating deletion. The API secret remains server-only.
 - Homepage Video, Motion, and Design category showreels deep-link into a pre-filtered public archive, while uploaded project galleries render every additional image and video in a responsive masonry layout that preserves its natural aspect ratio without grey framing or cropping, with consistent gaps, controls, complete item metadata, reduced-motion-aware playback, and accessible descriptions.
-- Expanded dashboard overview, settings status, quick actions, responsive eight-item navigation, and 320px-safe media management.
+- Expanded dashboard overview, settings status, quick actions, responsive nine-item navigation, and 320px-safe media management.
 - Added an owner-only growth settings workspace for full brand assets, metadata, SEO/AEO/GEO context, crawler controls, Google/Bing verification, optional GTM, and visible highlighted marketplace/profile links.
 - Kept GTM injection inside the Vinext-supported document body so compiled stylesheet links remain runtime-managed and every public route retains its complete visual system.
 - Added one persisted navbar logo size control from 20–200px inside the Website logo panel, matching the original simple resizing system without separate width and height settings.
@@ -25,12 +25,13 @@ Last updated: 2026-08-04
 - Fixed external testimonial media delivery and dashboard uploads in the content security policy, added automatic publishing after valid uploads, media-type inference for pasted URLs, and a shorter media-dominant testimonial composition.
 - Rebuilt the homepage hero as a viewport-fit open editorial composition with prominent Orko Biswas identity, a borderless Cloudinary motion layer, slow theme-green atmospheric light rays, footer-matched display/serif headline typography, static reduced-motion/low-data fallback, and coordinated entrance motion.
 - Replaced the oversized showreel poster and popup with a compact, borderless editorial composition. The open cinematic media plane now sits beneath expressive display-and-serif “Showreel” typography, with floating playback controls and an unboxed information rail. The Cloudinary reel autoplays muted in place, loops while visible, pauses off-screen or for reduced-motion/low-data preferences, and uses a dedicated scrubbed ScrollTrigger reveal without pinning the page.
+- Added a dedicated owner-only Showreel dashboard with current-media preview, signed direct video upload, automatic Cloudinary poster generation, secure URL editing, original-reel restoration, immediate durable publication, and standard success/error notifications. The homepage and `/showreel` route now read the same managed media values.
 
 ## Validation
 
 - Lint: passed.
 - Typecheck: passed.
-- Automated tests: 15 passed.
+- Automated tests: 17 passed.
 - Production build: passed.
 - Prior desktop and mobile browser reviews passed for public navigation, archive filters, case studies, forms, animations, and inquiry persistence.
 
@@ -42,6 +43,6 @@ Last updated: 2026-08-04
 
 ## Honest remaining extensions
 
-- The owner area now manages content, experience, testimonials, services, project creation/deletion/publication, Cloudinary media, and inquiries. Analytics and role-granular multi-user permissions remain future modules.
+- The owner area now manages content, experience, testimonials, showreel replacement, services, project creation/deletion/publication, Cloudinary media, and inquiries. Analytics and role-granular multi-user permissions remain future modules.
 - Public uploads remain intentionally disabled; every media control requires an authenticated owner session.
 - Drizzle Kit encountered a host-level credential lookup failure in the Windows sandbox, so the inspected equivalent SQL migration remains the source of truth and runtime initialization uses the same idempotent schema.

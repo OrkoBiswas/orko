@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowUpRight, Pause, Play } from "lucide-react";
 import { showreelMedia } from "@/lib/portfolio";
 
-export function ShowreelLoop({ heading, intro }: { heading: string; intro: string }) {
+export function ShowreelLoop({ heading, intro, videoUrl = showreelMedia.videoUrl, posterUrl = showreelMedia.posterUrl }: { heading: string; intro: string; videoUrl?: string; posterUrl?: string }) {
   const section = useRef<HTMLElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const manuallyPaused = useRef(false);
@@ -83,13 +83,13 @@ export function ShowreelLoop({ heading, intro }: { heading: string; intro: strin
             playsInline
             autoPlay
             preload="metadata"
-            poster={showreelMedia.posterUrl}
+            poster={posterUrl || undefined}
             aria-describedby="showreel-caption"
             data-showreel-video
             onPlay={() => setPlaying(true)}
             onPause={() => setPlaying(false)}
           >
-            <source src={showreelMedia.videoUrl} type="video/mp4" />
+            <source src={videoUrl} />
           </video>
           <div className="showreel-wash" aria-hidden="true" />
           <p className="showreel-live" data-showreel-overlay><i />Playing in place</p>

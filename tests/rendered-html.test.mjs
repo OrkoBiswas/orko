@@ -93,6 +93,15 @@ test("Cloudinary upload signatures reject anonymous requests", async () => {
   assert.equal(response.status, 401);
 });
 
+test("showreel replacement rejects anonymous requests", async () => {
+  const response = await request("/api/admin/showreel", {
+    method: "PATCH",
+    headers: { "content-type": "application/json", accept: "application/json" },
+    body: JSON.stringify({ showreelVideoUrl: "https://res.cloudinary.com/example/video/upload/reel.mp4", showreelPosterUrl: "" }),
+  });
+  assert.equal(response.status, 401);
+});
+
 test("unknown routes use the authored recovery state", async () => {
   const response = await request("/missing-frame");
   assert.equal(response.status, 404);

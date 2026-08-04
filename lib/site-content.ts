@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { brand } from "@/lib/brand";
+import { showreelMedia } from "@/lib/portfolio";
 
 const textField = z.string().trim().min(1).max(500);
 const longTextField = z.string().trim().min(1).max(3000);
@@ -67,6 +68,8 @@ export const siteContentSchema = z.object({
   workIntro: longTextField.max(800),
   showreelHeading: textField.max(180),
   showreelIntro: longTextField.max(800),
+  showreelVideoUrl: optionalAssetUrl.default(showreelMedia.videoUrl),
+  showreelPosterUrl: optionalAssetUrl.default(showreelMedia.posterUrl),
   capabilitiesHeading: textField.max(180),
   capabilitiesIntro: longTextField.max(800),
   experienceHeading: textField.max(180),
@@ -123,6 +126,8 @@ export const defaultSiteContent: SiteContent = {
   workIntro: "Explore video edits, motion graphics, posters, social content, brand visuals, and project bundles.",
   showreelHeading: "A quick look at my work.",
   showreelIntro: "The final reel will show licensed projects only. You can explore the work library while it is being prepared.",
+  showreelVideoUrl: showreelMedia.videoUrl,
+  showreelPosterUrl: showreelMedia.posterUrl,
   capabilitiesHeading: "Video, motion, and design.",
   capabilitiesIntro: "I can support one focused task or build a complete set of visuals for your campaign.",
   experienceHeading: "Independent, flexible, and focused on useful creative work.",
@@ -162,3 +167,8 @@ export function parseSiteContent(value: unknown): SiteContent {
   const parsed = siteContentSchema.safeParse(candidate);
   return parsed.success ? parsed.data : defaultSiteContent;
 }
+
+export const showreelSettingsSchema = z.object({
+  showreelVideoUrl: optionalAssetUrl.refine(Boolean, "Upload a video or enter its secure Cloudinary URL."),
+  showreelPosterUrl: optionalAssetUrl.default(""),
+});
