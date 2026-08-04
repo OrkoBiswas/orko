@@ -83,6 +83,29 @@ export function MotionProvider() {
         });
       });
 
+      const showreelSequence = document.querySelector<HTMLElement>("[data-showreel-sequence]");
+      if (showreelSequence) {
+        const copy = showreelSequence.querySelector<HTMLElement>("[data-showreel-copy]");
+        const frame = showreelSequence.querySelector<HTMLElement>("[data-showreel-frame]");
+        const video = showreelSequence.querySelector<HTMLElement>("[data-showreel-video]");
+        const overlays = gsap.utils.toArray<HTMLElement>("[data-showreel-overlay]", showreelSequence);
+        const progress = showreelSequence.querySelector<HTMLElement>("[data-showreel-progress]");
+        const reel = gsap.timeline({
+          scrollTrigger: {
+            trigger: showreelSequence,
+            start: "top 88%",
+            end: "top 28%",
+            scrub: 0.75,
+          },
+        });
+
+        if (copy) reel.fromTo(copy, { x: -42, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.72, ease: "power3.out" }, 0);
+        if (frame) reel.fromTo(frame, { clipPath: "inset(8% 7% 8% 7%)", scale: 0.96, y: 44 }, { clipPath: "inset(0% 0% 0% 0%)", scale: 1, y: 0, duration: 1, ease: "power3.out" }, 0.02);
+        if (video) reel.fromTo(video, { scale: 1.14, xPercent: 3 }, { scale: 1, xPercent: 0, duration: 1.15, ease: "power2.out" }, 0.04);
+        if (overlays.length) reel.fromTo(overlays, { y: 18, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.55, stagger: 0.08, ease: "power2.out" }, 0.36);
+        if (progress) reel.fromTo(progress, { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "none" }, 0.2);
+      }
+
       const processSequence = document.querySelector<HTMLElement>("[data-process-sequence]");
       if (processSequence) {
         const heading = processSequence.querySelector<HTMLElement>(".section-heading");

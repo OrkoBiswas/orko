@@ -36,6 +36,12 @@ export type ProjectGalleryItem = {
   year: number | null;
 };
 
+export const showreelMedia = {
+  videoUrl: "https://res.cloudinary.com/dbq2cv0an/video/upload/f_mp4,q_auto:good/twjrdvsw3twharx3w0kx.mp4",
+  posterUrl: "https://res.cloudinary.com/dbq2cv0an/video/upload/so_0,f_jpg,q_auto:good/twjrdvsw3twharx3w0kx.jpg",
+  label: "Orko Biswas motion showreel",
+} as const;
+
 export const workDisciplines = [
   { value: "video", label: "Video" },
   { value: "motion", label: "Motion" },

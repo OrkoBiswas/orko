@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-
-const heroVideo = "https://res.cloudinary.com/dbq2cv0an/video/upload/f_mp4,q_auto:good/twjrdvsw3twharx3w0kx.mp4";
-const heroPoster = "https://res.cloudinary.com/dbq2cv0an/video/upload/so_0,f_jpg,q_auto:good/twjrdvsw3twharx3w0kx.jpg";
+import { showreelMedia } from "@/lib/portfolio";
 
 export function HeroMotionMedia() {
   const video = useRef<HTMLVideoElement>(null);
@@ -36,8 +34,8 @@ export function HeroMotionMedia() {
 
   return (
     <div className="hero-media" data-hero-media aria-hidden="true">
-      <video ref={video} muted loop playsInline preload="metadata" poster={heroPoster} aria-hidden="true">
-        <source src={heroVideo} type="video/mp4" />
+      <video ref={video} muted loop playsInline preload="metadata" poster={showreelMedia.posterUrl} aria-hidden="true">
+        <source src={showreelMedia.videoUrl} type="video/mp4" />
       </video>
       <div className="hero-media-wash" aria-hidden="true" />
     </div>

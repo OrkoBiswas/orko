@@ -4,7 +4,7 @@ import { ArrowDown, ArrowRight, ArrowUpRight, Asterisk, Sparkles } from "lucide-
 import { projectMatchesDiscipline, projects, services, workDisciplines } from "@/lib/portfolio";
 import { getSiteContent, listPortfolioProjects, listPortfolioServices } from "@/db/repository";
 import { ShowcaseGrid } from "@/components/ShowcaseGrid";
-import { ShowreelDialog } from "@/components/ShowreelDialog";
+import { ShowreelLoop } from "@/components/ShowreelLoop";
 import { ExperienceSection } from "@/components/ExperienceSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { HeroMotionMedia } from "@/components/HeroMotionMedia";
@@ -76,10 +76,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="showreel-section section-shell section-space">
-        <div className="section-heading light" data-reveal><div><p className="eyebrow"><span>02</span>Showreel</p><h2>{brand.showreelHeading}</h2></div><p>{brand.showreelIntro}</p></div>
-        <div className="showreel-poster" data-reveal><div className="poster-art" aria-hidden="true"><span>SHOW</span><span>REEL</span><i>00:00:00</i><b /></div><div className="showreel-controls"><ShowreelDialog /><div><span>01:12</span><span>Motion · Edit · Design</span></div></div></div>
-      </section>
+      <ShowreelLoop heading={brand.showreelHeading} intro={brand.showreelIntro} />
 
       <section className="services-section section-shell section-space">
         <div className="section-heading" data-reveal><div><p className="eyebrow"><span>03</span>Capabilities</p><h2>{brand.capabilitiesHeading}</h2></div><p>{brand.capabilitiesIntro}</p></div>
