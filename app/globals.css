@@ -2600,7 +2600,7 @@ html[data-motion="reduced"] .mobile-menu .mobile-menu-cta > i { width: 100%; ani
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   column-gap: 0;
-  row-gap: clamp(108px, 13vw, 210px);
+  row-gap: clamp(64px, 7vw, 112px);
   padding: clamp(72px, 9vw, 138px) 0 clamp(90px, 10vw, 150px);
   background: transparent;
 }
@@ -2721,6 +2721,15 @@ html[data-motion="reduced"] .mobile-menu .mobile-menu-cta > i { width: 100%; ani
   outline: 0;
   box-shadow: none;
   transition: transform .75s cubic-bezier(.22,1,.36,1), filter .45s ease;
+}
+.showcase-piece-media .project-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center;
 }
 .showcase-piece-media .project-art.has-media .art-index,
 .showcase-piece-media .project-art.has-media .art-kicker,
@@ -2858,7 +2867,7 @@ html[data-motion="reduced"] .mobile-menu .mobile-menu-cta > i { width: 100%; ani
   .showcase-library-top dl > div:last-child,
   .showcase-library-top dl > div:not(:first-child) { padding: 14px 0 13px; }
   .showcase-library-top dt a { font-size: 1.25rem; }
-  .showcase-grid { gap: 96px; padding-block: 64px 92px; }
+  .showcase-grid { gap: 62px; padding-block: 64px 82px; }
   .showcase-piece > a { display: grid; grid-template-columns: 1fr; gap: 0; }
   .showcase-piece-index,
   .showcase-piece:nth-child(even) .showcase-piece-index {
@@ -2910,7 +2919,7 @@ html[data-motion="reduced"] .mobile-menu .mobile-menu-cta > i { width: 100%; ani
 
 @media (max-width: 380px) {
   .showcase-library-title > strong { font-size: 2rem; }
-  .showcase-grid { gap: 78px; padding-top: 52px; }
+  .showcase-grid { gap: 52px; padding-top: 48px; }
   .showcase-piece-media-label { right: 10px; bottom: 9px; left: 10px; gap: 6px; letter-spacing: .08em; }
   .showcase-piece-heading h3 { font-size: 2.3rem; }
   .showcase-piece-meta > div { grid-template-columns: 62px minmax(0,1fr); }
