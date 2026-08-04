@@ -14,15 +14,18 @@ const frameLabels: Record<Project["ratio"], string> = {
 export function ProjectCard({ project, priority = false, variant = "default" }: { project: Project; priority?: boolean; variant?: "default" | "showcase" }) {
   if (variant === "showcase") {
     return (
-      <article className={`project-card showcase-card ratio-${project.ratio}`} data-project-card data-index={project.index} data-priority={priority || undefined}>
+      <article className={`project-card showcase-piece ratio-${project.ratio}`} data-project-card data-index={project.index} data-priority={priority || undefined}>
         <Link href={`/work/${project.slug}`} aria-label={`Open ${project.title} showcase item`} data-cursor="project">
-          <div className="showcase-card-bar"><span>{project.index}</span><span>{project.category}</span><span>{frameLabels[project.ratio]}</span></div>
-          <div className="showcase-card-stage"><ProjectArtwork project={project} /></div>
-          <div className="showcase-card-info">
-            <div className="showcase-card-heading"><span>Featured project</span><h3>{project.title}</h3></div>
+          <div className="showcase-piece-index" aria-hidden="true"><span>Project</span><strong>{project.index}</strong><i /></div>
+          <div className="showcase-piece-media">
+            <ProjectArtwork project={project} />
+            <span className="showcase-piece-media-label" aria-hidden="true">{project.category}<i />{frameLabels[project.ratio]}</span>
+          </div>
+          <div className="showcase-piece-info">
+            <div className="showcase-piece-heading"><span>Selected chapter</span><h3>{project.title}</h3></div>
             <p>{project.summary}</p>
-            <dl className="showcase-card-meta" aria-label={`${project.title} project details`}><div><dt>Client</dt><dd>{project.client || "Independent"}</dd></div><div><dt>Industry</dt><dd>{project.industry}</dd></div><div><dt>Year</dt><dd>{project.year}</dd></div></dl>
-            <div className="showcase-card-foot"><span>{project.services.slice(0, 2).join(" + ")}</span><span>Explore work <ArrowUpRight aria-hidden="true" /></span></div>
+            <dl className="showcase-piece-meta" aria-label={`${project.title} project details`}><div><dt>Client</dt><dd>{project.client || "Independent"}</dd></div><div><dt>Industry</dt><dd>{project.industry}</dd></div><div><dt>Year</dt><dd>{project.year}</dd></div></dl>
+            <div className="showcase-piece-action"><span>{project.services.slice(0, 2).join(" + ")}</span><strong>Open project <ArrowUpRight aria-hidden="true" /></strong></div>
           </div>
         </Link>
       </article>
