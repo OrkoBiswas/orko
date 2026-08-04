@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowDown, ArrowRight, ArrowUpRight, Asterisk, Sparkles } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";
 import { projectMatchesDiscipline, projects, services, workDisciplines } from "@/lib/portfolio";
 import { getSiteContent, listPortfolioProjects, listPortfolioServices } from "@/db/repository";
 import { ShowcaseGrid } from "@/components/ShowcaseGrid";
@@ -55,8 +55,6 @@ export default async function Home() {
         </div>
       </section>
 
-      <div className="discipline-rail" aria-label="Disciplines"><div><span>VIDEO EDITING</span><Asterisk /><span>2D MOTION</span><Asterisk /><span>GRAPHIC DESIGN</span><Asterisk /><span>VISUAL SYSTEMS</span><Asterisk /><span>VIDEO EDITING</span></div></div>
-
       <ProfileLinksBand content={brand} />
 
       <section id="selected-work" className="selected-work section-shell section-space">
@@ -86,30 +84,8 @@ export default async function Home() {
 
       <ExperienceSection content={brand} />
 
-      <section className="content-needs section-shell section-space">
-        <div className="section-heading" data-reveal><div><p className="eyebrow"><span>05</span>What I can create</p><h2>Useful content for every screen.</h2></div><p>Choose one item or combine several into a complete content package.</p></div>
-        <div className="content-needs-grid">
-          {[
-            ["01", "Brand and promo videos", "Clear edits for products, services, events, and campaigns."],
-            ["02", "YouTube and interviews", "Well-paced long videos, interviews, chapters, and cutdowns."],
-            ["03", "Reels and short videos", "Vertical edits with strong openings, captions, and clean timing."],
-            ["04", "Motion graphics", "Animated titles, explainers, logos, text, and visual effects."],
-            ["05", "Posters and social posts", "Strong layouts for campaigns, announcements, and daily content."],
-            ["06", "Creative content bundles", "A connected set of video, motion, and design assets for one launch."],
-          ].map(([number, title, copy]) => <article key={number} data-reveal><span>{number}</span><h3>{title}</h3><p>{copy}</p></article>)}
-        </div>
-      </section>
-
-      <section className="why-section section-shell section-space">
-        <div className="why-mark"><Sparkles aria-hidden="true" /><span>WHY ORKO</span></div>
-        <div className="why-copy" data-reveal><p className="eyebrow">Why work with me</p><h2>Clear ideas.<br /><em>Strong visual work.</em></h2><p>Every edit and design choice should make the message easier to understand and the work easier to remember.</p></div>
-        <div className="why-grid">
-          {[["01","Clear story","I first decide what the audience needs to understand, feel, or do."],["02","Consistent style","Colors, type, motion, and layouts stay connected across every format."],["03","Easy workflow","You get clear steps, focused feedback rounds, and regular updates."],["04","Ready for each platform","Every file is prepared for the correct screen, size, caption area, and format."],["05","Organized delivery","Final exports and source files are named clearly and easy to use."],["06","Flexible support","I can help with one task or support a larger campaign from start to finish."]].map(([number,title,copy]) => <article key={number} data-reveal><span>{number}</span><h3>{title}</h3><p>{copy}</p></article>)}
-        </div>
-      </section>
-
       <section className="process-preview process-showcase section-shell" data-process-sequence>
-        <div className="section-heading"><div><p className="eyebrow"><span>06</span>Process</p><h2>A clear path from idea to delivery.</h2></div><Link className="text-link" href="/process">See the full process <ArrowUpRight aria-hidden="true" /></Link></div>
+        <div className="section-heading"><div><p className="eyebrow"><span>05</span>Process</p><h2>A clear path from idea to delivery.</h2></div><Link className="text-link" href="/process">See the full process <ArrowUpRight aria-hidden="true" /></Link></div>
         <div className="process-stage" data-process-stage>
           <div className="process-track-head"><span>Project timeline · 01—06</span><span>From the first brief to organized final files</span></div>
           <div className="process-timeline" tabIndex={0} role="region" aria-label="Six-stage project timeline">
@@ -121,7 +97,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <TestimonialsSection content={brand} />
+      <TestimonialsSection content={brand} index="06" />
     </>
   );
 }

@@ -8,7 +8,7 @@ Projects contain opaque ID, slug, title, index, category, services, industry, ye
 
 Cloudinary assets are external media records tagged for the portfolio workspace. The dashboard exposes only their public ID, secure delivery URL, type, format, size, dimensions, duration, and created timestamp. Provider credentials and signatures are not content fields.
 
-Testimonials contain an approved quote, client name, optional role and company, plus an optional media type, secure image/video URL, and accessibility description. Older stored testimonials receive safe no-media defaults during parsing.
+Testimonials contain an approved quote, client name, optional role and company, plus an optional media type, secure image/video URL, and accessibility description. Older stored testimonials receive safe no-media defaults during parsing. The public testimonial section is omitted when the approved collection is empty.
 
 Services contain slug, promise, problem set, deliverables, ideal clients, process, timeline, pricing mode, FAQ, and related project slugs.
 

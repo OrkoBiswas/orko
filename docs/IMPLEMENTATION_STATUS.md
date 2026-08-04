@@ -26,6 +26,7 @@ Last updated: 2026-08-04
 - Rebuilt the homepage hero as a viewport-fit open editorial composition with prominent Orko Biswas identity, a borderless Cloudinary motion layer, slow theme-green atmospheric light rays, footer-matched display/serif headline typography, static reduced-motion/low-data fallback, and coordinated entrance motion.
 - Replaced the oversized showreel poster and popup with a compact, borderless editorial composition. The open cinematic media plane now sits beneath expressive display-and-serif “Showreel” typography, with floating playback controls and an unboxed information rail. The Cloudinary reel autoplays muted in place, loops while visible, pauses off-screen or for reduced-motion/low-data preferences, and uses a dedicated scrubbed ScrollTrigger reveal without pinning the page.
 - Added a dedicated owner-only Showreel dashboard with current-media preview, signed direct video upload, automatic Cloudinary poster generation, secure URL editing, original-reel restoration, immediate durable publication, and standard success/error notifications. The homepage and `/showreel` route now read the same managed media values.
+- Simplified the public experience by removing the decorative discipline ticker, the repeated “What I can create” and “Why work with me” grids, and the speculative chapter cards from the Showreel page. Empty testimonials now stay hidden until approved feedback exists, leaving a shorter homepage focused on work, reel, services, experience, process, proof, and contact.
 
 ## Validation
 
