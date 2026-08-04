@@ -32,6 +32,7 @@ Last updated: 2026-08-04
 - Refined the Selected Work runway with stronger editorial hierarchy, structured client/industry/year metadata, elevated media framing, a compact theme-green index marker, subtle green edge lighting, cleaner spacing, and restrained focus/hover depth while preserving every project’s natural frame and category destination. The unwanted circular arrow overlay was removed.
 - Rebuilt the public header as a floating editorial navigation rail with owner-sized identity, live availability and timezone context, active-route cues, smooth direction-aware auto-hide and reveal, keyboard-safe menu behavior, and a looping theme-green light-saber CTA. Tablet, touch, 320px, and reduced-motion presentations retain complete navigation access without exposing the hidden header state.
 - Replaced the Selected Work card runway with an open editorial exhibition: full-bleed ratio-aware media, alternating magazine-spread composition, oversized project indexing, cut-corner framing, clean typographic information rails, and direct category navigation. The new system removes grey outer boxes while preserving every image and video frame across desktop, touch, and 320px layouts.
+- Fixed the exhibition layout collapse by explicitly resetting its inherited legacy column geometry to a single full-width project track, separating horizontal and vertical gaps, and pinning every alternating media, information, and index region to the same grid row. Project spreads now keep their intended widths and alignment at every responsive breakpoint.
 
 ## Validation
 

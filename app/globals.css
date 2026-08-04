@@ -2598,7 +2598,9 @@ html[data-motion="reduced"] .mobile-menu .mobile-menu-cta > i { width: 100%; ani
 
 .showcase-grid {
   display: grid;
-  gap: clamp(108px, 13vw, 210px);
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: 0;
+  row-gap: clamp(108px, 13vw, 210px);
   padding: clamp(72px, 9vw, 138px) 0 clamp(90px, 10vw, 150px);
   background: transparent;
 }
@@ -2649,6 +2651,7 @@ html[data-motion="reduced"] .mobile-menu .mobile-menu-cta > i { width: 100%; ani
 .showcase-piece > a:focus-visible .showcase-piece-media { outline: 3px solid #668817; outline-offset: 5px; }
 .showcase-piece-index {
   grid-column: 1 / 2;
+  grid-row: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -2677,6 +2680,7 @@ html[data-motion="reduced"] .mobile-menu .mobile-menu-cta > i { width: 100%; ani
   position: relative;
   isolation: isolate;
   grid-column: 2 / 9;
+  grid-row: 1;
   aspect-ratio: 16 / 9;
   align-self: start;
   overflow: hidden;
@@ -2742,6 +2746,7 @@ html[data-motion="reduced"] .mobile-menu .mobile-menu-cta > i { width: 100%; ani
 .showcase-piece-media-label i { width: 22px; height: 1px; background: var(--accent); box-shadow: 0 0 8px rgba(201,255,67,.55); }
 .showcase-piece-info {
   grid-column: 9 / 13;
+  grid-row: 1;
   align-self: end;
   min-width: 0;
   display: grid;
@@ -2844,7 +2849,7 @@ html[data-motion="reduced"] .mobile-menu .mobile-menu-cta > i { width: 100%; ani
   .showcase-piece-meta > div { grid-template-columns: 60px minmax(0,1fr); }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 860px) {
   .selected-work .section-heading { display: block; }
   .showcase-library-top { display: grid; grid-template-columns: 1fr; grid-template-areas: "title" "intro" "categories"; gap: 22px; }
   .showcase-library-top dl { grid-template-columns: 1fr; }
