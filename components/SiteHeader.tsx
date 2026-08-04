@@ -98,10 +98,6 @@ export function SiteHeader({ content: brand }: { content: SiteContent }) {
         <Link className="wordmark" href="/" aria-label={`${brand.name}, home`} onClick={() => setOpen(false)}>
           {brand.logoUrl ? <img className="wordmark-logo" src={brand.logoUrl} alt={brand.logoAlt || `${brand.name} logo`} /> : <span className="wordmark-mark">{brand.monogram}</span>}
         </Link>
-        <div className="header-context" aria-label={`${brand.availability}. Time zone ${brand.timezone}`}>
-          <span><i aria-hidden="true" />{brand.availability}</span>
-          <small>{brand.timezone}</small>
-        </div>
         <nav className="desktop-nav" aria-label="Primary navigation">
           {navigation.map(([label, href], index) => (
             <Link href={href} key={href} aria-current={isCurrent(href) ? "page" : undefined}>
@@ -131,7 +127,7 @@ export function SiteHeader({ content: brand }: { content: SiteContent }) {
             <i aria-hidden="true" />
           </Link>
         </nav>
-        <p>{brand.location}<br />{brand.availability}</p>
+        <p>{brand.location}</p>
       </div>
     </header>
   );
