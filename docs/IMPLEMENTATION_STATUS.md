@@ -30,6 +30,7 @@ Last updated: 2026-08-04
 - Strengthened the homepage Process section as a wider editorial timeline while preserving its light theme and green accent system. The display-and-serif headline is more expressive, the six stages are bolder, and every column, node, connector, guide, and progress line now uses shared geometry for exact desktop and touch-scroll alignment down to 320px.
 - Removed the Process timeline scrollbar and eliminated final-stage clipping. Wide screens keep the complete six-step horizontal composition, while tablet and mobile switch to a fully visible vertical sequence with a responsive animated spine, clean dividers, and no sideways scrolling.
 - Refined the Selected Work runway with stronger editorial hierarchy, structured client/industry/year metadata, elevated media framing, a compact theme-green index marker, subtle green edge lighting, cleaner spacing, and restrained focus/hover depth while preserving every project’s natural frame and category destination. The unwanted circular arrow overlay was removed.
+- Rebuilt the public header as a floating editorial navigation rail with owner-sized identity, live availability and timezone context, active-route cues, smooth direction-aware auto-hide and reveal, keyboard-safe menu behavior, and a looping theme-green light-saber CTA. Tablet, touch, 320px, and reduced-motion presentations retain complete navigation access without exposing the hidden header state.
 
 ## Validation
 
