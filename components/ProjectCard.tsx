@@ -17,7 +17,7 @@ export function ProjectCard({ project, priority = false, variant = "default" }: 
       <article className={`project-card showcase-card ratio-${project.ratio}`} data-project-card data-index={project.index} data-priority={priority || undefined}>
         <Link href={`/work/${project.slug}`} aria-label={`Open ${project.title} showcase item`} data-cursor="project">
           <div className="showcase-card-bar"><span>{project.index}</span><span>{project.category}</span><span>{frameLabels[project.ratio]}</span></div>
-          <div className="showcase-card-stage"><ProjectArtwork project={project} /><span className="showcase-card-open" aria-hidden="true"><ArrowUpRight /></span></div>
+          <div className="showcase-card-stage"><ProjectArtwork project={project} /></div>
           <div className="showcase-card-info">
             <div className="showcase-card-heading"><span>Featured project</span><h3>{project.title}</h3></div>
             <p>{project.summary}</p>
