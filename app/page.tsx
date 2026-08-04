@@ -85,7 +85,7 @@ export default async function Home() {
       <ExperienceSection content={brand} />
 
       <section className="process-preview process-showcase section-shell" data-process-sequence>
-        <div className="section-heading"><div><p className="eyebrow"><span>05</span>Process</p><h2>A clear path from idea to delivery.</h2></div><Link className="text-link" href="/process">See the full process <ArrowUpRight aria-hidden="true" /></Link></div>
+        <div className="section-heading"><div><p className="eyebrow"><span>05</span>Process</p><h2>A clear path from <em>idea</em><br />to delivery.</h2></div><Link className="text-link" href="/process">See the full process <ArrowUpRight aria-hidden="true" /></Link></div>
         <div className="process-stage" data-process-stage>
           <div className="process-track-head"><span>Project timeline · 01—06</span><span>From the first brief to organized final files</span></div>
           <div className="process-timeline" tabIndex={0} role="region" aria-label="Six-stage project timeline">
