@@ -24,7 +24,7 @@ Last updated: 2026-08-04
 - Redesigned testimonials as calmer editorial cards with smaller, lighter quote typography and optional client image/video layouts. The dedicated owner form supports direct signed upload, secure URL entry, accessible media descriptions, previews, replacement, and attachment removal.
 - Fixed external testimonial media delivery and dashboard uploads in the content security policy, added automatic publishing after valid uploads, media-type inference for pasted URLs, and a shorter media-dominant testimonial composition.
 - Rebuilt the homepage hero as a viewport-fit open editorial composition with prominent Orko Biswas identity, a borderless Cloudinary motion layer, slow theme-green atmospheric light rays, footer-matched display/serif headline typography, static reduced-motion/low-data fallback, and coordinated entrance motion.
-- Replaced the oversized showreel poster and popup with a compact screen-fit editorial composition. The Cloudinary reel now autoplays muted in place, loops while visible, pauses off-screen or for reduced-motion/low-data preferences, exposes a direct play/pause control, and uses a dedicated scrubbed ScrollTrigger reveal without pinning the page.
+- Replaced the oversized showreel poster and popup with a compact, borderless editorial composition. The open cinematic media plane now sits beneath expressive display-and-serif “Showreel” typography, with floating playback controls and an unboxed information rail. The Cloudinary reel autoplays muted in place, loops while visible, pauses off-screen or for reduced-motion/low-data preferences, and uses a dedicated scrubbed ScrollTrigger reveal without pinning the page.
 
 ## Validation
 

@@ -62,25 +62,20 @@ export function ShowreelLoop({ heading, intro }: { heading: string; intro: strin
 
   return (
     <section ref={section} id="showreel" className="showreel-section section-shell" data-showreel-sequence aria-labelledby="showreel-heading">
-      <div className="showreel-loop-grid">
-        <div className="showreel-copy" data-showreel-copy>
-          <p className="eyebrow"><span>02</span>Showreel / continuous loop</p>
-          <h2 id="showreel-heading">{heading}</h2>
-          <p>{intro}</p>
-          <div className="showreel-actions">
-            <button className="showreel-play" type="button" onClick={togglePlayback} aria-pressed={playing}>
-              <span>{playing ? <Pause aria-hidden="true" /> : <Play aria-hidden="true" fill="currentColor" />}</span>
-              {playing ? "Pause reel" : "Play reel"}
-            </button>
-            <Link className="text-link light" href="/work">Explore the full archive <ArrowUpRight aria-hidden="true" /></Link>
-          </div>
-          <dl className="showreel-facts">
-            <div><dt>Format</dt><dd>Silent loop</dd></div>
-            <div><dt>Focus</dt><dd>Edit · Motion · Design</dd></div>
-          </dl>
-        </div>
+      <div className="showreel-masthead" data-showreel-copy>
+        <p className="eyebrow"><span>02</span>Selected motion / continuous loop</p>
+        <p className="showreel-edition"><span>Orko Biswas</span><span>Visual designer · 2026</span></p>
+      </div>
 
-        <div className="showreel-frame" data-showreel-frame>
+      <div className="showreel-stage">
+        <h2 id="showreel-heading" className="showreel-type" data-showreel-title>
+          <span className="sr-only">{heading}</span>
+          <span className="showreel-type-sans" data-showreel-word aria-hidden="true">Show</span>
+          <em data-showreel-word aria-hidden="true">reel</em>
+          <small data-showreel-word aria-hidden="true">’26</small>
+        </h2>
+
+        <div className="showreel-media" data-showreel-frame>
           <video
             ref={video}
             muted
@@ -97,17 +92,22 @@ export function ShowreelLoop({ heading, intro }: { heading: string; intro: strin
             <source src={showreelMedia.videoUrl} type="video/mp4" />
           </video>
           <div className="showreel-wash" aria-hidden="true" />
-          <div className="showreel-frame-top" data-showreel-overlay>
-            <span><i />Playing in place</span>
-            <span>OB / 2026</span>
-          </div>
-          <div className="showreel-watermark" aria-hidden="true">OB</div>
-          <div className="showreel-frame-bottom" data-showreel-overlay>
-            <p id="showreel-caption"><strong>{showreelMedia.label}</strong><span>No popup · Muted autoplay · Loops continuously</span></p>
-            <span aria-hidden="true">↗</span>
-          </div>
+          <p className="showreel-live" data-showreel-overlay><i />Playing in place</p>
+          <button className="showreel-play" type="button" onClick={togglePlayback} aria-pressed={playing} data-showreel-overlay>
+            <span>{playing ? <Pause aria-hidden="true" /> : <Play aria-hidden="true" fill="currentColor" />}</span>
+            {playing ? "Pause reel" : "Play reel"}
+          </button>
           <div className="showreel-progress" aria-hidden="true"><span data-showreel-progress /></div>
         </div>
+      </div>
+
+      <div className="showreel-details" data-showreel-details>
+        <div className="showreel-statement">
+          <strong>{heading}</strong>
+          <p id="showreel-caption">{intro}</p>
+        </div>
+        <p className="showreel-meta"><span>Silent autoplay</span><span>Edit · Motion · Design</span><span>Loops while visible</span></p>
+        <Link className="text-link light" href="/work">Explore the full archive <ArrowUpRight aria-hidden="true" /></Link>
       </div>
     </section>
   );
