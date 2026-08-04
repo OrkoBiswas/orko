@@ -8,7 +8,7 @@ Motion guides reading, reveals hierarchy, and makes project media feel tactile. 
 
 - GSAP context scopes lifecycle and cleanup inside `MotionProvider`.
 - Initial hero sequence animates masks and type with short staggered timing.
-- ScrollTrigger reveals selected sections, unfolds the showreel media plane while independently sliding its mixed-type headline into place, and advances the process rail across one shared, geometry-locked timeline. Process nodes, alternating entries, and focus labels reveal in sequence without changing their final alignment.
+- ScrollTrigger reveals selected sections, unfolds the showreel media plane while independently sliding its mixed-type headline into place, and advances the process rail across one shared, geometry-locked timeline. A CSS progress variable lets the same reveal run horizontally on wide screens and vertically on smaller screens without changing node alignment.
 - Work filters use GSAP Flip for positional continuity.
 - Pointer parallax is desktop-only and bounded to a few pixels.
 - Route loading uses native instant navigation plus a brief CSS progress cue.

@@ -132,7 +132,7 @@ export function MotionProvider() {
 
         if (heading) sequence.fromTo(heading, { y: 24, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.45, ease: "power2.out" }, 0);
         if (stage) sequence.fromTo(stage, { y: 34, scale: 0.975 }, { y: 0, scale: 1, duration: 0.72, ease: "power3.out" }, 0.06);
-        if (progress) sequence.fromTo(progress, { scaleX: 0 }, { scaleX: 1, duration: 1.35, ease: "none" }, 0.1);
+        if (progress) sequence.fromTo(progress, { "--process-progress": "0%" }, { "--process-progress": "100%", duration: 1.35, ease: "none" }, 0.1);
         if (nodes.length) sequence.fromTo(nodes, { scale: 0.35, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.28, stagger: 0.14, ease: "back.out(2.2)" }, 0.13);
         if (entries.length) sequence.fromTo(entries, { y: (index) => index % 2 === 0 ? -32 : 32, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.62, stagger: 0.11, ease: "power3.out" }, 0.2);
         if (details.length) sequence.fromTo(details, { x: -10, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.35, stagger: 0.08, ease: "power2.out" }, 0.48);

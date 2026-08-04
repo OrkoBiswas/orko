@@ -28,6 +28,7 @@ Last updated: 2026-08-04
 - Added a dedicated owner-only Showreel dashboard with current-media preview, signed direct video upload, automatic Cloudinary poster generation, secure URL editing, original-reel restoration, immediate durable publication, and standard success/error notifications. The homepage and `/showreel` route now read the same managed media values.
 - Simplified the public experience by removing the decorative discipline ticker, the repeated “What I can create” and “Why work with me” grids, and the speculative chapter cards from the Showreel page. Empty testimonials now stay hidden until approved feedback exists, leaving a shorter homepage focused on work, reel, services, experience, process, proof, and contact.
 - Strengthened the homepage Process section as a wider editorial timeline while preserving its light theme and green accent system. The display-and-serif headline is more expressive, the six stages are bolder, and every column, node, connector, guide, and progress line now uses shared geometry for exact desktop and touch-scroll alignment down to 320px.
+- Removed the Process timeline scrollbar and eliminated final-stage clipping. Wide screens keep the complete six-step horizontal composition, while tablet and mobile switch to a fully visible vertical sequence with a responsive animated spine, clean dividers, and no sideways scrolling.
 
 ## Validation
 
