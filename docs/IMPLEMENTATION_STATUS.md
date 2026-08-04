@@ -35,6 +35,7 @@ Last updated: 2026-08-04
 - Fixed the exhibition layout collapse by explicitly resetting its inherited legacy column geometry to a single full-width project track, separating horizontal and vertical gaps, and pinning every alternating media, information, and index region to the same grid row. Project spreads now keep their intended widths and alignment at every responsive breakpoint.
 - Tightened the Selected Work exhibition rhythm and explicitly locks uploaded images and videos to the full width and height of their chosen ratio-aware media frame with centered cover fitting. Desktop and mobile project chapters now sit closer together without reintroducing grey framing or alignment drift.
 - Removed the availability and GMT status labels from the public navbar, then rebalanced the remaining logo, navigation, and project CTA across desktop and mobile layouts.
+- Improved the complete owner dashboard for responsive use with a single-row touch navigation rail, flexible headers and actions, safer narrow-screen tables, stacked save/danger controls, and 320px card layouts. The public hamburger now uses a sleek three-line-to-close animation with a restrained theme-green glow and reduced-motion support.
 
 ## Validation
 

@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element -- Owner-controlled logo URLs are validated before storage. */
 
 import Link from "next/link";
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { SiteContent } from "@/lib/site-content";
@@ -111,7 +111,8 @@ export function SiteHeader({ content: brand }: { content: SiteContent }) {
           <span className="header-saber-track" aria-hidden="true"><i /></span>
         </Link>
         <button className="menu-button" type="button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-controls="mobile-menu" aria-label={open ? "Close navigation" : "Open navigation"}>
-          <span>{open ? "Close" : "Menu"}</span>{open ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+          <span className="menu-button-label">{open ? "Close" : "Menu"}</span>
+          <span className="menu-button-icon" aria-hidden="true"><i /><i /><i /></span>
         </button>
       </div>
       <div id="mobile-menu" className={`mobile-menu ${open ? "is-open" : ""}`} aria-hidden={!open}>
