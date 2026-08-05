@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { SiteContent } from "@/lib/site-content";
 
 const navigation = [
@@ -17,15 +17,41 @@ const navigation = [
 
 export function SiteHeader({ content: brand }: { content: SiteContent }) {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
+  const [menuState, setMenuState] = useState<"closed" | "open" | "closing">("closed");
   const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [engaged, setEngaged] = useState(false);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const open = menuState === "open";
+  const menuVisible = menuState !== "closed";
+
+  const clearCloseTimer = useCallback(() => {
+    if (!closeTimer.current) return;
+    clearTimeout(closeTimer.current);
+    closeTimer.current = null;
+  }, []);
+
+  const openMenu = useCallback(() => {
+    clearCloseTimer();
+    setMenuState("open");
+  }, [clearCloseTimer]);
+
+  const closeMenu = useCallback(() => {
+    if (menuState !== "open") return;
+    clearCloseTimer();
+    setMenuState("closing");
+    closeTimer.current = setTimeout(() => {
+      setMenuState("closed");
+      closeTimer.current = null;
+    }, 760);
+  }, [clearCloseTimer, menuState]);
+
+  useEffect(() => clearCloseTimer, [clearCloseTimer]);
 
   useEffect(() => {
-    document.body.classList.toggle("menu-open", open);
+    document.body.classList.toggle("menu-open", menuVisible);
     return () => document.body.classList.remove("menu-open");
-  }, [open]);
+  }, [menuVisible]);
 
   useEffect(() => {
     let previousY = Math.max(window.scrollY, 0);
@@ -39,7 +65,7 @@ export function SiteHeader({ content: brand }: { content: SiteContent }) {
 
       setScrolled(currentY > 18);
 
-      if (reduced || open || engaged || currentY < 112) {
+      if (reduced || menuVisible || engaged || currentY < 112) {
         setHidden(false);
       } else if (delta > 8) {
         setHidden(true);
@@ -68,18 +94,18 @@ export function SiteHeader({ content: brand }: { content: SiteContent }) {
       motionPreference.removeEventListener("change", onMotionChange);
       if (frame) window.cancelAnimationFrame(frame);
     };
-  }, [engaged, open]);
+  }, [engaged, menuVisible]);
 
   useEffect(() => {
     if (!open) return;
 
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") closeMenu();
     };
 
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
-  }, [open]);
+  }, [closeMenu, open]);
 
   const isCurrent = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
@@ -95,7 +121,7 @@ export function SiteHeader({ content: brand }: { content: SiteContent }) {
       }}
     >
       <div className="header-shell">
-        <Link className="wordmark" href="/" aria-label={`${brand.name}, home`} onClick={() => setOpen(false)}>
+        <Link className="wordmark" href="/" aria-label={`${brand.name}, home`} onClick={closeMenu}>
           {brand.logoUrl ? <img className="wordmark-logo" src={brand.logoUrl} alt={brand.logoAlt || `${brand.name} logo`} /> : <span className="wordmark-mark">{brand.monogram}</span>}
         </Link>
         <nav className="desktop-nav" aria-label="Primary navigation">
@@ -110,19 +136,19 @@ export function SiteHeader({ content: brand }: { content: SiteContent }) {
           <span className="header-cta-arrow" aria-hidden="true"><ArrowUpRight size={17} /></span>
           <span className="header-saber-track" aria-hidden="true"><i /></span>
         </Link>
-        <button className="menu-button" type="button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-controls="mobile-menu" aria-label={open ? "Close navigation" : "Open navigation"}>
+        <button className="menu-button" type="button" onClick={open ? closeMenu : openMenu} aria-expanded={open} aria-controls="mobile-menu" aria-label={open ? "Close navigation" : "Open navigation"}>
           <span className="menu-button-label">{open ? "Close" : "Menu"}</span>
           <span className="menu-button-icon" aria-hidden="true"><i /><i /><i /></span>
         </button>
       </div>
-      <div id="mobile-menu" className={`mobile-menu ${open ? "is-open" : ""}`} aria-hidden={!open}>
+      <div id="mobile-menu" className={`mobile-menu${open ? " is-open" : ""}${menuState === "closing" ? " is-closing" : ""}`} aria-hidden={!open}>
         <nav aria-label="Mobile navigation">
           {navigation.map(([label, href], index) => (
-            <Link href={href} key={href} onClick={() => setOpen(false)} aria-current={isCurrent(href) ? "page" : undefined}>
+            <Link href={href} key={href} onClick={closeMenu} aria-current={isCurrent(href) ? "page" : undefined}>
               <span>0{index + 1}</span>{label}
             </Link>
           ))}
-          <Link className="mobile-menu-cta" href="/start-a-project" onClick={() => setOpen(false)}>
+          <Link className="mobile-menu-cta" href="/start-a-project" onClick={closeMenu}>
             <span><small>Have a project?</small><strong>Let&apos;s work</strong></span>
             <ArrowUpRight aria-hidden="true" />
             <i aria-hidden="true" />
