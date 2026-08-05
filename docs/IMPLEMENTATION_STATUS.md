@@ -37,6 +37,7 @@ Last updated: 2026-08-04
 - Removed the availability and GMT status labels from the public navbar, then rebalanced the remaining logo, navigation, and project CTA across desktop and mobile layouts.
 - Improved the complete owner dashboard for responsive use with a single-row touch navigation rail, flexible headers and actions, safer narrow-screen tables, stacked save/danger controls, and 320px card layouts. The public hamburger now uses a sleek three-line-to-close animation with a restrained theme-green glow and reduced-motion support.
 - Refined the responsive navigation reveal with a smooth top-down panel opening, a subtle green edge flare, and individually staggered menu lines. The mobile hero glow is now anchored to the top-left with controlled ray geometry so the green atmosphere starts cleanly without a clipped or detached top edge.
+- Prevented stale HTML from holding onto an older compiled stylesheet after production releases. Public and admin document responses now disable browser and CDN caching while fingerprinted static assets remain independently cacheable, so newly published responsive styles appear immediately on the normal site URL.
 
 ## Validation
 

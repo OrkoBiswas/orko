@@ -15,6 +15,8 @@ async function request(path = "/", init = {}) {
 test("server-renders the finished portfolio homepage", async () => {
   const response = await request();
   assert.equal(response.status, 200);
+  assert.match(response.headers.get("cache-control") ?? "", /no-store/);
+  assert.equal(response.headers.get("cdn-cache-control"), "no-store");
   const html = await response.text();
   assert.match(html, /<title>Orko Biswas/);
   assert.match(html, /Visual ideas/);
