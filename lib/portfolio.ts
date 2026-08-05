@@ -42,6 +42,14 @@ export const showreelMedia = {
   label: "Orko Biswas motion showreel",
 } as const;
 
+export const footerContent = {
+  availabilityLead: "Available for the right creative project",
+  headlineLead: "Have a story?",
+  headlineAccent: "Let's make it move.",
+  support: "Tell me what you are making, what you need, and when you need it. I will reply with a clear next step.",
+  identityNote: "Video editing, motion design, and graphic design for brands, businesses, and creators.",
+} as const;
+
 export const workDisciplines = [
   { value: "video", label: "Video" },
   { value: "motion", label: "Motion" },

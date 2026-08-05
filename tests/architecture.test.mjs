@@ -151,3 +151,20 @@ test("responsive comfort system protects public and owner layouts down to 320px"
   assert.match(css, /\.hero-light-rays \{ display: none; \}/);
   assert.match(css, /@media \(max-width: 1024px\) and \(max-height: 620px\)/);
 });
+
+test("shared footer gives every viewport a clear and accessible hiring path", async () => {
+  const [footer, portfolio, css] = await Promise.all([
+    readFile(new URL("components/SiteFooter.tsx", root), "utf8"),
+    readFile(new URL("lib/portfolio.ts", root), "utf8"),
+    readFile(new URL("app/globals.css", root), "utf8"),
+  ]);
+  assert.match(footer, /aria-labelledby="footer-heading"/);
+  assert.match(footer, /aria-label="Footer navigation"/);
+  assert.match(footer, /href="\/start-a-project"/);
+  assert.match(footer, /mailto:/);
+  assert.doesNotMatch(footer, /href="\/admin"/);
+  assert.match(portfolio, /export const footerContent/);
+  assert.match(css, /Modern responsive site footer/);
+  assert.match(css, /@media \(max-width: 420px\)/);
+  assert.match(css, /footer-project-link::before \{ animation: none; \}/);
+});

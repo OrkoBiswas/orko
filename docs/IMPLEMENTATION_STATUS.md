@@ -41,12 +41,13 @@ Last updated: 2026-08-05
 - Removed the atmospheric green hero light from mobile layouts while preserving the complete animated ray treatment on desktop screens.
 - Prevented stale HTML from holding onto an older compiled stylesheet after production releases. Public and admin document responses now disable browser and CDN caching while fingerprinted static assets remain independently cacheable, so newly published responsive styles appear immediately on the normal site URL.
 - Consolidated the public site and owner dashboard into one final responsive comfort system: tighter section rhythm, balanced small-screen type, closer showcase chapters, shorter process/testimonial/experience layouts, safer media and long-text containment, 44â€“48px touch targets, landscape navigation handling, compact forms, safe-area notifications, reduced-motion scrolling, and verified 320px fallbacks without changing the established desktop identity.
+- Rebuilt the shared public footer as a modern hiring-focused close for every route: expressive theme typography, a direct project CTA with restrained light-saber motion, immediate email/location/response details, owner-managed identity and social links, clearer visitor navigation, safe touch targets, accessible landmarks, reduced-motion support, and dedicated desktop, tablet, mobile, and 320px arrangements. The unnecessary public Owner link was removed.
 
 ## Validation
 
 - Lint: passed.
 - Typecheck: passed.
-- Automated tests: 18 passed.
+- Automated tests: 19 passed.
 - Production build: passed.
 - Prior desktop and mobile browser reviews passed for public navigation, archive filters, case studies, forms, animations, and inquiry persistence.
 
