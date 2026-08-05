@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element -- Testimonial sources are dynamic Cloudinary delivery URLs. */
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, Pause, Play, Quote } from "lucide-react";
+import { ArrowLeft, ArrowRight, Pause, Play, Quote, Volume2, VolumeX } from "lucide-react";
 import type { SiteContent } from "@/lib/site-content";
 
 type Testimonial = SiteContent["testimonials"][number];
@@ -14,17 +14,76 @@ function resolveMediaType(testimonial: Testimonial): "image" | "video" | null {
   return /\/video\/upload\/|\.(mp4|webm|mov|m4v)(?:$|[?#])/i.test(testimonial.mediaUrl) ? "video" : "image";
 }
 
+function TestimonialVideo({ testimonial, active, reducedMotion, pageVisible }: { testimonial: Testimonial; active: boolean; reducedMotion: boolean; pageVisible: boolean }) {
+  const video = useRef<HTMLVideoElement>(null);
+  const [muted, setMuted] = useState(true);
+
+  function muteVideo() {
+    if (video.current) video.current.muted = true;
+    setMuted(true);
+  }
+
+  function toggleSound() {
+    const media = video.current;
+    if (!media) return;
+    const nextMuted = !media.muted;
+    media.muted = nextMuted;
+    setMuted(nextMuted);
+    if (media.paused && active && !reducedMotion) void media.play().catch(() => undefined);
+  }
+
+  useEffect(() => {
+    const media = video.current;
+    if (!media) return;
+    if (!active || !pageVisible || reducedMotion) {
+      media.pause();
+      media.muted = true;
+      return;
+    }
+    void media.play().catch(() => undefined);
+  }, [active, pageVisible, reducedMotion]);
+
+  return (
+    <div
+      className="testimonial-video-frame"
+      data-audio-active={!muted || undefined}
+      onMouseLeave={muteVideo}
+      onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) muteVideo(); }}
+    >
+      <video
+        ref={video}
+        src={testimonial.mediaUrl}
+        autoPlay={active && !reducedMotion}
+        muted={muted}
+        loop
+        playsInline
+        preload="metadata"
+        tabIndex={-1}
+        aria-label={testimonial.mediaAlt || `${testimonial.name} testimonial video`}
+      />
+      <button
+        className={`testimonial-video-sound${muted ? "" : " is-unmuted"}`}
+        type="button"
+        onClick={toggleSound}
+        aria-label={muted ? `Unmute ${testimonial.name}'s testimonial video` : `Mute ${testimonial.name}'s testimonial video`}
+        aria-pressed={!muted}
+      >
+        {muted ? <VolumeX aria-hidden="true" /> : <Volume2 aria-hidden="true" />}
+      </button>
+    </div>
+  );
+}
+
 export function TestimonialCarousel({ testimonials }: { testimonials: Testimonial[] }) {
   const [active, setActive] = useState(0);
   const [manualPause, setManualPause] = useState(false);
   const [interactionPause, setInteractionPause] = useState(false);
-  const [mediaPlaying, setMediaPlaying] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [pageVisible, setPageVisible] = useState(true);
   const touchStart = useRef<number | null>(null);
   const carousel = useRef<HTMLDivElement>(null);
   const canMove = testimonials.length > 1;
-  const paused = manualPause || interactionPause || mediaPlaying || reducedMotion || !pageVisible;
+  const paused = manualPause || interactionPause || reducedMotion || !pageVisible;
 
   useEffect(() => {
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -48,7 +107,6 @@ export function TestimonialCarousel({ testimonials }: { testimonials: Testimonia
 
   function choose(index: number) {
     carousel.current?.querySelectorAll("video").forEach((video) => video.pause());
-    setMediaPlaying(false);
     setActive(index);
   }
 
@@ -81,7 +139,7 @@ export function TestimonialCarousel({ testimonials }: { testimonials: Testimonia
             const mediaType = resolveMediaType(testimonial);
             const hasMedia = Boolean(mediaType);
             return <figure className={`testimonial-slide${hasMedia ? " has-testimonial-media" : " is-quote-only"}`} key={testimonial.id} aria-hidden={index !== active} inert={index !== active ? true : undefined}>
-              {hasMedia && <div className="testimonial-media">{mediaType === "video" ? <video src={testimonial.mediaUrl} controls playsInline preload="metadata" aria-label={testimonial.mediaAlt || `${testimonial.name} testimonial video`} onPlay={() => setMediaPlaying(true)} onPause={() => setMediaPlaying(false)} onEnded={() => setMediaPlaying(false)} /> : <img src={testimonial.mediaUrl} alt={testimonial.mediaAlt || `${testimonial.name} testimonial`} loading="lazy" />}</div>}
+              {hasMedia && <div className="testimonial-media">{mediaType === "video" ? <TestimonialVideo key={`${testimonial.id}-${index === active}-${pageVisible}-${reducedMotion}`} testimonial={testimonial} active={index === active} reducedMotion={reducedMotion} pageVisible={pageVisible} /> : <img src={testimonial.mediaUrl} alt={testimonial.mediaAlt || `${testimonial.name} testimonial`} loading="lazy" />}</div>}
               <div className="testimonial-copy"><div className="testimonial-slide-mark"><Quote aria-hidden="true" /><span>{String(index + 1).padStart(2, "0")} / {String(testimonials.length).padStart(2, "0")}</span></div><blockquote>{testimonial.quote}</blockquote><figcaption><span className="testimonial-avatar" aria-hidden="true">{testimonial.name.slice(0, 1)}</span><span><strong>{testimonial.name}</strong>{[testimonial.role, testimonial.company].filter(Boolean).length > 0 && <small>{[testimonial.role, testimonial.company].filter(Boolean).join(" · ")}</small>}</span></figcaption></div>
             </figure>;
           })}

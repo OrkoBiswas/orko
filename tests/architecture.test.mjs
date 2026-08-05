@@ -92,6 +92,11 @@ test("testimonial media is validated, owner-managed, and rendered accessibly", a
   assert.match(carousel, /resolveMediaType/);
   assert.match(carousel, /aria-label=\{testimonial\.mediaAlt/);
   assert.match(carousel, /<video/);
+  assert.match(carousel, /autoPlay=\{active && !reducedMotion\}/);
+  assert.match(carousel, /muted=\{muted\}/);
+  assert.match(carousel, /loop/);
+  assert.match(carousel, /testimonial-video-sound/);
+  assert.match(carousel, /onMouseLeave=\{muteVideo\}/);
   assert.match(nextConfig, /img-src[^;]+https:\/\/res\.cloudinary\.com/);
   assert.match(nextConfig, /media-src[^;]+https:\/\/res\.cloudinary\.com/);
   assert.match(nextConfig, /connect-src[^;]+https:\/\/api\.cloudinary\.com/);
