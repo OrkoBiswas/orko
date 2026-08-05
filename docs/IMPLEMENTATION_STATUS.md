@@ -36,6 +36,7 @@ Last updated: 2026-08-04
 - Tightened the Selected Work exhibition rhythm and explicitly locks uploaded images and videos to the full width and height of their chosen ratio-aware media frame with centered cover fitting. Desktop and mobile project chapters now sit closer together without reintroducing grey framing or alignment drift.
 - Removed the availability and GMT status labels from the public navbar, then rebalanced the remaining logo, navigation, and project CTA across desktop and mobile layouts.
 - Improved the complete owner dashboard for responsive use with a single-row touch navigation rail, flexible headers and actions, safer narrow-screen tables, stacked save/danger controls, and 320px card layouts. The public hamburger now uses a sleek three-line-to-close animation with a restrained theme-green glow and reduced-motion support.
+- Refined the responsive navigation reveal with a smooth top-down panel opening, a subtle green edge flare, and individually staggered menu lines. The mobile hero glow is now anchored to the top-left with controlled ray geometry so the green atmosphere starts cleanly without a clipped or detached top edge.
 
 ## Validation
 
