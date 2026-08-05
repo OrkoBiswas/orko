@@ -38,6 +38,7 @@ Last updated: 2026-08-04
 - Improved the complete owner dashboard for responsive use with a single-row touch navigation rail, flexible headers and actions, safer narrow-screen tables, stacked save/danger controls, and 320px card layouts. The public hamburger now uses a sleek three-line-to-close animation with a restrained theme-green glow and reduced-motion support.
 - Refined the responsive navigation reveal with a smooth top-down panel opening, a subtle green edge flare, and individually staggered menu lines. The mobile hero glow is now anchored to the top-left with controlled ray geometry so the green atmosphere starts cleanly without a clipped or detached top edge.
 - Rebuilt the responsive menu as a two-way animated sequence: a diagonal panel reveal, passing green light curtain, staggered navigation lines, and a dedicated reverse close state now play smoothly in both directions. The mobile hero atmosphere now uses a contained top-left glow and two precisely angled, softly drifting beams with no oversized off-canvas layer, black gap, or content washout.
+- Removed the atmospheric green hero light from mobile layouts while preserving the complete animated ray treatment on desktop screens.
 - Prevented stale HTML from holding onto an older compiled stylesheet after production releases. Public and admin document responses now disable browser and CDN caching while fingerprinted static assets remain independently cacheable, so newly published responsive styles appear immediately on the normal site URL.
 
 ## Validation
