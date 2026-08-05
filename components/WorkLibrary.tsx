@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Grid2X2, List, Search, SlidersHorizontal, X } from "lucide-react";
 import gsap from "gsap";
 import { Flip } from "gsap/Flip";
-import { filterProjects, workDisciplines, type Project, type WorkDiscipline } from "@/lib/portfolio";
+import { filterProjects, showcaseCategories, workDisciplines, type Project, type WorkDiscipline } from "@/lib/portfolio";
 import { ProjectCard } from "@/components/ProjectCard";
 
 gsap.registerPlugin(Flip);
@@ -12,14 +12,14 @@ gsap.registerPlugin(Flip);
 type InitialWorkFilters = { query?: string; discipline?: WorkDiscipline | "All"; category?: string; industry?: string; year?: string };
 
 export function WorkLibrary({ projects, initialFilters = {} }: { projects: Project[]; initialFilters?: InitialWorkFilters }) {
-  const categories = useMemo(() => ["All", ...Array.from(new Set(projects.map((project) => project.category)))], [projects]);
+  const categoryValues = useMemo(() => ["All", ...showcaseCategories.map((item) => item.value)], []);
   const industries = useMemo(() => ["All", ...Array.from(new Set(projects.map((project) => project.industry)))], [projects]);
   const years = useMemo(() => ["All", ...Array.from(new Set(projects.map((project) => String(project.year)))).sort().reverse()], [projects]);
   const root = useRef<HTMLDivElement>(null);
   const pendingFlip = useRef<ReturnType<typeof Flip.getState> | null>(null);
   const [query, setQuery] = useState(initialFilters.query ?? "");
   const [discipline, setDiscipline] = useState<WorkDiscipline | "All">(initialFilters.discipline ?? "All");
-  const [category, setCategory] = useState(categories.includes(initialFilters.category ?? "") ? initialFilters.category! : "All");
+  const [category, setCategory] = useState(categoryValues.includes(initialFilters.category ?? "") ? initialFilters.category! : "All");
   const [industry, setIndustry] = useState(industries.includes(initialFilters.industry ?? "") ? initialFilters.industry! : "All");
   const [year, setYear] = useState(years.includes(initialFilters.year ?? "") ? initialFilters.year! : "All");
   const [view, setView] = useState<"grid" | "list">("grid");
@@ -108,7 +108,7 @@ export function WorkLibrary({ projects, initialFilters = {} }: { projects: Proje
 
       <div className={`filter-panel ${filtersOpen ? "is-open" : ""}`}>
         <div><p>Showreel</p><div className="filter-options"><button type="button" aria-pressed={discipline === "All"} onClick={() => changeFilter(() => setDiscipline("All"))}>All work</button>{workDisciplines.map((item) => <button type="button" key={item.value} aria-pressed={discipline === item.value} onClick={() => changeFilter(() => setDiscipline(item.value))}>{item.label}</button>)}</div></div>
-        <div><p>Category</p><div className="filter-options">{categories.map((item) => <button type="button" key={item} aria-pressed={category === item} onClick={() => changeFilter(() => setCategory(item))}>{item}</button>)}</div></div>
+        <div><p>Category</p><div className="filter-options"><button type="button" aria-pressed={category === "All"} onClick={() => changeFilter(() => setCategory("All"))}>All categories</button>{showcaseCategories.map((item) => <button type="button" key={item.value} aria-pressed={category === item.value} onClick={() => changeFilter(() => setCategory(item.value))}>{item.label}</button>)}</div></div>
         <div><p>Industry</p><div className="filter-options">{industries.map((item) => <button type="button" key={item} aria-pressed={industry === item} onClick={() => changeFilter(() => setIndustry(item))}>{item}</button>)}</div></div>
         <div><p>Year</p><div className="filter-options">{years.map((item) => <button type="button" key={item} aria-pressed={year === item} onClick={() => changeFilter(() => setYear(item))}>{item}</button>)}</div></div>
       </div>

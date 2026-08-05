@@ -58,10 +58,67 @@ export const workDisciplines = [
 
 export type WorkDiscipline = (typeof workDisciplines)[number]["value"];
 
+export const showcaseCategories = [
+  { value: "book-cover-design", label: "Book Cover Design" },
+  { value: "brand-identity-design", label: "Brand Identity Design" },
+  { value: "thumbnail-design", label: "Thumbnail Design" },
+  { value: "banner-poster-design", label: "Banner & Poster Design" },
+  { value: "2d-motion", label: "2D Motion" },
+  { value: "ui-ux", label: "UI/UX" },
+  { value: "others", label: "Others" },
+] as const;
+
+export type ShowcaseCategory = (typeof showcaseCategories)[number]["value"];
+
 export function projectMatchesDiscipline(project: Project, discipline: WorkDiscipline) {
   if (discipline === "video") return project.services.some((service) => ["Video Editing", "YouTube"].includes(service));
   if (discipline === "motion") return project.services.some((service) => service.includes("Motion"));
   return project.services.some((service) => ["Graphic Design", "Brand Visuals", "Social Media"].includes(service));
+}
+
+function projectCategoryText(project: Project) {
+  return [
+    project.title,
+    project.category,
+    project.summary,
+    ...project.services,
+    ...project.deliverables,
+    ...project.tools,
+  ].join(" ").toLowerCase();
+}
+
+function matchesNamedShowcaseCategory(project: Project, category: Exclude<ShowcaseCategory, "others">) {
+  const text = projectCategoryText(project);
+  const exactCategory = project.category.trim().toLowerCase();
+  if (category === "book-cover-design") {
+    return exactCategory === "book cover design" || project.visual === "editorial" || /\bbook\b|editorial design/.test(text);
+  }
+  if (category === "brand-identity-design") {
+    return exactCategory === "brand identity design" || /\bbranding\b|brand identity|brand visuals|campaign identity/.test(text);
+  }
+  if (category === "thumbnail-design") {
+    return exactCategory === "thumbnail design" || /\bthumbnail(s)?\b/.test(text);
+  }
+  if (category === "banner-poster-design") {
+    return exactCategory === "banner & poster design" || /\bbanner(s)?\b|\bposter(s)?\b|key visual/.test(text);
+  }
+  if (category === "2d-motion") {
+    return exactCategory === "2d motion" || /\b2d motion\b|motion graphics|motion design/.test(text);
+  }
+  return exactCategory === "ui/ux" || /\bui\b|\bux\b|user interface|user experience|web design|product design/.test(text) || (project.tools.includes("Figma") && /system|template|digital/.test(text));
+}
+
+export function projectMatchesShowcaseCategory(project: Project, category: ShowcaseCategory) {
+  if (category !== "others") return matchesNamedShowcaseCategory(project, category);
+  const namedCategories: Exclude<ShowcaseCategory, "others">[] = [
+    "book-cover-design",
+    "brand-identity-design",
+    "thumbnail-design",
+    "banner-poster-design",
+    "2d-motion",
+    "ui-ux",
+  ];
+  return !namedCategories.some((item) => matchesNamedShowcaseCategory(project, item));
 }
 
 export const projects: Project[] = [
@@ -447,7 +504,10 @@ export function filterProjects(
     return (
       (!query || searchable.includes(query)) &&
       (!options.discipline || options.discipline === "All" || projectMatchesDiscipline(project, options.discipline)) &&
-      (!options.category || options.category === "All" || project.category === options.category) &&
+      (!options.category || options.category === "All" ||
+        (showcaseCategories.some((item) => item.value === options.category)
+          ? projectMatchesShowcaseCategory(project, options.category as ShowcaseCategory)
+          : project.category === options.category)) &&
       (!options.industry || options.industry === "All" || project.industry === options.industry) &&
       (!options.year || options.year === "All" || String(project.year) === options.year)
     );

@@ -22,9 +22,15 @@ test("server-renders the finished portfolio homepage", async () => {
   assert.match(html, /Visual ideas/);
   assert.match(html, /Selected creative work/);
   assert.match(html, /Category showreels/);
-  assert.match(html, /\/work\?discipline=video/);
-  assert.match(html, /\/work\?discipline=motion/);
-  assert.match(html, /\/work\?discipline=design/);
+  assert.match(html, /Book Cover Design/);
+  assert.match(html, /Brand Identity Design/);
+  assert.match(html, /Thumbnail Design/);
+  assert.match(html, /Banner &amp; Poster Design/);
+  assert.match(html, /2D Motion/);
+  assert.match(html, /UI\/UX/);
+  assert.match(html, /Others/);
+  assert.match(html, /\/work\?category=book-cover-design/);
+  assert.match(html, /\/work\?category=ui-ux/);
   assert.match(html, /items in the full library/);
   assert.doesNotMatch(html, /Selected chapter|showcase-piece-media-label|Open project/);
   assert.match(html, /About &amp; experience/);

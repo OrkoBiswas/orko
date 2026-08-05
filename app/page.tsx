@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";
-import { projectMatchesDiscipline, projects, services, workDisciplines } from "@/lib/portfolio";
+import { projectMatchesShowcaseCategory, projects, services, showcaseCategories as showcaseCategoryDefinitions } from "@/lib/portfolio";
 import { getSiteContent, listPortfolioProjects, listPortfolioServices } from "@/db/repository";
 import { ShowcaseGrid } from "@/components/ShowcaseGrid";
 import { ShowreelLoop } from "@/components/ShowreelLoop";
@@ -20,10 +20,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function Home() {
   const [brand, liveProjects, liveServices] = await Promise.all([getSiteContent(), listPortfolioProjects(projects, { publishedOnly: true }), listPortfolioServices(services)]);
-  const showcaseCategories = workDisciplines.flatMap((discipline) => {
-    const matchingProjects = liveProjects.filter((project) => projectMatchesDiscipline(project, discipline.value));
+  const showcaseCategories = showcaseCategoryDefinitions.flatMap((category, index) => {
+    const matchingProjects = liveProjects.filter((project) => projectMatchesShowcaseCategory(project, category.value));
     const cover = matchingProjects.find((project) => project.featured) ?? matchingProjects[0];
-    return cover ? [{ ...discipline, cover }] : [];
+    const fallbackCover = liveProjects[index % Math.max(liveProjects.length, 1)];
+    return cover || fallbackCover ? [{ ...category, cover: cover ?? fallbackCover }] : [];
   });
   const processStages = [
     { title: "Discover", copy: "We discuss your goal, audience, content, deadline, and budget.", details: ["Goal", "Audience", "Scope"] },

@@ -170,13 +170,14 @@ test("shared footer gives every viewport a clear and accessible hiring path", as
 });
 
 test("owner portrait and category-only showcase stay secure, durable, and label-free", async () => {
-  const [contentModel, editor, experience, showcase, artwork, home, css] = await Promise.all([
+  const [contentModel, editor, experience, showcase, artwork, home, portfolio, css] = await Promise.all([
     readFile(new URL("lib/site-content.ts", root), "utf8"),
     readFile(new URL("components/AdminContentForm.tsx", root), "utf8"),
     readFile(new URL("components/ExperienceSection.tsx", root), "utf8"),
     readFile(new URL("components/ShowcaseGrid.tsx", root), "utf8"),
     readFile(new URL("components/ProjectArtwork.tsx", root), "utf8"),
     readFile(new URL("app/page.tsx", root), "utf8"),
+    readFile(new URL("lib/portfolio.ts", root), "utf8"),
     readFile(new URL("app/globals.css", root), "utf8"),
   ]);
   assert.match(contentModel, /profileImageUrl: optionalAssetUrl/);
@@ -187,10 +188,14 @@ test("owner portrait and category-only showcase stay secure, durable, and label-
   assert.match(experience, /experience-portrait/);
   assert.match(experience, /profileImageAlt/);
   assert.match(showcase, /hideLabels/);
-  assert.match(showcase, /\/work\?discipline=/);
+  assert.match(showcase, /\/work\?category=/);
   assert.doesNotMatch(showcase, /Client|Industry|Year|project\.summary/);
   assert.match(artwork, /!hideLabels/);
   assert.match(home, /Category showreels/);
+  assert.match(portfolio, /Book Cover Design/);
+  assert.match(portfolio, /Brand Identity Design/);
+  assert.match(portfolio, /Banner & Poster Design/);
+  assert.match(portfolio, /projectMatchesShowcaseCategory/);
   assert.doesNotMatch(home, /featured chapters|Browse category showreels/);
   assert.match(css, /\.process-focus li,[\s\S]*white-space: nowrap/);
 });

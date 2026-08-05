@@ -3772,6 +3772,20 @@ html[data-motion="reduced"] .footer-project-link::before { animation: none; }
   .showcase-category-card:hover .showcase-category-caption svg { transform: translate(3px,-3px); }
 }
 
+/* Seven-category editorial runway. Covers remain completely label-free. */
+.showcase-category-runway {
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: clamp(48px, 6vw, 88px);
+  padding: clamp(54px, 7vw, 96px) 0 clamp(66px, 8vw, 112px);
+}
+.showcase-category-piece .showcase-piece-info { align-self: center; }
+.showcase-category-piece .showcase-piece-heading h3 {
+  font-size: clamp(2.45rem, 4.45vw, 5.4rem);
+  line-height: .84;
+}
+.showcase-category-piece .showcase-piece-action { margin-top: clamp(4px, 1vw, 14px); }
+.showcase-category-piece .project-art.is-label-free :where(.art-index, .art-kicker, .art-demo-label, .art-title) { display: none; }
+
 .admin-profile-image-editor { min-width: 0; display: grid; grid-template-columns: minmax(220px, .65fr) minmax(0, 1.35fr); gap: 22px; }
 .admin-profile-image-preview {
   min-height: 260px;
@@ -3826,6 +3840,8 @@ html[data-motion="reduced"] .footer-project-link::before { animation: none; }
   .showcase-category-cover { aspect-ratio: 16 / 10; }
   .showcase-category-caption { min-height: 62px; }
   .showcase-category-caption h3 { font-size: clamp(1.65rem, 9vw, 2.25rem); }
+  .showcase-category-runway { gap: 48px; padding-block: 42px 58px; }
+  .showcase-category-piece .showcase-piece-heading h3 { font-size: clamp(2.15rem, 11vw, 3.6rem); }
 }
 
 @media (max-width: 420px) {
