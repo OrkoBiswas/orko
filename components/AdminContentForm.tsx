@@ -1,12 +1,16 @@
 "use client";
+/* eslint-disable @next/next/no-img-element -- The owner portrait uses a validated Cloudinary delivery URL. */
 
 import { useState } from "react";
-import { Check, LoaderCircle, Plus, Save, Trash2 } from "lucide-react";
+import { Check, ImageUp, LoaderCircle, Plus, Save, Trash2 } from "lucide-react";
+import { notifyAdmin } from "@/components/AdminNotificationCenter";
 import type { SiteContent } from "@/lib/site-content";
 
 type ScalarSiteContentKey = { [Key in keyof SiteContent]: SiteContent[Key] extends string ? Key : never }[keyof SiteContent];
 type Experience = SiteContent["experiences"][number];
 type Testimonial = SiteContent["testimonials"][number];
+type SignatureResponse = { ok?: boolean; cloudName?: string; apiKey?: string; signature?: string; params?: Record<string, string>; message?: string };
+type UploadResponse = { secure_url?: string; resource_type?: string; error?: { message?: string } };
 
 const groups: Array<{ title: string; description: string; fields: Array<[ScalarSiteContentKey, string, "text" | "email" | "url" | "textarea"]> }> = [
   { title: "Identity", description: "The name and positioning used across navigation, metadata, and profile pages.", fields: [["name","Public name","text"],["monogram","Monogram","text"],["title","Professional title","text"],["shortTitle","Short descriptor","text"]] },
@@ -23,8 +27,33 @@ function recordId(prefix: string) {
 export function AdminContentForm({ initial }: { initial: SiteContent }) {
   const [content, setContent] = useState(initial);
   const [busy, setBusy] = useState(false);
+  const [uploadingPortrait, setUploadingPortrait] = useState(false);
   const [message, setMessage] = useState("");
   const [saved, setSaved] = useState(false);
+
+  async function uploadPortrait(file?: File) {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) { setSaved(false); setMessage("Choose an image file for your portrait."); return; }
+    if (file.size > 15 * 1024 * 1024) { setSaved(false); setMessage("The portrait image must be smaller than 15 MB."); return; }
+    setUploadingPortrait(true); setSaved(false); setMessage("");
+    try {
+      const signatureResponse = await fetch("/api/admin/media/signature", { method: "POST" });
+      const signed = await signatureResponse.json().catch(() => ({ message: "Upload authorization failed." })) as SignatureResponse;
+      if (!signatureResponse.ok || !signed.ok || !signed.cloudName || !signed.apiKey || !signed.signature || !signed.params) throw new Error(signed.message ?? "Upload authorization failed.");
+      const form = new FormData();
+      form.set("file", file); form.set("api_key", signed.apiKey); form.set("signature", signed.signature);
+      for (const [key, value] of Object.entries(signed.params)) form.set(key, value);
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(signed.cloudName)}/image/upload`, { method: "POST", body: form });
+      const uploaded = await response.json().catch(() => ({})) as UploadResponse;
+      if (!response.ok || !uploaded.secure_url || uploaded.resource_type !== "image") throw new Error(uploaded.error?.message ?? "The portrait could not be uploaded.");
+      setContent((current) => ({ ...current, profileImageUrl: uploaded.secure_url ?? "", profileImageAlt: current.profileImageAlt || `Portrait of ${current.name}` }));
+      setMessage("Portrait uploaded. Save public content to publish it.");
+      notifyAdmin({ tone: "success", title: "Portrait uploaded", message: "The image is ready. Save public content to publish it in About & experience." });
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "The portrait could not be uploaded.");
+      notifyAdmin({ tone: "error", title: "Upload not completed", message: "The portrait image could not be uploaded. Please try again." });
+    } finally { setUploadingPortrait(false); }
+  }
 
   async function save(event: React.FormEvent) {
     event.preventDefault();
@@ -69,6 +98,23 @@ export function AdminContentForm({ initial }: { initial: SiteContent }) {
   return (
     <form className="admin-editor" onSubmit={save}>
       {groups.map((group) => <section className="admin-form-section" key={group.title}><div className="admin-form-intro"><h2>{group.title}</h2><p>{group.description}</p></div><div className="admin-form-grid">{group.fields.map(([key,label,type]) => <label className={type === "textarea" ? "admin-field-wide" : ""} key={key}><span>{label}</span>{type === "textarea" ? <textarea rows={4} value={content[key]} onChange={(event) => setContent((current) => ({ ...current, [key]: event.target.value }))} /> : <input type={type} value={content[key]} onChange={(event) => setContent((current) => ({ ...current, [key]: event.target.value }))} />}</label>)}</div></section>)}
+      <section className="admin-form-section admin-profile-image-section">
+        <div className="admin-form-intro"><h2>About portrait</h2><p>Upload a clear photo of yourself so visitors can recognize the person behind the work. The image appears in the About &amp; experience section.</p></div>
+        <div className="admin-profile-image-editor">
+          <div className={`admin-profile-image-preview${content.profileImageUrl ? " has-image" : ""}`}>
+            {content.profileImageUrl ? <img src={content.profileImageUrl} alt={content.profileImageAlt || `Portrait of ${content.name}`} /> : <div><ImageUp aria-hidden="true" /><span>No portrait uploaded</span></div>}
+          </div>
+          <div className="admin-profile-image-controls">
+            <label><span>Portrait image URL</span><input type="url" placeholder="https://res.cloudinary.com/..." value={content.profileImageUrl} onChange={(event) => setContent((current) => ({ ...current, profileImageUrl: event.target.value }))} /></label>
+            <label><span>Image description</span><input placeholder={`Portrait of ${content.name}`} value={content.profileImageAlt} onChange={(event) => setContent((current) => ({ ...current, profileImageAlt: event.target.value }))} /></label>
+            <div className="admin-profile-image-actions">
+              <label className="admin-media-attach"><input type="file" accept="image/*" disabled={uploadingPortrait} onChange={(event) => { const file = event.currentTarget.files?.[0]; event.currentTarget.value = ""; void uploadPortrait(file); }} /><ImageUp aria-hidden="true" />{uploadingPortrait ? "Uploading..." : content.profileImageUrl ? "Replace portrait" : "Upload portrait"}</label>
+              {content.profileImageUrl && <button type="button" onClick={() => setContent((current) => ({ ...current, profileImageUrl: "", profileImageAlt: "" }))}><Trash2 aria-hidden="true" />Remove portrait</button>}
+            </div>
+            <small>Use a well-lit portrait. The website crops it responsively without changing the original file.</small>
+          </div>
+        </div>
+      </section>
       <section className="admin-form-section admin-collection-section">
         <div className="admin-form-intro"><h2>Work experience</h2><p>Add current and past workplaces, roles, dates, locations, and a short description. Keep only information you want visitors to see.</p><button className="admin-add-button" type="button" onClick={addExperience} disabled={content.experiences.length >= 8}><Plus aria-hidden="true" />Add experience</button></div>
         <div className="admin-record-list">
@@ -103,7 +149,7 @@ export function AdminContentForm({ initial }: { initial: SiteContent }) {
           </fieldset>) : <div className="admin-record-empty"><p>No testimonials published.</p><span>The public site will show an honest approved-feedback notice instead of a fake quote.</span></div>}
         </div>
       </section>
-      <div className="admin-save-bar"><div>{message && <p className={saved ? "is-success" : "is-error"} role="status">{saved && <Check aria-hidden="true" />}{message}</p>}</div><button type="submit" disabled={busy}>{busy ? <LoaderCircle className="spin" aria-hidden="true" /> : <Save aria-hidden="true" />}{busy ? "Saving…" : "Save public content"}</button></div>
+      <div className="admin-save-bar"><div>{message && <p className={saved ? "is-success" : "is-error"} role="status">{saved && <Check aria-hidden="true" />}{message}</p>}</div><button type="submit" disabled={busy || uploadingPortrait}>{busy ? <LoaderCircle className="spin" aria-hidden="true" /> : <Save aria-hidden="true" />}{busy ? "Saving…" : "Save public content"}</button></div>
     </form>
   );
 }

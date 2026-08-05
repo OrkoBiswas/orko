@@ -20,8 +20,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function Home() {
   const [brand, liveProjects, liveServices] = await Promise.all([getSiteContent(), listPortfolioProjects(projects, { publishedOnly: true }), listPortfolioServices(services)]);
-  const featured = liveProjects.filter((project) => project.featured).slice(0, 6);
-  const showcaseDisciplines = workDisciplines.map((discipline) => ({ ...discipline, count: liveProjects.filter((project) => projectMatchesDiscipline(project, discipline.value)).length }));
+  const showcaseCategories = workDisciplines.flatMap((discipline) => {
+    const matchingProjects = liveProjects.filter((project) => projectMatchesDiscipline(project, discipline.value));
+    const cover = matchingProjects.find((project) => project.featured) ?? matchingProjects[0];
+    return cover ? [{ ...discipline, cover }] : [];
+  });
   const processStages = [
     { title: "Discover", copy: "We discuss your goal, audience, content, deadline, and budget.", details: ["Goal", "Audience", "Scope"] },
     { title: "Plan", copy: "I prepare the story, visual direction, deliverables, and schedule.", details: ["Story", "Formats", "Schedule"] },
@@ -61,11 +64,10 @@ export default async function Home() {
         <div className="section-heading" data-reveal><div><p className="eyebrow"><span>01</span>Selected work</p><h2>{brand.workHeading}</h2></div><div><p>{brand.workIntro}</p><Link className="text-link" href="/work">Enter the full archive <ArrowUpRight aria-hidden="true" /></Link></div></div>
         <div className="showcase-library">
           <div className="showcase-library-top" data-reveal>
-            <div className="showcase-library-title"><span>Project runway</span><strong>{String(featured.length).padStart(2, "0")} featured chapters</strong></div>
-            <dl aria-label="Browse category showreels">{showcaseDisciplines.map((discipline) => <div key={discipline.value}><dt><Link href={`/work?discipline=${discipline.value}`}>{discipline.label} <ArrowUpRight aria-hidden="true" /></Link></dt><dd>{String(discipline.count).padStart(2, "0")}</dd></div>)}</dl>
-            <p>Move through each project as a full visual chapter. Every image and video keeps its correct frame.</p>
+            <div className="showcase-library-title"><span>Category showreels</span><strong>Choose what you want to explore.</strong></div>
+            <p>Open a category to see every published work inside it.</p>
           </div>
-          <ShowcaseGrid projects={featured} />
+          <ShowcaseGrid categories={showcaseCategories} />
           <div className="showcase-library-footer" data-reveal>
             <div><strong>{String(liveProjects.length).padStart(2, "0")}</strong><span>items in the full library</span></div>
             <p>Browse all video edits, motion work, posters, campaigns, social content, and creative bundles.</p>

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element -- The owner portrait uses a validated Cloudinary delivery URL. */
 import Link from "next/link";
 import { ArrowUpRight, MapPin } from "lucide-react";
 import type { SiteContent } from "@/lib/site-content";
@@ -10,17 +11,20 @@ export function ExperienceSection({ content, index = "04", showProfile = true }:
         <p>{content.experienceIntro}</p>
       </div>
       <div className="experience-layout">
-        {showProfile && <aside className="experience-profile" data-reveal>
-          <div className="experience-monogram" aria-hidden="true">{content.monogram}</div>
-          <p className="eyebrow">About {content.name.split(" ")[0]}</p>
-          <h3>{content.name}</h3>
-          <p>{content.biography}</p>
-          <dl>
-            <div><dt>Based in</dt><dd>{content.location}</dd></div>
-            <div><dt>Working hours</dt><dd>{content.timezone}</dd></div>
-            <div><dt>Availability</dt><dd>{content.availability}</dd></div>
-          </dl>
-          <Link className="text-link" href="/about">Read my full profile <ArrowUpRight aria-hidden="true" /></Link>
+        {showProfile && <aside className={`experience-profile${content.profileImageUrl ? " has-portrait" : ""}`} data-reveal>
+          {content.profileImageUrl && <div className="experience-portrait"><img src={content.profileImageUrl} alt={content.profileImageAlt || `Portrait of ${content.name}`} /></div>}
+          <div className="experience-profile-copy">
+            {!content.profileImageUrl && <div className="experience-monogram" aria-hidden="true">{content.monogram}</div>}
+            <p className="eyebrow">About {content.name.split(" ")[0]}</p>
+            <h3>{content.name}</h3>
+            <p>{content.biography}</p>
+            <dl>
+              <div><dt>Based in</dt><dd>{content.location}</dd></div>
+              <div><dt>Working hours</dt><dd>{content.timezone}</dd></div>
+              <div><dt>Availability</dt><dd>{content.availability}</dd></div>
+            </dl>
+            <Link className="text-link" href="/about">Read my full profile <ArrowUpRight aria-hidden="true" /></Link>
+          </div>
         </aside>}
         <div className="experience-history">
           {content.experiences.length > 0 ? <ol>

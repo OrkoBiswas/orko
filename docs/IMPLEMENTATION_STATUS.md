@@ -43,11 +43,14 @@ Last updated: 2026-08-05
 - Consolidated the public site and owner dashboard into one final responsive comfort system: tighter section rhythm, balanced small-screen type, closer showcase chapters, shorter process/testimonial/experience layouts, safer media and long-text containment, 44â€“48px touch targets, landscape navigation handling, compact forms, safe-area notifications, reduced-motion scrolling, and verified 320px fallbacks without changing the established desktop identity.
 - Rebuilt the shared public footer as a compact modern hiring-focused close for every route: balanced theme typography, a direct project CTA with restrained light-saber motion, immediate email/location/response details, owner-managed identity and social links, clearer visitor navigation, safe touch targets, accessible landmarks, reduced-motion support, and dedicated desktop, tablet, mobile, and 320px arrangements. The unnecessary public Owner link was removed.
 
+- Converted Selected Work from project-detail chapters into three direct category showreel covers for Video, Motion, and Design. Each clean cover contains no text or metadata, while its category name remains in a separate accessible caption and opens the complete filtered archive. Process labels now stay on one line, including Source files.
+- Added a durable owner portrait and accessible description to public content, with an authenticated signed Cloudinary image upload, replacement, preview, URL entry, removal, standard notifications, and responsive presentation inside the homepage About & experience profile so visitors can recognize Orko.
+
 ## Validation
 
 - Lint: passed.
 - Typecheck: passed.
-- Automated tests: 19 passed.
+- Automated tests: 20 passed.
 - Production build: passed.
 - Prior desktop and mobile browser reviews passed for public navigation, archive filters, case studies, forms, animations, and inquiry persistence.
 

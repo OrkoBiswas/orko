@@ -21,11 +21,12 @@ test("server-renders the finished portfolio homepage", async () => {
   assert.match(html, /<title>Orko Biswas/);
   assert.match(html, /Visual ideas/);
   assert.match(html, /Selected creative work/);
-  assert.match(html, /Project runway/);
+  assert.match(html, /Category showreels/);
   assert.match(html, /\/work\?discipline=video/);
   assert.match(html, /\/work\?discipline=motion/);
   assert.match(html, /\/work\?discipline=design/);
   assert.match(html, /items in the full library/);
+  assert.doesNotMatch(html, /Selected chapter|showcase-piece-media-label|Open project/);
   assert.match(html, /About &amp; experience/);
   assert.match(html, /Independent creative practice/);
   assert.doesNotMatch(html, /What I can create|Why work with me|Client feedback desk|ready for real client testimonials/i);

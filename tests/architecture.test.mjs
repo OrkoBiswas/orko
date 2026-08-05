@@ -168,3 +168,29 @@ test("shared footer gives every viewport a clear and accessible hiring path", as
   assert.match(css, /@media \(max-width: 420px\)/);
   assert.match(css, /footer-project-link::before \{ animation: none; \}/);
 });
+
+test("owner portrait and category-only showcase stay secure, durable, and label-free", async () => {
+  const [contentModel, editor, experience, showcase, artwork, home, css] = await Promise.all([
+    readFile(new URL("lib/site-content.ts", root), "utf8"),
+    readFile(new URL("components/AdminContentForm.tsx", root), "utf8"),
+    readFile(new URL("components/ExperienceSection.tsx", root), "utf8"),
+    readFile(new URL("components/ShowcaseGrid.tsx", root), "utf8"),
+    readFile(new URL("components/ProjectArtwork.tsx", root), "utf8"),
+    readFile(new URL("app/page.tsx", root), "utf8"),
+    readFile(new URL("app/globals.css", root), "utf8"),
+  ]);
+  assert.match(contentModel, /profileImageUrl: optionalAssetUrl/);
+  assert.match(contentModel, /profileImageAlt: optionalTextField/);
+  assert.match(editor, /\/api\/admin\/media\/signature/);
+  assert.match(editor, /accept="image\/\*"/);
+  assert.match(editor, /Save public content to publish it/);
+  assert.match(experience, /experience-portrait/);
+  assert.match(experience, /profileImageAlt/);
+  assert.match(showcase, /hideLabels/);
+  assert.match(showcase, /\/work\?discipline=/);
+  assert.doesNotMatch(showcase, /Client|Industry|Year|project\.summary/);
+  assert.match(artwork, /!hideLabels/);
+  assert.match(home, /Category showreels/);
+  assert.doesNotMatch(home, /featured chapters|Browse category showreels/);
+  assert.match(css, /\.process-focus li,[\s\S]*white-space: nowrap/);
+});

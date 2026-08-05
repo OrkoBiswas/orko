@@ -1,5 +1,7 @@
 # Content model
 
+The public identity also stores an optional owner portrait URL and accessible description. The file is uploaded through the authenticated signed media flow, while only its validated delivery URL is saved with the existing durable site content.
+
 Brand configuration contains identity, role, biography, location, availability, contact links, calls to action, logo/favicon/share assets, navbar logo width from 20–200px, theme color, SEO/AEO/GEO fields, crawler controls, verification tokens, optional GTM ID, and ordered marketplace/profile links with visibility and highlight controls.
 
 Showreel configuration stores one secure Cloudinary video URL and an optional poster URL alongside its managed public heading and introduction. Uploads publish through a dedicated owner-only mutation while the original authored reel remains available as a restore point.
