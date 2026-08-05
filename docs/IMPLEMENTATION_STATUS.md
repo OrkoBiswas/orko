@@ -1,6 +1,6 @@
 # Implementation status
 
-Last updated: 2026-08-04
+Last updated: 2026-08-05
 
 ## Completed
 
@@ -40,12 +40,13 @@ Last updated: 2026-08-04
 - Rebuilt the responsive menu as a two-way animated sequence: a diagonal panel reveal, passing green light curtain, staggered navigation lines, and a dedicated reverse close state now play smoothly in both directions. The mobile hero atmosphere now uses a contained top-left glow and two precisely angled, softly drifting beams with no oversized off-canvas layer, black gap, or content washout.
 - Removed the atmospheric green hero light from mobile layouts while preserving the complete animated ray treatment on desktop screens.
 - Prevented stale HTML from holding onto an older compiled stylesheet after production releases. Public and admin document responses now disable browser and CDN caching while fingerprinted static assets remain independently cacheable, so newly published responsive styles appear immediately on the normal site URL.
+- Consolidated the public site and owner dashboard into one final responsive comfort system: tighter section rhythm, balanced small-screen type, closer showcase chapters, shorter process/testimonial/experience layouts, safer media and long-text containment, 44â€“48px touch targets, landscape navigation handling, compact forms, safe-area notifications, reduced-motion scrolling, and verified 320px fallbacks without changing the established desktop identity.
 
 ## Validation
 
 - Lint: passed.
 - Typecheck: passed.
-- Automated tests: 17 passed.
+- Automated tests: 18 passed.
 - Production build: passed.
 - Prior desktop and mobile browser reviews passed for public navigation, archive filters, case studies, forms, animations, and inquiry persistence.
 

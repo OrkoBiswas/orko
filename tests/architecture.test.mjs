@@ -140,3 +140,14 @@ test("showreel replacement is owner-managed, signed, and rendered from durable c
   assert.match(home, /videoUrl=\{brand\.showreelVideoUrl\}/);
   assert.match(showreel, /posterUrl \|\| undefined/);
 });
+
+test("responsive comfort system protects public and owner layouts down to 320px", async () => {
+  const css = await readFile(new URL("app/globals.css", root), "utf8");
+  assert.match(css, /Responsive comfort system/);
+  assert.match(css, /touch-action: manipulation/);
+  assert.match(css, /--mobile-step-height: 150px/);
+  assert.match(css, /@media \(max-width: 360px\)/);
+  assert.match(css, /\.admin-mobile-nav a \{ min-width: 68px; min-height: 50px; \}/);
+  assert.match(css, /\.hero-light-rays \{ display: none; \}/);
+  assert.match(css, /@media \(max-width: 1024px\) and \(max-height: 620px\)/);
+});
