@@ -145,6 +145,9 @@ test("category thumbnails are independently owner-managed and durably rendered",
   assert.match(manager, /\/api\/admin\/media\/signature/);
   assert.match(manager, /accept="image\/\*,video\/\*"/);
   assert.match(manager, /Attach thumbnail/);
+  assert.match(manager, /placeholder="https:\/\/res\.cloudinary\.com\/…"/);
+  assert.match(manager, /async function saveUrl/);
+  assert.match(manager, /Use URL/);
   assert.match(manager, /Category thumbnail removed/);
   assert.match(route, /getOwner/);
   assert.match(route, /requireSameOrigin/);

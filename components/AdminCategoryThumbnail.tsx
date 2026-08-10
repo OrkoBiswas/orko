@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Image as ImageIcon, LoaderCircle, RefreshCw, Trash2, Upload } from "lucide-react";
+import { Image as ImageIcon, Link2, LoaderCircle, RefreshCw, Trash2, Upload } from "lucide-react";
 import { notifyAdmin } from "@/components/AdminNotificationCenter";
 import type { CategoryThumbnail } from "@/lib/category-content";
 
@@ -23,6 +23,7 @@ export function AdminCategoryThumbnail({ slug, label, initial }: { slug: string;
   const router = useRouter();
   const [thumbnail, setThumbnail] = useState(initial);
   const [ratio, setRatio] = useState<CategoryThumbnail["ratio"]>(initial?.ratio ?? "wide");
+  const [urlInput, setUrlInput] = useState(initial?.mediaUrl ?? "");
   const [busy, setBusy] = useState(false);
 
   async function persist(media: Pick<CategoryThumbnail, "mediaUrl" | "mediaType" | "mediaAlt">, nextRatio = ratio) {
@@ -61,9 +62,34 @@ export function AdminCategoryThumbnail({ slug, label, initial }: { slug: string;
       const uploaded = await uploadResponse.json().catch(() => ({})) as UploadResponse;
       if (!uploadResponse.ok || !uploaded.secure_url || !uploaded.resource_type) throw new Error(uploaded.error?.message ?? "The file could not be uploaded.");
       await persist({ mediaUrl: uploaded.secure_url, mediaType: uploaded.resource_type, mediaAlt: `${label} category thumbnail` });
+      setUrlInput(uploaded.secure_url);
       notifyAdmin({ tone: "success", title: thumbnail ? "Category thumbnail replaced" : "Category thumbnail attached", message: `${label} now has its own public cover.` });
     } catch (error) {
       notifyAdmin({ tone: "error", title: "Thumbnail not uploaded", message: error instanceof Error ? error.message : "Please try again." });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function saveUrl() {
+    const mediaUrl = urlInput.trim();
+    let mediaType: "image" | "video";
+    try {
+      const url = new URL(mediaUrl);
+      if (url.protocol !== "https:" || url.hostname !== "res.cloudinary.com") throw new Error("Paste a secure Cloudinary delivery URL.");
+      const path = url.pathname.toLowerCase();
+      mediaType = path.includes("/video/upload/") || /\.(mp4|webm|mov|m4v)(?:$|[?#])/.test(path) ? "video" : "image";
+    } catch {
+      notifyAdmin({ tone: "error", title: "URL not saved", message: "Paste a valid secure Cloudinary image or video URL." });
+      return;
+    }
+    setBusy(true);
+    try {
+      await persist({ mediaUrl, mediaType, mediaAlt: `${label} category thumbnail` });
+      setUrlInput(mediaUrl);
+      notifyAdmin({ tone: "success", title: thumbnail ? "Category URL replaced" : "Category URL attached", message: `${label} now uses this ${mediaType} as its public cover.` });
+    } catch (error) {
+      notifyAdmin({ tone: "error", title: "URL not saved", message: error instanceof Error ? error.message : "Please try again." });
     } finally {
       setBusy(false);
     }
@@ -91,6 +117,7 @@ export function AdminCategoryThumbnail({ slug, label, initial }: { slug: string;
       const result = await response.json().catch(() => ({ message: "The category thumbnail could not be removed." })) as { ok?: boolean; message?: string };
       if (!response.ok || !result.ok) throw new Error(result.message ?? "The category thumbnail could not be removed.");
       setThumbnail(undefined);
+      setUrlInput("");
       router.refresh();
       notifyAdmin({ tone: "success", title: "Category thumbnail removed", message: "The uploaded file remains safe in the media library." });
     } catch (error) {
@@ -106,6 +133,11 @@ export function AdminCategoryThumbnail({ slug, label, initial }: { slug: string;
       {busy && <span className="admin-category-thumbnail-busy"><LoaderCircle className="spin" aria-hidden="true" /> Saving</span>}
     </div>
     <label className="admin-category-ratio"><span>Frame</span><select value={ratio} disabled={busy} onChange={(event) => void changeRatio(event.target.value as CategoryThumbnail["ratio"])}>{ratioOptions.map(([value, copy]) => <option value={value} key={value}>{copy}</option>)}</select></label>
+    <div className="admin-category-url">
+      <label htmlFor={`category-thumbnail-url-${slug}`}>Cloudinary URL</label>
+      <div><input id={`category-thumbnail-url-${slug}`} type="url" inputMode="url" placeholder="https://res.cloudinary.com/…" value={urlInput} disabled={busy} onChange={(event) => setUrlInput(event.target.value)} /><button type="button" disabled={busy || !urlInput.trim()} onClick={() => void saveUrl()}><Link2 aria-hidden="true" /> Use URL</button></div>
+      <small>Paste an image or video delivery URL from Cloudinary.</small>
+    </div>
     <div className="admin-category-thumbnail-actions">
       <label><input type="file" accept="image/*,video/*" disabled={busy} onChange={(event) => { const file = event.currentTarget.files?.[0]; event.currentTarget.value = ""; if (file) void upload(file); }} />{thumbnail ? <RefreshCw aria-hidden="true" /> : <Upload aria-hidden="true" />}{thumbnail ? "Replace" : "Attach thumbnail"}</label>
       {thumbnail && <button type="button" disabled={busy} onClick={() => void remove()}><Trash2 aria-hidden="true" /> Remove</button>}

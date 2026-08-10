@@ -4290,6 +4290,15 @@ html[data-motion="reduced"] .footer-project-link::before { animation: none; }
 .admin-category-ratio { display: grid; grid-template-columns: auto minmax(0,1fr); gap: 8px; align-items: center; }
 .admin-category-ratio > span { color: #707d76; font-size: 7px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
 .admin-category-ratio select { width: 100%; min-width: 0; min-height: 44px; padding: 0 8px; color: #33403b; border: 1px solid #ccd4d6; background: #fff; font-size: 8px; }
+.admin-category-url { display: grid; gap: 5px; }
+.admin-category-url > label { color: #707d76; font-size: 7px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+.admin-category-url > div { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 5px; }
+.admin-category-url input { min-width: 0; min-height: 44px; padding: 0 10px; color: #33403b; border: 1px solid #ccd4d6; background: #fff; font-size: 9px; }
+.admin-category-url button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 0 10px; color: #24310f; border: 1px solid #b9d773; background: #eff8d9; font: 850 8px/1 var(--body); }
+.admin-category-url button svg { width: 11px; height: 11px; }
+.admin-category-url small { color: #78837d; font-size: 7px; line-height: 1.4; }
+.admin-category-url :focus-visible { outline: 2px solid #729c1f; outline-offset: 2px; }
+.admin-category-url :disabled { cursor: wait; opacity: .58; }
 .admin-category-thumbnail-actions { display: grid; grid-template-columns: 1fr auto auto; gap: 5px; }
 .admin-category-thumbnail-actions label,
 .admin-category-thumbnail-actions button,
@@ -4331,6 +4340,7 @@ html[data-motion="reduced"] .footer-project-link::before { animation: none; }
   .admin-category-grid { grid-template-columns: 1fr; }
   .admin-category-thumbnail-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .admin-category-thumbnail-actions label { grid-column: 1 / -1; }
+  .admin-category-url > div { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {
