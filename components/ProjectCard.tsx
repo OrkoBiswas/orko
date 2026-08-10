@@ -12,7 +12,7 @@ export function ProjectCard({ project, priority = false, clean = false }: { proj
           <div className="work-card-info">
             <div className="work-card-index"><span>{project.category}</span><small>{project.index}</small></div>
             <h3>{project.title}</h3>
-            <div className="work-card-meta"><span>{project.client} · {project.industry}</span><span>{project.year}<ArrowUpRight aria-hidden="true" /></span></div>
+            <div className="work-card-meta"><span>{project.client} · {project.industry}</span><span>{project.year}<b>View project</b><ArrowUpRight aria-hidden="true" /></span></div>
           </div>
         </> : <>
           <ProjectArtwork project={project} />

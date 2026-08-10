@@ -68,6 +68,8 @@ Last updated: 2026-08-10
 
 - Removed the Work category entrance entirely so the page now contains one focused All Projects archive. A display-and-serif archive masthead leads directly into a sticky client-friendly control rail with project search, newest/oldest/alphabetical sorting, advanced type/category/industry/year filters, URL-persisted choices, live result count, reset, responsive touch layouts, and reduced-motion-safe project reordering.
 
+- Replaced the remaining old editorial Work-page styling with a genuinely new company-grade agency directory. The archive now opens with a contemporary sans-only “Creative work. Built to connect.” presentation, subtle theme-green grid atmosphere, client-focused copy, live project/category statistics, and capability indexing. A floating utility dock and denser three/two/one-column project gallery provide search, sorting, advanced filters, explicit project cues, polished media depth, and comfortable desktop-to-320px browsing without returning to the previous giant serif treatment.
+
 ## Validation
 
 - Lint: passed.

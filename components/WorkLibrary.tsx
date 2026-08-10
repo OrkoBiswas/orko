@@ -73,10 +73,30 @@ export function WorkLibrary({ projects, initialFilters = {} }: { projects: Proje
 
   return (
     <div className="work-library">
-      <header className="work-archive-masthead">
-        <div className="work-archive-topline"><p className="eyebrow">Complete archive</p><p>{String(projects.length).padStart(2, "0")} published projects</p></div>
-        <h1 id="work-archive-title"><span>All</span><em>projects.</em></h1>
-        <div className="work-archive-intro"><span aria-hidden="true" /><p>Browse every published project. Search by name, narrow the archive with advanced filters, or change the order to find the most useful work quickly.</p></div>
+      <header className="work-archive-masthead agency-work-hero">
+        <div className="agency-work-topbar">
+          <p><span aria-hidden="true" /> All projects</p>
+          <p>Orko Biswas / Visual designer</p>
+        </div>
+        <div className="agency-work-main">
+          <div className="agency-work-heading">
+            <p className="agency-work-kicker">Design / Motion / Video</p>
+            <h1 id="work-archive-title">
+              <span className="agency-work-title-line"><span data-hero-line>Creative work.</span></span>
+              <span className="agency-work-title-line"><span data-hero-line>Built to <strong>connect.</strong></span></span>
+            </h1>
+          </div>
+          <div className="agency-work-summary" data-reveal>
+            <p>A growing library of brand, campaign, motion, and video work. Use the tools below to find the projects that match your goals.</p>
+            <dl>
+              <div><dt>Projects</dt><dd>{String(projects.length).padStart(2, "0")}</dd></div>
+              <div><dt>Categories</dt><dd>{String(showcaseCategories.length).padStart(2, "0")}</dd></div>
+            </dl>
+          </div>
+        </div>
+        <div className="agency-work-capabilities" aria-label="Creative areas">
+          {workDisciplines.map((item, index) => <span key={item.value}><i>{String(index + 1).padStart(2, "0")}</i>{item.label}</span>)}
+        </div>
       </header>
 
       <div className="work-archive-controls" aria-label="Project search and display options">

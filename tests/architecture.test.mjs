@@ -224,6 +224,10 @@ test("work archive and global collaboration close stay simple, client-focused, a
   assert.match(workPage, /aria-labelledby="work-archive-title"/);
   assert.doesNotMatch(workPage, /work-gallery-hero|Selected<br|View the projects|Discuss your project|Published projects/);
   assert.match(library, /work-archive-title/);
+  assert.match(library, /agency-work-hero/);
+  assert.match(library, /Creative work\./);
+  assert.match(library, /Built to/);
+  assert.doesNotMatch(library, /<h1 id="work-archive-title"><span>All<\/span><em>/);
   assert.match(library, /work-archive-masthead/);
   assert.match(library, /Advanced filters/);
   assert.match(library, /Newest first/);
@@ -235,6 +239,7 @@ test("work archive and global collaboration close stay simple, client-focused, a
   assert.doesNotMatch(library, /Grid2X2|Editorial list view|ResizeObserver/);
   assert.match(projectCard, /hideLabels/);
   assert.match(projectCard, /work-card-info/);
+  assert.match(projectCard, /View project/);
   assert.match(frame, /<CtaBand \/>/);
   assert.match(collaboration, /aria-labelledby="collaboration-heading"/);
   assert.match(collaboration, /cta-band-steps/);
@@ -247,6 +252,8 @@ test("work archive and global collaboration close stay simple, client-focused, a
   assert.match(css, /Refined typography-first Work category entrance/);
   assert.match(css, /Single-section Work archive with advanced controls/);
   assert.match(css, /\.work-archive-controls/);
+  assert.match(css, /Modern agency Work directory/);
+  assert.match(css, /grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/);
   assert.match(css, /\.work-project-card \.work-card-media \{ aspect-ratio: 4 \/ 3; \}/);
   assert.match(css, /\.work-project-card \.work-card-media \.project-media[\s\S]*object-fit: cover/);
   assert.match(css, /Compact collaboration close shared by every public page/);
