@@ -83,6 +83,22 @@ export function MotionProvider() {
         });
       });
 
+      const workCategorySequence = document.querySelector<HTMLElement>("[data-work-category-sequence]");
+      if (workCategorySequence) {
+        const lines = gsap.utils.toArray<HTMLElement>("[data-work-category-line]", workCategorySequence);
+        const intro = workCategorySequence.querySelector<HTMLElement>("[data-work-category-intro]");
+        const orbit = workCategorySequence.querySelector<HTMLElement>(".work-category-orbit");
+        const items = gsap.utils.toArray<HTMLElement>("[data-work-category-item]", workCategorySequence);
+        const categoryReveal = gsap.timeline({
+          scrollTrigger: { trigger: workCategorySequence, start: "top 94%", once: true },
+        });
+
+        if (orbit) categoryReveal.fromTo(orbit, { scale: 0.58, rotate: -42, autoAlpha: 0 }, { scale: 1, rotate: 0, autoAlpha: 1, duration: 1.25, ease: "power4.out" }, 0);
+        if (lines.length) categoryReveal.fromTo(lines, { yPercent: 115, rotate: 2.5 }, { yPercent: 0, rotate: 0, duration: 1.05, stagger: 0.1, ease: "power4.out" }, 0.05);
+        if (intro) categoryReveal.fromTo(intro, { x: -24, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.72, ease: "power3.out" }, 0.45);
+        if (items.length) categoryReveal.fromTo(items, { x: 46, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.76, stagger: 0.075, ease: "power3.out" }, 0.28);
+      }
+
       const showreelSequence = document.querySelector<HTMLElement>("[data-showreel-sequence]");
       if (showreelSequence) {
         const copy = showreelSequence.querySelector<HTMLElement>("[data-showreel-copy]");
