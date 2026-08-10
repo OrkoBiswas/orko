@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { categorySlug, projects } from "@/lib/portfolio";
 import { listPortfolioProjects } from "@/db/repository";
-import { CtaBand } from "@/components/CtaBand";
 import { ProjectPresentation } from "@/components/ProjectPresentation";
 
 export function generateStaticParams() {
@@ -57,7 +56,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ "proje
       </div>
     </header>
     <ProjectPresentation project={project} />
-    <CtaBand title={<>Want something<br />similar?</>} />
     <Link className="next-project" href={`/work/${next.slug}`}><span>Next project / {next.index}</span><strong>{next.title}<ArrowRight aria-hidden="true" /></strong></Link>
   </article>;
 }

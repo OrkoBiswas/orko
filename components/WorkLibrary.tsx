@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { Grid2X2, List, Search, SlidersHorizontal, X } from "lucide-react";
+import { Search, SlidersHorizontal, X } from "lucide-react";
 import gsap from "gsap";
 import { Flip } from "gsap/Flip";
 import { deriveShowcaseCategories, filterProjects, workDisciplines, type Project, type WorkDiscipline } from "@/lib/portfolio";
@@ -23,7 +23,6 @@ export function WorkLibrary({ projects, initialFilters = {} }: { projects: Proje
   const [category, setCategory] = useState(categoryValues.includes(initialFilters.category ?? "") ? initialFilters.category! : "All");
   const [industry, setIndustry] = useState(industries.includes(initialFilters.industry ?? "") ? initialFilters.industry! : "All");
   const [year, setYear] = useState(years.includes(initialFilters.year ?? "") ? initialFilters.year! : "All");
-  const [view, setView] = useState<"grid" | "list">("grid");
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const visible = useMemo(() => filterProjects(projects, { query, discipline, category, industry, year }), [projects, query, discipline, category, industry, year]);
@@ -46,41 +45,6 @@ export function WorkLibrary({ projects, initialFilters = {} }: { projects: Proje
     pendingFlip.current = null;
   }, [visible]);
 
-  useLayoutEffect(() => {
-    const grid = root.current;
-    if (!grid) return;
-    const cards = Array.from(grid.querySelectorAll<HTMLElement>("[data-project-card]"));
-    if (view !== "grid") {
-      cards.forEach((card) => { card.style.gridRowEnd = ""; });
-      return;
-    }
-
-    let frame = 0;
-    const layout = () => {
-      window.cancelAnimationFrame(frame);
-      frame = window.requestAnimationFrame(() => {
-        const styles = window.getComputedStyle(grid);
-        const row = Number.parseFloat(styles.gridAutoRows) || 8;
-        const gap = Number.parseFloat(styles.rowGap) || 1;
-        cards.forEach((card) => {
-          const content = card.querySelector<HTMLElement>("a");
-          if (!content) return;
-          const span = Math.max(1, Math.ceil((content.scrollHeight + gap) / (row + gap)));
-          const next = `span ${span}`;
-          if (card.style.gridRowEnd !== next) card.style.gridRowEnd = next;
-        });
-      });
-    };
-
-    const observer = new ResizeObserver(layout);
-    observer.observe(grid);
-    layout();
-    return () => {
-      observer.disconnect();
-      window.cancelAnimationFrame(frame);
-    };
-  }, [visible, view]);
-
   function changeFilter(update: () => void) {
     if (root.current) pendingFlip.current = Flip.getState(root.current.querySelectorAll("[data-project-card]"));
     update();
@@ -98,13 +62,10 @@ export function WorkLibrary({ projects, initialFilters = {} }: { projects: Proje
 
   return (
     <div className="work-library">
+      <div className="work-library-head"><div><p className="eyebrow">Complete collection</p><h2>Browse all projects.</h2></div><p>Search by name or open the filters for a specific format, category, industry, or year.</p></div>
       <div className="work-toolbar">
-        <label className="search-field" htmlFor="work-search"><Search aria-hidden="true" /><span className="sr-only">Search work</span><input id="work-search" type="search" value={query} placeholder="Search title, format, industry…" onChange={(event) => changeFilter(() => setQuery(event.target.value))} /></label>
+        <label className="search-field" htmlFor="work-search"><Search aria-hidden="true" /><span className="sr-only">Search work</span><input id="work-search" type="search" value={query} placeholder="Search title, format, or industry…" onChange={(event) => changeFilter(() => setQuery(event.target.value))} /></label>
         <button className="filter-toggle" type="button" aria-expanded={filtersOpen} onClick={() => setFiltersOpen((value) => !value)}><SlidersHorizontal aria-hidden="true" /> Filters {isFiltered && <span />}</button>
-        <div className="view-toggle" aria-label="Project view">
-          <button type="button" aria-label="Grid view" aria-pressed={view === "grid"} onClick={() => setView("grid")}><Grid2X2 aria-hidden="true" /></button>
-          <button type="button" aria-label="Editorial list view" aria-pressed={view === "list"} onClick={() => setView("list")}><List aria-hidden="true" /></button>
-        </div>
       </div>
 
       <div className={`filter-panel ${filtersOpen ? "is-open" : ""}`}>
@@ -117,7 +78,7 @@ export function WorkLibrary({ projects, initialFilters = {} }: { projects: Proje
       <div className="library-count"><p><span>{String(visible.length).padStart(2, "0")}</span> projects in view</p>{isFiltered && <button type="button" onClick={clearFilters}>Clear filters <X aria-hidden="true" /></button>}</div>
 
       {visible.length ? (
-        <div ref={root} className={`project-library ${view === "list" ? "is-list" : "is-grid"}`} aria-live="polite">
+        <div ref={root} className="project-library is-grid" aria-live="polite">
           {visible.map((project, index) => <ProjectCard project={project} key={project.id} priority={index < 4} />)}
         </div>
       ) : (

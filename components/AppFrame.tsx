@@ -7,6 +7,7 @@ import { SettingsDock } from "@/components/SettingsDock";
 import { MotionProvider } from "@/components/MotionProvider";
 import { CustomCursor } from "@/components/CustomCursor";
 import { AdminNotificationCenter } from "@/components/AdminNotificationCenter";
+import { CtaBand } from "@/components/CtaBand";
 import type { SiteContent } from "@/lib/site-content";
 
 export function AppFrame({ content, children }: { content: SiteContent; children: React.ReactNode }) {
@@ -22,6 +23,7 @@ export function AppFrame({ content, children }: { content: SiteContent; children
       <div id="top" />
       <SiteHeader content={content} />
       <main id="main-content">{children}</main>
+      <CtaBand />
       <SiteFooter content={content} />
       <SettingsDock />
       <MotionProvider />

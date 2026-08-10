@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
-import { CtaBand } from "@/components/CtaBand";
 import { ProjectArtwork } from "@/components/ProjectArtwork";
 import { ProjectMedia } from "@/components/ProjectMedia";
 import { listPortfolioProjects } from "@/db/repository";
@@ -63,6 +62,5 @@ export default async function WorkCategoryPage({ params }: { params: CategoryPar
       })}</div>
     </section>
 
-    <CtaBand title={<>Need this kind<br />of visual work?</>} copy={`Tell me what you liked in the ${category.label} collection and what you want to create.`} />
   </main>;
 }

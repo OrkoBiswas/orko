@@ -54,11 +54,13 @@ Last updated: 2026-08-10
 
 - Made every category project card one complete accessible link, so its image, title, details, and “View project” cue all open the presentation. Opened projects now use calmer headline scales and viewport-bounded presentation media on desktop and responsive screens, with natural aspect ratios, safe gutters, keyboard focus, and reduced-motion behavior preserved.
 
+- Rebuilt the Work archive as a simpler client-focused journey: a compact high-impact introduction, clear project discussion action, direct category index with live counts, and a calm two-column project collection with search plus optional filters. The shared “Start a collaboration” close now appears once across every public page with a compact dark composition, simple three-step expectation, focused primary action, quick-message path, keyboard support, reduced motion, and dedicated 320px behavior.
+
 ## Validation
 
 - Lint: passed.
 - Typecheck: passed.
-- Automated tests: 23 passed.
+- Automated tests: 24 passed.
 - Production build: passed.
 - Prior desktop and mobile browser reviews passed for public navigation, archive filters, case studies, forms, animations, and inquiry persistence.
 

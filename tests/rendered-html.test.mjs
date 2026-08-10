@@ -45,9 +45,11 @@ test("work archive renders a clean empty-library state", async () => {
   const response = await request("/work");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /Video, motion/);
+  assert.match(html, /Work made to/);
+  assert.match(html, /earn attention/);
   assert.match(html, /New projects are coming soon/);
-  assert.match(html, /Search title, format, industry/);
+  assert.match(html, /Search title, format, or industry/);
+  assert.match(html, /Start a collaboration/);
   assert.doesNotMatch(html, /Kinetic Launch Film|Abstract Index/);
 });
 

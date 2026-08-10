@@ -211,6 +211,32 @@ test("shared footer gives every viewport a clear and accessible hiring path", as
   assert.match(css, /footer-project-link::before \{ animation: none; \}/);
 });
 
+test("work archive and global collaboration close stay simple, client-focused, and responsive", async () => {
+  const [workPage, library, frame, collaboration, css] = await Promise.all([
+    readFile(new URL("app/work/page.tsx", root), "utf8"),
+    readFile(new URL("components/WorkLibrary.tsx", root), "utf8"),
+    readFile(new URL("components/AppFrame.tsx", root), "utf8"),
+    readFile(new URL("components/CtaBand.tsx", root), "utf8"),
+    readFile(new URL("app/globals.css", root), "utf8"),
+  ]);
+  assert.match(workPage, /work-intro/);
+  assert.match(workPage, /work-category-index/);
+  assert.match(workPage, /projectMatchesShowcaseCategory/);
+  assert.match(workPage, /Discuss your project/);
+  assert.match(library, /Browse all projects/);
+  assert.match(library, /className="project-library is-grid"/);
+  assert.doesNotMatch(library, /Grid2X2|Editorial list view|ResizeObserver/);
+  assert.match(frame, /<CtaBand \/>/);
+  assert.match(collaboration, /aria-labelledby="collaboration-heading"/);
+  assert.match(collaboration, /cta-band-steps/);
+  assert.match(collaboration, /Start your project/);
+  assert.match(collaboration, /Send a quick message/);
+  assert.match(css, /Client-focused Work archive/);
+  assert.match(css, /Compact collaboration close shared by every public page/);
+  assert.match(css, /\.work-page \.project-library\.is-grid \{/);
+  assert.match(css, /@media \(max-width: 700px\)/);
+});
+
 test("owner portrait and owner-created category portfolio stay secure, durable, and label-free", async () => {
   const [contentModel, editor, experience, showcase, artwork, home, portfolio, categoryPage, adminProjects, projectEditor, resetMigration, css] = await Promise.all([
     readFile(new URL("lib/site-content.ts", root), "utf8"),

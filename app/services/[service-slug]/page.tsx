@@ -6,7 +6,6 @@ import { projects, services } from "@/lib/portfolio";
 import { listPortfolioProjects, listPortfolioServices } from "@/db/repository";
 import { PageHero } from "@/components/PageHero";
 import { ProjectCard } from "@/components/ProjectCard";
-import { CtaBand } from "@/components/CtaBand";
 
 export function generateStaticParams() { return services.map((service) => ({ "service-slug": service.slug })); }
 export async function generateMetadata({ params }: { params: Promise<{ "service-slug": string }> }): Promise<Metadata> { const { "service-slug": slug } = await params; const service = (await listPortfolioServices(services)).find((item) => item.slug === slug); return service ? { title: service.title, description: service.promise, alternates: { canonical: `/services/${service.slug}` }, openGraph: { type: "website", title: service.title, description: service.promise, url: `/services/${service.slug}` } } : { title: "Service not found" }; }
@@ -25,6 +24,5 @@ export default async function ServicePage({ params }: { params: Promise<{ "servi
     <section className="service-lists"><div className="service-lists-inner section-shell"><div><p className="eyebrow">Typical deliverables</p><ul className="numbered-list">{service.deliverables.map((item) => <li key={item}>{item}</li>)}</ul></div><div><p className="eyebrow">A strong fit for</p><ul className="numbered-list">{service.idealFor.map((item) => <li key={item}>{item}</li>)}</ul></div></div></section>
     <section className="editorial-section section-shell"><div className="section-heading"><div><p className="eyebrow">Related work</p><h2>See the craft<br /><em>in context.</em></h2></div><Link className="text-link" href="/work">Full archive <ArrowUpRight aria-hidden="true" /></Link></div><div className="featured-grid">{related.map((project) => <ProjectCard project={project} key={project.id} />)}</div></section>
     <section className="editorial-section section-shell"><div className="editorial-grid"><p className="eyebrow">Common question</p><div className="faq-list">{service.faqs.map((faq) => <details key={faq.question}><summary>{faq.question}</summary><p>{faq.answer}</p></details>)}</div></div></section>
-    <CtaBand title={<>Start a {service.title.toLowerCase()}<br />project.</>} />
   </>;
 }
