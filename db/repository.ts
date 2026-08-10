@@ -2,6 +2,7 @@ import type { InquiryInput } from "@/lib/inquiry";
 import type { Project, Service } from "@/lib/portfolio";
 import { normalizeProject, type ManagedProjectInput } from "@/lib/project-content";
 import { defaultSiteContent, parseSiteContent, type SiteContent } from "@/lib/site-content";
+import type { CategoryThumbnail } from "@/lib/category-content";
 
 type DatabaseEnv = { DB?: D1Database };
 
@@ -122,6 +123,15 @@ export function ensureSchema() {
       db.prepare(`CREATE TABLE IF NOT EXISTS project_content (
         project_id TEXT PRIMARY KEY,
         content_json TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )`),
+      db.prepare(`CREATE TABLE IF NOT EXISTS category_thumbnails (
+        slug TEXT PRIMARY KEY,
+        label TEXT NOT NULL,
+        media_url TEXT NOT NULL,
+        media_type TEXT NOT NULL CHECK (media_type IN ('image', 'video')),
+        media_alt TEXT NOT NULL,
+        ratio TEXT NOT NULL DEFAULT 'wide' CHECK (ratio IN ('wide', 'tall', 'square', 'vertical', 'banner')),
         updated_at TEXT NOT NULL
       )`),
       db.prepare(`CREATE TABLE IF NOT EXISTS service_content (
@@ -318,6 +328,66 @@ export async function listPortfolioProjects(defaults: Project[], options: { publ
 export async function getManagedProject(defaults: Project[], id: string) {
   const projects = await listPortfolioProjects(defaults);
   return projects.find((project) => project.id === id) ?? null;
+}
+
+type CategoryThumbnailRecord = {
+  slug: string;
+  label: string;
+  media_url: string;
+  media_type: "image" | "video";
+  media_alt: string;
+  ratio: CategoryThumbnail["ratio"];
+  updated_at: string;
+};
+
+function mapCategoryThumbnail(record: CategoryThumbnailRecord): CategoryThumbnail {
+  return {
+    slug: record.slug,
+    label: record.label,
+    mediaUrl: record.media_url,
+    mediaType: record.media_type,
+    mediaAlt: record.media_alt,
+    ratio: record.ratio,
+    updatedAt: record.updated_at,
+  };
+}
+
+export async function listCategoryThumbnails(): Promise<CategoryThumbnail[]> {
+  try {
+    await ensureSchema();
+    const rows = await (await database()).prepare("SELECT slug, label, media_url, media_type, media_alt, ratio, updated_at FROM category_thumbnails ORDER BY label ASC").all<CategoryThumbnailRecord>();
+    return (rows.results ?? []).map(mapCategoryThumbnail);
+  } catch {
+    return [];
+  }
+}
+
+export async function updateCategoryThumbnail(
+  slug: string,
+  input: Omit<CategoryThumbnail, "slug" | "updatedAt">,
+  actor: { userId: string; email: string },
+) {
+  await ensureSchema();
+  const db = await database();
+  const now = new Date().toISOString();
+  await db.batch([
+    db.prepare("INSERT INTO category_thumbnails (slug, label, media_url, media_type, media_alt, ratio, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT(slug) DO UPDATE SET label = excluded.label, media_url = excluded.media_url, media_type = excluded.media_type, media_alt = excluded.media_alt, ratio = excluded.ratio, updated_at = excluded.updated_at")
+      .bind(slug, input.label, input.mediaUrl, input.mediaType, input.mediaAlt, input.ratio, now),
+    db.prepare("INSERT INTO audit_logs (id, actor_id, actor_email, action, entity_type, entity_id, created_at) VALUES (?, ?, ?, 'category.thumbnail.updated', 'category', ?, ?)")
+      .bind(crypto.randomUUID(), actor.userId, actor.email, slug, now),
+  ]);
+  return { ...input, slug, updatedAt: now } satisfies CategoryThumbnail;
+}
+
+export async function deleteCategoryThumbnail(slug: string, actor: { userId: string; email: string }) {
+  await ensureSchema();
+  const db = await database();
+  const result = await db.prepare("DELETE FROM category_thumbnails WHERE slug = ?").bind(slug).run();
+  if (!result.meta.changes) return false;
+  await db.prepare("INSERT INTO audit_logs (id, actor_id, actor_email, action, entity_type, entity_id, created_at) VALUES (?, ?, ?, 'category.thumbnail.removed', 'category', ?, ?)")
+    .bind(crypto.randomUUID(), actor.userId, actor.email, slug, new Date().toISOString())
+    .run();
+  return true;
 }
 
 export async function updateManagedProject(

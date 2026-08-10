@@ -86,6 +86,16 @@ export const projectContent = sqliteTable("project_content", {
   updatedAt: text("updated_at").notNull(),
 });
 
+export const categoryThumbnails = sqliteTable("category_thumbnails", {
+  slug: text("slug").primaryKey(),
+  label: text("label").notNull(),
+  mediaUrl: text("media_url").notNull(),
+  mediaType: text("media_type", { enum: ["image", "video"] }).notNull(),
+  mediaAlt: text("media_alt").notNull(),
+  ratio: text("ratio", { enum: ["wide", "tall", "square", "vertical", "banner"] }).notNull().default("wide"),
+  updatedAt: text("updated_at").notNull(),
+});
+
 export const serviceContent = sqliteTable("service_content", {
   serviceSlug: text("service_slug").primaryKey(),
   contentJson: text("content_json").notNull(),

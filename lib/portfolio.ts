@@ -156,6 +156,22 @@ export function projectCategoryWorkCount(project: Project, category: ShowcaseCat
   return projectMatchesShowcaseCategory(project, category) ? 1 : 0;
 }
 
+export function getProjectPreviewMedia(project: Project): { url: string; type: "image" | "video"; alt: string } | null {
+  for (const block of project.contentBlocks ?? []) {
+    if (block.type === "image" && block.url) return { url: block.url, type: "image", alt: block.alt || `${project.title} preview` };
+    if (block.type === "photo-grid") {
+      const item = block.items.find((media) => media.url);
+      if (item) return { url: item.url, type: "image", alt: item.alt || `${project.title} preview` };
+    }
+    if (block.type === "video-audio" && block.mediaType === "video" && block.url) return { url: block.url, type: "video", alt: block.alt || `${project.title} preview` };
+    if (block.type === "lightroom" && (block.afterUrl || block.beforeUrl)) return { url: block.afterUrl || block.beforeUrl, type: "image", alt: block.alt || `${project.title} preview` };
+  }
+  if (project.mediaUrl && (project.mediaType === "image" || project.mediaType === "video")) {
+    return { url: project.mediaUrl, type: project.mediaType, alt: project.mediaAlt || `${project.title} preview` };
+  }
+  return null;
+}
+
 export const projects: Project[] = [];
 export type Service = {
   slug: string;

@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";
 import { deriveShowcaseCategories, projectMatchesShowcaseCategory, projects, services } from "@/lib/portfolio";
-import { getSiteContent, listPortfolioProjects, listPortfolioServices } from "@/db/repository";
+import { getSiteContent, listCategoryThumbnails, listPortfolioProjects, listPortfolioServices } from "@/db/repository";
 import { ShowcaseGrid } from "@/components/ShowcaseGrid";
 import { ShowreelLoop } from "@/components/ShowreelLoop";
 import { ExperienceSection } from "@/components/ExperienceSection";
@@ -19,11 +19,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const [brand, liveProjects, liveServices] = await Promise.all([getSiteContent(), listPortfolioProjects(projects, { publishedOnly: true }), listPortfolioServices(services)]);
+  const [brand, liveProjects, liveServices, categoryThumbnails] = await Promise.all([getSiteContent(), listPortfolioProjects(projects, { publishedOnly: true }), listPortfolioServices(services), listCategoryThumbnails()]);
+  const thumbnailsBySlug = new Map(categoryThumbnails.map((thumbnail) => [thumbnail.slug, thumbnail]));
   const showcaseCategories = deriveShowcaseCategories(liveProjects).flatMap((category) => {
     const matchingProjects = liveProjects.filter((project) => projectMatchesShowcaseCategory(project, category.value));
     const cover = matchingProjects.find((project) => project.featured) ?? matchingProjects[0];
-    return cover ? [{ ...category, cover, workCount: matchingProjects.length }] : [];
+    return cover ? [{ ...category, cover, thumbnail: thumbnailsBySlug.get(category.value), workCount: matchingProjects.length }] : [];
   });
   const processStages = [
     { title: "Discover", copy: "We discuss your goal, audience, content, deadline, and budget.", details: ["Goal", "Audience", "Scope"] },

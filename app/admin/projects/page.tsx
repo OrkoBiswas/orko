@@ -1,16 +1,18 @@
 import Link from "next/link";
 import { ArrowUpRight, Images, PencilLine, Plus } from "lucide-react";
 import { requireOwner } from "@/lib/admin";
-import { listPortfolioProjects } from "@/db/repository";
+import { listCategoryThumbnails, listPortfolioProjects } from "@/db/repository";
 import { deriveShowcaseCategories, projectMatchesShowcaseCategory, projects } from "@/lib/portfolio";
 import { AdminShell } from "@/components/AdminShell";
 import { AdminStatusControl } from "@/components/AdminStatusControl";
+import { AdminCategoryThumbnail } from "@/components/AdminCategoryThumbnail";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminProjectsPage() {
   const user = await requireOwner("/admin/projects");
-  const managed = await listPortfolioProjects(projects);
+  const [managed, thumbnails] = await Promise.all([listPortfolioProjects(projects), listCategoryThumbnails()]);
+  const thumbnailsBySlug = new Map(thumbnails.map((thumbnail) => [thumbnail.slug, thumbnail]));
   const categoryShelves = deriveShowcaseCategories(managed).map((category) => {
     const categoryProjects = managed.filter((project) => projectMatchesShowcaseCategory(project, category.value));
     const blockCount = categoryProjects.reduce((total, project) => total + (project.contentBlocks?.length || (project.gallery ?? []).filter((item) => item.url !== project.mediaUrl).length), 0);
@@ -24,6 +26,7 @@ export default async function AdminProjectsPage() {
       {categoryShelves.length ? <div className="admin-category-grid">{categoryShelves.map((category, index) => <article className="admin-category-card" key={category.value}>
         <div className="admin-category-card-top"><span>{String(index + 1).padStart(2, "0")}</span><Images aria-hidden="true" /></div>
         <h3>{category.label}</h3><p>{category.description}</p>
+        <AdminCategoryThumbnail slug={category.value} label={category.label} initial={thumbnailsBySlug.get(category.value)} />
         <dl><div><dt>Projects</dt><dd>{String(category.projectCount).padStart(2, "0")}</dd></div><div><dt>Blocks</dt><dd>{String(category.blockCount).padStart(2, "0")}</dd></div></dl>
         <div className="admin-category-actions"><Link href={`/admin/projects/new?category=${encodeURIComponent(category.label)}`}><Plus aria-hidden="true" /> Add project</Link><Link href={`/work/category/${category.value}`} target="_blank">View public <ArrowUpRight aria-hidden="true" /></Link></div>
       </article>)}</div> : <div className="admin-empty"><Images aria-hidden="true" /><h3>Your project library is empty.</h3><p>Add the first project and type any category name. That category will be created automatically.</p><Link className="admin-primary-action" href="/admin/projects/new"><Plus aria-hidden="true" /> Add first project</Link></div>}

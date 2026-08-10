@@ -90,6 +90,15 @@ test("project creation rejects anonymous requests", async () => {
   assert.equal(response.status, 401);
 });
 
+test("category thumbnail mutations reject anonymous requests", async () => {
+  const response = await request("/api/admin/categories/brand-identity/thumbnail", {
+    method: "PATCH",
+    headers: { "content-type": "application/json", accept: "application/json" },
+    body: JSON.stringify({ label: "Brand Identity", mediaUrl: "https://res.cloudinary.com/demo/image/upload/sample.jpg", mediaType: "image", mediaAlt: "Brand identity category", ratio: "wide" }),
+  });
+  assert.equal(response.status, 401);
+});
+
 test("Cloudinary upload signatures reject anonymous requests", async () => {
   const response = await request("/api/admin/media/signature", {
     method: "POST",

@@ -118,14 +118,44 @@ test("project presentations are validated, owner-built, cover-free, and publicly
   assert.match(projectBuilder, /Photo Grid/);
   assert.match(projectBuilder, /Video \/ Audio/);
   assert.match(projectBuilder, /Attach assets/);
-  assert.match(projectEditor, /Category thumbnail/);
-  assert.match(projectEditor, /It will never appear automatically inside the opened project/);
+  assert.match(projectEditor, /Category thumbnails are managed separately from the Projects dashboard/);
+  assert.doesNotMatch(projectEditor, /<strong>Category thumbnail<\/strong>|Secure thumbnail URL|Upload thumbnail/);
   assert.match(projectPage, /<ProjectPresentation project=\{project\}/);
   assert.doesNotMatch(projectPage, /case-art|case-gallery/);
   assert.match(presentation, /item\.url !== project\.mediaUrl/);
   assert.match(presentation, /<ProjectMedia/);
   assert.match(workLibrary, /discipline/);
   assert.match(workLibrary, /workDisciplines/);
+});
+
+test("category thumbnails are independently owner-managed and durably rendered", async () => {
+  const [contentModel, manager, route, repository, migration, adminProjects, home, showcase, artwork] = await Promise.all([
+    readFile(new URL("lib/category-content.ts", root), "utf8"),
+    readFile(new URL("components/AdminCategoryThumbnail.tsx", root), "utf8"),
+    readFile(new URL("app/api/admin/categories/[slug]/thumbnail/route.ts", root), "utf8"),
+    readFile(new URL("db/repository.ts", root), "utf8"),
+    readFile(new URL("drizzle/0004_category_thumbnails.sql", root), "utf8"),
+    readFile(new URL("app/admin/projects/page.tsx", root), "utf8"),
+    readFile(new URL("app/page.tsx", root), "utf8"),
+    readFile(new URL("components/ShowcaseGrid.tsx", root), "utf8"),
+    readFile(new URL("components/ProjectArtwork.tsx", root), "utf8"),
+  ]);
+  assert.match(contentModel, /categoryThumbnailSchema/);
+  assert.match(contentModel, /hostname === "res\.cloudinary\.com"/);
+  assert.match(manager, /\/api\/admin\/media\/signature/);
+  assert.match(manager, /accept="image\/\*,video\/\*"/);
+  assert.match(manager, /Attach thumbnail/);
+  assert.match(manager, /Category thumbnail removed/);
+  assert.match(route, /getOwner/);
+  assert.match(route, /requireSameOrigin/);
+  assert.match(route, /categoryThumbnailSchema\.safeParse/);
+  assert.match(repository, /CREATE TABLE IF NOT EXISTS category_thumbnails/);
+  assert.match(repository, /category\.thumbnail\.updated/);
+  assert.match(migration, /CREATE TABLE `category_thumbnails`/);
+  assert.match(adminProjects, /<AdminCategoryThumbnail/);
+  assert.match(home, /listCategoryThumbnails/);
+  assert.match(showcase, /category\.thumbnail \? <ProjectMedia/);
+  assert.match(artwork, /ignoreMedia/);
 });
 
 test("showreel replacement is owner-managed, signed, and rendered from durable content", async () => {
