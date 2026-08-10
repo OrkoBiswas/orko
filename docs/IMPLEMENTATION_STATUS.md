@@ -78,6 +78,8 @@ Last updated: 2026-08-10
 
 - Rebuilt the About page as a clean editorial profile with restrained typography, a concise personal introduction, work-life, career, client-care, experience, and creative-focus chapters. Removed the older repeated hero, editing/design cards, tool explanation, and duplicated experience presentation. Added an owner-managed photo journal with secure Cloudinary image uploads, captions, accessible descriptions, automatic empty-state hiding, durable content validation, dashboard notifications, and responsive layouts down to 320px.
 
+- Compressed the full About page into a tighter editorial rhythm: reduced every chapter’s vertical spacing, shortened the portrait and gallery offsets, made the headline system smaller and visibly lighter, tightened timeline and story rows, and preserved the serif accents and responsive 320px reading flow.
+
 ## Validation
 
 - Lint: passed.
