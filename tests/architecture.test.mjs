@@ -254,6 +254,7 @@ test("work archive and global collaboration close stay simple, client-focused, a
   assert.match(css, /\.work-archive-controls/);
   assert.match(css, /Modern agency Work directory/);
   assert.match(css, /grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/);
+  assert.match(css, /\.work-archive-controls \{[\s\S]*position: relative;[\s\S]*top: auto;/);
   assert.match(css, /\.work-project-card \.work-card-media \{ aspect-ratio: 4 \/ 3; \}/);
   assert.match(css, /\.work-project-card \.work-card-media \.project-media[\s\S]*object-fit: cover/);
   assert.match(css, /Compact collaboration close shared by every public page/);

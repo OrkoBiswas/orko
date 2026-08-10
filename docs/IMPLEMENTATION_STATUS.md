@@ -70,6 +70,8 @@ Last updated: 2026-08-10
 
 - Replaced the remaining old editorial Work-page styling with a genuinely new company-grade agency directory. The archive now opens with a contemporary sans-only “Creative work. Built to connect.” presentation, subtle theme-green grid atmosphere, client-focused copy, live project/category statistics, and capability indexing. A floating utility dock and denser three/two/one-column project gallery provide search, sorting, advanced filters, explicit project cues, polished media depth, and comfortable desktop-to-320px browsing without returning to the previous giant serif treatment.
 
+- Anchored the Work search, sorting, and advanced-filter bar to its designed position below the introduction. It now scrolls naturally with the page instead of following visitors as a sticky control, preserving the same desktop and mobile layout without covering project content.
+
 ## Validation
 
 - Lint: passed.

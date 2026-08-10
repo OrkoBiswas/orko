@@ -5752,8 +5752,9 @@ html[data-motion="reduced"] .work-gallery-category-list strong { transition: non
 }
 
 .work-archive-controls {
+  position: relative;
   margin-top: -27px;
-  top: 86px;
+  top: auto;
   grid-template-columns: minmax(240px, 1fr) minmax(170px, 210px) auto;
   padding: 9px;
   border: 1px solid #d4d6ce;
@@ -5852,7 +5853,7 @@ html[data-motion="reduced"] .work-gallery-category-list strong { transition: non
   .agency-work-summary dl { margin-top: 26px; }
   .agency-work-capabilities > span { min-height: 48px; gap: 7px; font-size: 8px; }
   .agency-work-capabilities > span + span { padding-left: 10px; }
-  .work-archive-controls { margin-top: -18px; top: 70px; border-radius: 12px; }
+  .work-archive-controls { margin-top: -18px; top: auto; border-radius: 12px; }
   .work-archive-controls + .filter-panel.is-open { max-height: 760px; padding: 18px; }
   .work-collection .project-library.is-grid { grid-template-columns: 1fr; gap: 54px; padding-top: 22px; }
   .work-card-info h3 { font-size: clamp(1.8rem, 9vw, 2.5rem); }
