@@ -94,7 +94,7 @@ export function normalizeProject(value: unknown): Project | null {
   return parsed.success ? parsed.data : null;
 }
 
-export function createProjectTemplate(displayOrder: number, category = "Others"): ManagedProjectInput {
+export function createProjectTemplate(displayOrder: number, category = ""): ManagedProjectInput {
   const number = displayOrder + 1;
   return {
     id: `prj_custom_${crypto.randomUUID().replaceAll("-", "")}`,

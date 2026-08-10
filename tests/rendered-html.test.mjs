@@ -20,18 +20,8 @@ test("server-renders the finished portfolio homepage", async () => {
   const html = await response.text();
   assert.match(html, /<title>Orko Biswas/);
   assert.match(html, /Visual ideas/);
-  assert.match(html, /Selected creative work/);
-  assert.match(html, /All categories/);
-  assert.match(html, /Book Cover Design/);
-  assert.match(html, /Brand Identity Design/);
-  assert.match(html, /Thumbnail Design/);
-  assert.match(html, /Banner &amp; Poster Design/);
-  assert.match(html, /2D Motion/);
-  assert.match(html, /UI\/UX/);
-  assert.match(html, /Others/);
-  assert.match(html, /\/work\/category\/book-cover-design/);
-  assert.match(html, /\/work\/category\/ui-ux/);
-  assert.match(html, /items in the full library/);
+  assert.match(html, /Showreel/);
+  assert.doesNotMatch(html, /All categories|items in the full library|\/work\/category\//);
   assert.doesNotMatch(html, /Selected chapter|showcase-piece-media-label|Open project/);
   assert.match(html, /About &amp; experience/);
   assert.match(html, /Independent creative practice/);
@@ -51,26 +41,21 @@ test("about page includes the managed work history", async () => {
   assert.match(html, /Bangladesh/);
 });
 
-test("work archive renders real searchable project content", async () => {
+test("work archive renders a clean empty-library state", async () => {
   const response = await request("/work");
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /Video, motion/);
-  assert.match(html, /Kinetic Launch Film/);
-  assert.match(html, /Abstract Index/);
+  assert.match(html, /New projects are coming soon/);
   assert.match(html, /Search title, format, industry/);
+  assert.doesNotMatch(html, /Kinetic Launch Film|Abstract Index/);
 });
 
-test("category portfolio renders a complete Behance-style work stack", async () => {
+test("removed category routes no longer expose old project content", async () => {
   const response = await request("/work/category/thumbnail-design");
-  assert.equal(response.status, 200);
+  assert.equal(response.status, 404);
   const html = await response.text();
-  assert.match(html, /Thumbnail Design/);
-  assert.match(html, /Complete category stack/);
-  assert.match(html, /Choose a project to explore/);
-  assert.match(html, /Abstract Index/);
-  assert.match(html, /View project/);
-  assert.match(html, /\/work\/category\/brand-identity-design/);
+  assert.doesNotMatch(html, /Thumbnail Design|Abstract Index|View project/);
 });
 
 test("inquiry endpoint rejects invalid data before persistence", async () => {

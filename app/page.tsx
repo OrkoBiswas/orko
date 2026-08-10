@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";
-import { projectCategoryWorkCount, projectMatchesShowcaseCategory, projects, services, showcaseCategories as showcaseCategoryDefinitions } from "@/lib/portfolio";
+import { deriveShowcaseCategories, projectMatchesShowcaseCategory, projects, services } from "@/lib/portfolio";
 import { getSiteContent, listPortfolioProjects, listPortfolioServices } from "@/db/repository";
 import { ShowcaseGrid } from "@/components/ShowcaseGrid";
 import { ShowreelLoop } from "@/components/ShowreelLoop";
@@ -20,12 +20,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function Home() {
   const [brand, liveProjects, liveServices] = await Promise.all([getSiteContent(), listPortfolioProjects(projects, { publishedOnly: true }), listPortfolioServices(services)]);
-  const showcaseCategories = showcaseCategoryDefinitions.flatMap((category, index) => {
+  const showcaseCategories = deriveShowcaseCategories(liveProjects).flatMap((category) => {
     const matchingProjects = liveProjects.filter((project) => projectMatchesShowcaseCategory(project, category.value));
     const cover = matchingProjects.find((project) => project.featured) ?? matchingProjects[0];
-    const fallbackCover = liveProjects[index % Math.max(liveProjects.length, 1)];
-    const workCount = liveProjects.reduce((total, project) => total + projectCategoryWorkCount(project, category.value), 0);
-    return cover || fallbackCover ? [{ ...category, cover: cover ?? fallbackCover, workCount }] : [];
+    return cover ? [{ ...category, cover, workCount: matchingProjects.length }] : [];
   });
   const processStages = [
     { title: "Discover", copy: "We discuss your goal, audience, content, deadline, and budget.", details: ["Goal", "Audience", "Scope"] },
@@ -55,14 +53,14 @@ export default async function Home() {
           <HeroMotionMedia />
         </div>
         <div className="hero-foot">
-          <a className="scroll-note" href="#selected-work"><ArrowDown aria-hidden="true" /> Scroll to explore</a>
+          <a className="scroll-note" href={showcaseCategories.length ? "#selected-work" : "#showreel"}><ArrowDown aria-hidden="true" /> Scroll to explore</a>
           <p><span>Orko Biswas</span><span>Portfolio / 2026</span></p>
         </div>
       </section>
 
       <ProfileLinksBand content={brand} />
 
-      <section id="selected-work" className="selected-work section-shell section-space">
+      {showcaseCategories.length > 0 && <section id="selected-work" className="selected-work section-shell section-space">
         <div className="section-heading" data-reveal><div><p className="eyebrow"><span>01</span>Selected work</p><h2>{brand.workHeading}</h2></div><div><p>{brand.workIntro}</p><Link className="text-link" href="/work">Enter the full archive <ArrowUpRight aria-hidden="true" /></Link></div></div>
         <div className="showcase-library">
           <div className="showcase-library-top" data-reveal>
@@ -76,7 +74,7 @@ export default async function Home() {
             <Link className="button button-dark" href="/work">Browse everything <ArrowRight aria-hidden="true" /></Link>
           </div>
         </div>
-      </section>
+      </section>}
 
       <ShowreelLoop heading={brand.showreelHeading} intro={brand.showreelIntro} videoUrl={brand.showreelVideoUrl} posterUrl={brand.showreelPosterUrl} />
 

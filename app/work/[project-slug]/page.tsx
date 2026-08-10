@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { getShowcaseCategory, projects } from "@/lib/portfolio";
+import { categorySlug, projects } from "@/lib/portfolio";
 import { listPortfolioProjects } from "@/db/repository";
 import { CtaBand } from "@/components/CtaBand";
 import { ProjectPresentation } from "@/components/ProjectPresentation";
@@ -32,7 +32,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ "proje
   if (!project) notFound();
   const index = liveProjects.findIndex((item) => item.id === project.id);
   const next = liveProjects[(index + 1) % liveProjects.length];
-  const assignedCategory = getShowcaseCategory(project.category);
+  const assignedCategory = categorySlug(project.category);
   const projectSchema = {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
@@ -50,7 +50,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ "proje
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(projectSchema).replaceAll("<", "\\u003c") }} />
     <header className="case-hero project-intro">
       <div className="section-shell">
-        <div className="case-hero-head"><Link className="text-link" href={assignedCategory ? `/work/category/${assignedCategory.value}` : "/work"}><ArrowLeft aria-hidden="true" /> {assignedCategory ? "Back to category" : "Back to work"}</Link><p className="eyebrow">Project / {project.index}</p></div>
+        <div className="case-hero-head"><Link className="text-link" href={`/work/category/${assignedCategory}`}><ArrowLeft aria-hidden="true" /> Back to category</Link><p className="eyebrow">Project / {project.index}</p></div>
         <h1>{project.title}</h1>
         <p className="project-intro-summary">{project.summary}</p>
         <div className="case-hero-meta"><div><span>Category</span><p>{project.category}</p></div><div><span>Client</span><p>{project.client}</p></div><div><span>Industry</span><p>{project.industry}</p></div><div><span>Year</span><p>{project.year}</p></div></div>

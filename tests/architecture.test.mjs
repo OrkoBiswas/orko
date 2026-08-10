@@ -178,8 +178,8 @@ test("shared footer gives every viewport a clear and accessible hiring path", as
   assert.match(css, /footer-project-link::before \{ animation: none; \}/);
 });
 
-test("owner portrait and category portfolio stay secure, durable, and label-free", async () => {
-  const [contentModel, editor, experience, showcase, artwork, home, portfolio, categoryPage, adminProjects, projectEditor, css] = await Promise.all([
+test("owner portrait and owner-created category portfolio stay secure, durable, and label-free", async () => {
+  const [contentModel, editor, experience, showcase, artwork, home, portfolio, categoryPage, adminProjects, projectEditor, resetMigration, css] = await Promise.all([
     readFile(new URL("lib/site-content.ts", root), "utf8"),
     readFile(new URL("components/AdminContentForm.tsx", root), "utf8"),
     readFile(new URL("components/ExperienceSection.tsx", root), "utf8"),
@@ -190,6 +190,7 @@ test("owner portrait and category portfolio stay secure, durable, and label-free
     readFile(new URL("app/work/category/[category-slug]/page.tsx", root), "utf8"),
     readFile(new URL("app/admin/projects/page.tsx", root), "utf8"),
     readFile(new URL("components/AdminProjectEditor.tsx", root), "utf8"),
+    readFile(new URL("drizzle/0003_reset_project_library.sql", root), "utf8"),
     readFile(new URL("app/globals.css", root), "utf8"),
   ]);
   assert.match(contentModel, /profileImageUrl: optionalAssetUrl/);
@@ -204,10 +205,12 @@ test("owner portrait and category portfolio stay secure, durable, and label-free
   assert.match(showcase, /workCount/);
   assert.doesNotMatch(showcase, /Client|Industry|Year|project\.summary/);
   assert.match(artwork, /!hideLabels/);
-  assert.match(home, /All categories/);
-  assert.match(portfolio, /Book Cover Design/);
-  assert.match(portfolio, /Brand Identity Design/);
-  assert.match(portfolio, /Banner & Poster Design/);
+  assert.match(home, /showcaseCategories\.length > 0/);
+  assert.match(portfolio, /export const projects: Project\[\] = \[\]/);
+  assert.match(portfolio, /export const showcaseCategories: ShowcaseCategoryDefinition\[\] = \[\]/);
+  assert.match(portfolio, /deriveShowcaseCategories/);
+  assert.match(portfolio, /categorySlug/);
+  assert.doesNotMatch(portfolio, /Book Cover Design|Brand Identity Design|Banner & Poster Design/);
   assert.match(portfolio, /projectMatchesShowcaseCategory/);
   assert.match(portfolio, /galleryItemMatchesShowcaseCategory/);
   assert.match(portfolio, /projectCategoryWorkCount/);
@@ -215,12 +218,17 @@ test("owner portrait and category portfolio stay secure, durable, and label-free
   assert.match(categoryPage, /ProjectMedia/);
   assert.match(adminProjects, /admin-category-grid/);
   assert.match(adminProjects, /admin\/projects\/new\?category=/);
-  assert.match(projectEditor, /<CategoryOptions current=\{project\.category\}/);
+  assert.match(adminProjects, /Categories appear automatically/);
+  assert.match(projectEditor, /placeholder="e\.g\. Brand Identity"/);
+  assert.doesNotMatch(projectEditor, /CategoryOptions|<select required value=\{project\.category\}/);
   assert.match(projectEditor, /admin-project-composer/);
   assert.match(projectEditor, /admin-simple-settings/);
   assert.match(projectEditor, /Public category/);
   assert.match(projectEditor, /contentBlocks/);
   assert.doesNotMatch(home, /featured chapters|Browse category showreels/);
+  assert.match(resetMigration, /DELETE FROM `project_content`/);
+  assert.match(resetMigration, /DELETE FROM `projects`/);
+  assert.match(resetMigration, /manual-reset-2026-08-10/);
   assert.match(css, /\.process-focus li,[\s\S]*white-space: nowrap/);
   assert.match(css, /Behance-inspired category library/);
 });

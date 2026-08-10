@@ -100,21 +100,42 @@ export const workDisciplines = [
 
 export type WorkDiscipline = (typeof workDisciplines)[number]["value"];
 
-export const showcaseCategories = [
-  { value: "book-cover-design", label: "Book Cover Design", description: "Book covers, editorial artwork, and connected cover systems." },
-  { value: "brand-identity-design", label: "Brand Identity Design", description: "Logos, identity systems, campaign direction, and brand visuals." },
-  { value: "thumbnail-design", label: "Thumbnail Design", description: "Clear, high-impact thumbnails made for channels and campaigns." },
-  { value: "banner-poster-design", label: "Banner & Poster Design", description: "Posters, banners, key visuals, and promotional artwork." },
-  { value: "2d-motion", label: "2D Motion", description: "Motion graphics, animated identities, titles, and short visual loops." },
-  { value: "ui-ux", label: "UI/UX", description: "Digital interfaces, product visuals, and practical design systems." },
-  { value: "others", label: "Others", description: "Experiments, mixed-format projects, and work outside the main categories." },
-] as const;
+export type ShowcaseCategory = string;
 
-export type ShowcaseCategory = (typeof showcaseCategories)[number]["value"];
+export type ShowcaseCategoryDefinition = {
+  value: ShowcaseCategory;
+  label: string;
+  description: string;
+};
 
-export function getShowcaseCategory(value: string) {
-  const normalized = value.trim().toLowerCase();
-  return showcaseCategories.find((item) => item.value === normalized || item.label.toLowerCase() === normalized);
+export const showcaseCategories: ShowcaseCategoryDefinition[] = [];
+
+export function categorySlug(value: string) {
+  return value
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "uncategorized";
+}
+
+export function deriveShowcaseCategories(items: Project[]): ShowcaseCategoryDefinition[] {
+  const seen = new Set<string>();
+  return items.flatMap((project) => {
+    const label = project.category.trim();
+    if (!label) return [];
+    const value = categorySlug(label);
+    if (seen.has(value)) return [];
+    seen.add(value);
+    return [{ value, label, description: `${label} projects and complete visual presentations.` }];
+  });
+}
+
+export function getShowcaseCategory(value: string, definitions: ShowcaseCategoryDefinition[] = showcaseCategories) {
+  const normalized = categorySlug(value);
+  return definitions.find((item) => item.value === normalized || categorySlug(item.label) === normalized);
 }
 
 export function projectMatchesDiscipline(project: Project, discipline: WorkDiscipline) {
@@ -123,341 +144,19 @@ export function projectMatchesDiscipline(project: Project, discipline: WorkDisci
   return project.services.some((service) => ["Graphic Design", "Brand Visuals", "Social Media"].includes(service));
 }
 
-function projectCategoryText(project: Project) {
-  return [
-    project.title,
-    project.category,
-    project.summary,
-    ...project.services,
-    ...project.deliverables,
-    ...project.tools,
-  ].join(" ").toLowerCase();
-}
-
-function matchesNamedShowcaseCategory(project: Project, category: Exclude<ShowcaseCategory, "others">) {
-  const text = projectCategoryText(project);
-  const exactCategory = project.category.trim().toLowerCase();
-  if (category === "book-cover-design") {
-    return exactCategory === "book cover design" || project.visual === "editorial" || /\bbook\b|editorial design/.test(text);
-  }
-  if (category === "brand-identity-design") {
-    return exactCategory === "brand identity design" || /\bbranding\b|brand identity|brand visuals|campaign identity/.test(text);
-  }
-  if (category === "thumbnail-design") {
-    return exactCategory === "thumbnail design" || /\bthumbnail(s)?\b/.test(text);
-  }
-  if (category === "banner-poster-design") {
-    return exactCategory === "banner & poster design" || /\bbanner(s)?\b|\bposter(s)?\b|key visual/.test(text);
-  }
-  if (category === "2d-motion") {
-    return exactCategory === "2d motion" || /\b2d motion\b|motion graphics|motion design/.test(text);
-  }
-  return exactCategory === "ui/ux" || /\bui\b|\bux\b|user interface|user experience|web design|product design/.test(text) || (project.tools.includes("Figma") && /system|template|digital/.test(text));
-}
-
 export function projectMatchesShowcaseCategory(project: Project, category: ShowcaseCategory) {
-  if (category !== "others") return matchesNamedShowcaseCategory(project, category);
-  const namedCategories: Exclude<ShowcaseCategory, "others">[] = [
-    "book-cover-design",
-    "brand-identity-design",
-    "thumbnail-design",
-    "banner-poster-design",
-    "2d-motion",
-    "ui-ux",
-  ];
-  return !namedCategories.some((item) => matchesNamedShowcaseCategory(project, item));
-}
-
-function galleryCategoryText(item: ProjectGalleryItem) {
-  return [item.title, item.category, item.alt, item.client, item.industry].join(" ").toLowerCase();
-}
-
-function matchesNamedGalleryCategory(item: ProjectGalleryItem, category: Exclude<ShowcaseCategory, "others">) {
-  const assigned = getShowcaseCategory(item.category);
-  if (assigned) return assigned.value === category;
-  const text = galleryCategoryText(item);
-  if (category === "book-cover-design") return /\bbook\b|editorial|cover design/.test(text);
-  if (category === "brand-identity-design") return /\bbranding\b|brand identity|brand visual|logo design/.test(text);
-  if (category === "thumbnail-design") return /\bthumbnail(s)?\b|youtube cover/.test(text);
-  if (category === "banner-poster-design") return /\bbanner(s)?\b|\bposter(s)?\b|key visual/.test(text);
-  if (category === "2d-motion") return /\b2d motion\b|motion graphic|motion design|animation/.test(text);
-  return /\bui\b|\bux\b|user interface|user experience|web design|product design|app design/.test(text);
+  return categorySlug(project.category) === categorySlug(category);
 }
 
 export function galleryItemMatchesShowcaseCategory(item: ProjectGalleryItem, category: ShowcaseCategory) {
-  const assigned = getShowcaseCategory(item.category);
-  if (assigned) return assigned.value === category;
-  if (category !== "others") return matchesNamedGalleryCategory(item, category);
-  const namedCategories: Exclude<ShowcaseCategory, "others">[] = [
-    "book-cover-design",
-    "brand-identity-design",
-    "thumbnail-design",
-    "banner-poster-design",
-    "2d-motion",
-    "ui-ux",
-  ];
-  return !namedCategories.some((itemCategory) => matchesNamedGalleryCategory(item, itemCategory));
+  return categorySlug(item.category) === categorySlug(category);
 }
 
 export function projectCategoryWorkCount(project: Project, category: ShowcaseCategory) {
   return projectMatchesShowcaseCategory(project, category) ? 1 : 0;
 }
 
-export const projects: Project[] = [
-  {
-    id: "prj_kinetic_launch",
-    slug: "kinetic-launch-film",
-    title: "Kinetic Launch Film",
-    index: "01",
-    category: "Promotional Video",
-    services: ["Video Editing", "2D Motion"],
-    industry: "Technology",
-    client: "Concept Study",
-    year: 2026,
-    featured: true,
-    accent: "#c9ff43",
-    visual: "signal",
-    ratio: "wide",
-    summary: "A fast product video with clear information, strong timing, and a bold visual style.",
-    challenge: "Show many product features in a short video without making the screen feel busy.",
-    concept: "One strong visual line guides the viewer through every scene and transition.",
-    approach: ["Narrative beat map", "Rhythmic rough cut", "Graphic motion system", "Multi-format finishing"],
-    deliverables: ["60s launch film", "30s cutdown", "Three vertical edits", "Poster frames"],
-    tools: ["Premiere Pro", "After Effects", "Photoshop"],
-  },
-  {
-    id: "prj_after_hours",
-    slug: "after-hours-ident",
-    title: "After Hours Ident",
-    index: "02",
-    category: "2D Motion",
-    services: ["2D Motion", "Brand Visuals"],
-    industry: "Music & Culture",
-    client: "Concept Study",
-    year: 2026,
-    featured: true,
-    accent: "#ff6338",
-    visual: "orbit",
-    ratio: "vertical",
-    summary: "A dark motion identity built with moving type, simple shapes, and printed textures.",
-    challenge: "Create one visual style that works for film openings, chapter titles, and short social loops.",
-    concept: "A late-night broadcast look with simple geometry and warm texture.",
-    approach: ["Identity motion principles", "Modular type grid", "Loop design", "Sound-reactive timing"],
-    deliverables: ["Main ident", "Five bumpers", "Vertical loops", "Style frames"],
-    tools: ["After Effects", "Illustrator", "Audition"],
-  },
-  {
-    id: "prj_common_ground",
-    slug: "common-ground-campaign",
-    title: "Common Ground",
-    index: "03",
-    category: "Branding",
-    services: ["Graphic Design", "Social Media"],
-    industry: "Community",
-    client: "Concept Study",
-    year: 2025,
-    featured: true,
-    accent: "#8aa7ff",
-    visual: "editorial",
-    ratio: "square",
-    summary: "A flexible campaign kit that turns one visual idea into a month of connected social content.",
-    challenge: "Create many different posts while keeping every design part of the same campaign.",
-    concept: "Bold image crops, clear text, and one simple layout rule connect every story.",
-    approach: ["Campaign architecture", "Art-direction system", "Template stress test", "Export playbook"],
-    deliverables: ["Campaign key visual", "24 social assets", "Story templates", "Usage guide"],
-    tools: ["Photoshop", "Illustrator", "Figma"],
-  },
-  {
-    id: "prj_ninety_seconds",
-    slug: "ninety-seconds-forward",
-    title: "90 Seconds Forward",
-    index: "04",
-    category: "Video Editing",
-    services: ["Video Editing", "YouTube"],
-    industry: "Education",
-    client: "Concept Study",
-    year: 2026,
-    featured: true,
-    accent: "#f5d05f",
-    visual: "frame",
-    ratio: "banner",
-    summary: "A clear explainer edit that moves quickly but gives important ideas enough time to land.",
-    challenge: "Turn a long interview and supporting footage into a short story while keeping the speaker natural.",
-    concept: "Personal interview moments, simple graphics, and quiet pauses create a balanced pace.",
-    approach: ["Transcript edit", "Story restructuring", "B-roll map", "Caption and sound pass"],
-    deliverables: ["Main edit", "Caption master", "Three chapter clips", "Thumbnail system"],
-    tools: ["Premiere Pro", "After Effects", "DaVinci Resolve"],
-  },
-  {
-    id: "prj_grown_wild",
-    slug: "grown-wild-packaging-film",
-    title: "Grown Wild",
-    index: "05",
-    category: "Advertisement",
-    services: ["Video Editing", "Graphic Design"],
-    industry: "Food & Beverage",
-    client: "Concept Study",
-    year: 2025,
-    featured: true,
-    accent: "#66d889",
-    visual: "spectrum",
-    ratio: "tall",
-    summary: "A lively product story using close-up shots, handmade graphics, and a fast social edit.",
-    challenge: "Give a small product range a strong and professional look across video and static design.",
-    concept: "Fresh color, direct text, and handmade details bring the ingredients to life.",
-    approach: ["Shot selection", "Texture library", "Type animation", "Platform versioning"],
-    deliverables: ["20s ad", "6s bumpers", "Product carousel", "Retail poster"],
-    tools: ["Premiere Pro", "After Effects", "Photoshop"],
-  },
-  {
-    id: "prj_open_signal",
-    slug: "open-signal-title-sequence",
-    title: "Open Signal",
-    index: "06",
-    category: "2D Motion",
-    services: ["2D Motion", "Graphic Design"],
-    industry: "Film & Media",
-    client: "Concept Study",
-    year: 2025,
-    featured: true,
-    accent: "#ff8e8e",
-    visual: "type",
-    ratio: "wide",
-    summary: "A title sequence where moving text feels like a broadcast signal coming into focus.",
-    challenge: "Set the mood for a documentary before the first person begins to speak.",
-    concept: "Scan lines, notes, and moving type slowly come together into one clear message.",
-    approach: ["Reference edit", "Typographic tests", "Transition grammar", "Final compositing"],
-    deliverables: ["45s title sequence", "Lower thirds", "Chapter cards", "Credit package"],
-    tools: ["After Effects", "Illustrator", "DaVinci Resolve"],
-  },
-  {
-    id: "prj_one_more_frame",
-    slug: "one-more-frame-series",
-    title: "One More Frame",
-    index: "07",
-    category: "YouTube",
-    services: ["YouTube", "Graphic Design"],
-    industry: "Creator Economy",
-    client: "Concept Study",
-    year: 2026,
-    featured: false,
-    accent: "#c9ff43",
-    visual: "frame",
-    ratio: "square",
-    summary: "A reusable editing and design system for video essays, chapter graphics, thumbnails, and short clips.",
-    challenge: "Keep weekly videos consistent without making every episode look the same.",
-    concept: "Editing marks, image crops, and story notes become part of the channel style.",
-    approach: ["Content review", "Main edit", "Thumbnail design", "Reusable motion templates"],
-    deliverables: ["12-minute edit", "Thumbnail set", "Chapter system", "Five shorts"],
-    tools: ["Premiere Pro", "After Effects", "Photoshop"],
-  },
-  {
-    id: "prj_future_tastes",
-    slug: "future-tastes-social-system",
-    title: "Future Tastes",
-    index: "08",
-    category: "Social Media",
-    services: ["Social Media", "2D Motion"],
-    industry: "Hospitality",
-    client: "Concept Study",
-    year: 2026,
-    featured: false,
-    accent: "#bd8cff",
-    visual: "orbit",
-    ratio: "vertical",
-    summary: "A bright motion and design system for launches, menus, stories, and regular social posts.",
-    challenge: "Create a social style that is easy to use every day and strong enough to catch attention.",
-    concept: "Clear type, soft shapes, and quick movement give the brand a fresh look.",
-    approach: ["Content plan", "Motion style", "Template library", "Team handoff"],
-    deliverables: ["Launch reel", "18 post templates", "12 story layouts", "Motion guide"],
-    tools: ["After Effects", "Photoshop", "Figma"],
-  },
-  {
-    id: "prj_detail_matters",
-    slug: "detail-matters-poster-set",
-    title: "Detail Matters",
-    index: "09",
-    category: "Posters",
-    services: ["Graphic Design"],
-    industry: "Design & Culture",
-    client: "Self-initiated",
-    year: 2025,
-    featured: false,
-    accent: "#ff6338",
-    visual: "editorial",
-    ratio: "tall",
-    summary: "A poster series that explores type, space, scale, and printed texture.",
-    challenge: "Keep one clear series style while giving every poster its own layout.",
-    concept: "Each poster follows one simple design rule and removes anything unnecessary.",
-    approach: ["Layout studies", "Type pairing", "Print texture", "Final selection"],
-    deliverables: ["12 poster artworks", "Social crops", "Print-ready masters"],
-    tools: ["Photoshop", "Illustrator", "InDesign"],
-  },
-  {
-    id: "prj_ten_second_story",
-    slug: "ten-second-story",
-    title: "Ten Second Story",
-    index: "10",
-    category: "Short-Form",
-    services: ["Video Editing", "Social Media"],
-    industry: "Lifestyle",
-    client: "Concept Study",
-    year: 2026,
-    featured: false,
-    accent: "#61d7e8",
-    visual: "signal",
-    ratio: "vertical",
-    summary: "A set of ten-second vertical videos with a clear opening, change, and ending.",
-    challenge: "Create several very short edits without making them loud or repetitive.",
-    concept: "Each video uses one simple action: fold, snap, reveal, or repeat.",
-    approach: ["Opening ideas", "Short storyboards", "Sound timing", "Final versions"],
-    deliverables: ["Eight vertical edits", "Caption styles", "Cover frames"],
-    tools: ["Premiere Pro", "After Effects", "Audition"],
-  },
-  {
-    id: "prj_quiet_power",
-    slug: "quiet-power-brand-film",
-    title: "Quiet Power",
-    index: "11",
-    category: "Branding",
-    services: ["Video Editing", "Brand Visuals"],
-    industry: "Wellness",
-    client: "Concept Study",
-    year: 2025,
-    featured: false,
-    accent: "#d8c5a3",
-    visual: "spectrum",
-    ratio: "wide",
-    summary: "A calm brand video using natural images, slow pace, and simple typography.",
-    challenge: "Create a peaceful feeling while keeping the video clear and memorable.",
-    concept: "Slow camera movement, clean edits, and carefully placed text create quiet confidence.",
-    approach: ["Mood edit", "Pacing plan", "Simple graphic style", "Color finish"],
-    deliverables: ["75s brand film", "15s cutdown", "Still campaign set"],
-    tools: ["Premiere Pro", "DaVinci Resolve", "After Effects"],
-  },
-  {
-    id: "prj_abstract_index",
-    slug: "abstract-index-thumbnails",
-    title: "Abstract Index",
-    index: "12",
-    category: "Thumbnails",
-    services: ["Graphic Design", "YouTube"],
-    industry: "Education",
-    client: "Concept Study",
-    year: 2026,
-    featured: false,
-    accent: "#7aa7ff",
-    visual: "type",
-    ratio: "square",
-    summary: "A thumbnail system that builds interest with clear type and strong image choices.",
-    challenge: "Make covers that are easy to read at small sizes and consistent across many topics.",
-    concept: "One subject, one short phrase, and one clear visual detail lead each thumbnail.",
-    approach: ["Content groups", "Small-size tests", "Layout options", "Archive system"],
-    deliverables: ["20 thumbnail concepts", "Source templates", "Usage matrix"],
-    tools: ["Photoshop", "Illustrator", "Figma"],
-  },
-];
-
+export const projects: Project[] = [];
 export type Service = {
   slug: string;
   number: string;
@@ -566,7 +265,7 @@ export const services: Service[] = [
   },
 ];
 
-export const categories = ["All", ...Array.from(new Set(projects.map((project) => project.category)))];
+export const categories = ["All"];
 
 export function getProject(slug: string) {
   return projects.find((project) => project.slug === slug);
@@ -586,10 +285,7 @@ export function filterProjects(
     return (
       (!query || searchable.includes(query)) &&
       (!options.discipline || options.discipline === "All" || projectMatchesDiscipline(project, options.discipline)) &&
-      (!options.category || options.category === "All" ||
-        (showcaseCategories.some((item) => item.value === options.category)
-          ? projectMatchesShowcaseCategory(project, options.category as ShowcaseCategory)
-          : project.category === options.category)) &&
+      (!options.category || options.category === "All" || projectMatchesShowcaseCategory(project, options.category)) &&
       (!options.industry || options.industry === "All" || project.industry === options.industry) &&
       (!options.year || options.year === "All" || String(project.year) === options.year)
     );

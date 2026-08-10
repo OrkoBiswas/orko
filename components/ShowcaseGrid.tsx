@@ -1,12 +1,9 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { ProjectArtwork } from "@/components/ProjectArtwork";
-import type { Project, ShowcaseCategory as ShowcaseCategoryValue } from "@/lib/portfolio";
+import type { Project, ShowcaseCategoryDefinition } from "@/lib/portfolio";
 
-export type ShowcaseCategory = {
-  value: ShowcaseCategoryValue;
-  label: string;
-  description: string;
+export type ShowcaseCategory = ShowcaseCategoryDefinition & {
   cover: Project;
   workCount: number;
 };

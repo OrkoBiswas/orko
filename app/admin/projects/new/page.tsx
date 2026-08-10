@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { requireOwner } from "@/lib/admin";
 import { listPortfolioProjects } from "@/db/repository";
-import { getShowcaseCategory, projects } from "@/lib/portfolio";
+import { projects } from "@/lib/portfolio";
 import { createProjectTemplate } from "@/lib/project-content";
 import { AdminShell } from "@/components/AdminShell";
 import { AdminProjectEditor } from "@/components/AdminProjectEditor";
@@ -16,7 +16,7 @@ export default async function NewAdminProjectPage({ searchParams }: { searchPara
   const user = await requireOwner("/admin/projects/new");
   const managed = await listPortfolioProjects(projects);
   const requested = await searchParams;
-  const category = getShowcaseCategory(first(requested.category));
-  const template = createProjectTemplate(managed.length, category?.label);
-  return <AdminShell user={user} eyebrow="Portfolio library" title={category ? "Add " + category.label : "Add project"} actions={<Link className="admin-secondary-action" href="/admin/projects"><ArrowLeft aria-hidden="true" /> Back to projects</Link>}><AdminProjectEditor initial={template} mode="create" /></AdminShell>;
+  const category = first(requested.category).trim();
+  const template = createProjectTemplate(managed.length, category);
+  return <AdminShell user={user} eyebrow="Portfolio library" title={category ? "Add " + category : "Add project"} actions={<Link className="admin-secondary-action" href="/admin/projects"><ArrowLeft aria-hidden="true" /> Back to projects</Link>}><AdminProjectEditor initial={template} mode="create" /></AdminShell>;
 }
