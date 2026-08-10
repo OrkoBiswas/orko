@@ -9,6 +9,7 @@ import type { SiteContent } from "@/lib/site-content";
 type ScalarSiteContentKey = { [Key in keyof SiteContent]: SiteContent[Key] extends string ? Key : never }[keyof SiteContent];
 type Experience = SiteContent["experiences"][number];
 type Testimonial = SiteContent["testimonials"][number];
+type AboutGalleryItem = SiteContent["aboutGallery"][number];
 type SignatureResponse = { ok?: boolean; cloudName?: string; apiKey?: string; signature?: string; params?: Record<string, string>; message?: string };
 type UploadResponse = { secure_url?: string; resource_type?: string; error?: { message?: string } };
 
@@ -16,6 +17,7 @@ const groups: Array<{ title: string; description: string; fields: Array<[ScalarS
   { title: "Identity", description: "The name and positioning used across navigation, metadata, and profile pages.", fields: [["name","Public name","text"],["monogram","Monogram","text"],["title","Professional title","text"],["shortTitle","Short descriptor","text"]] },
   { title: "Homepage hero", description: "The first message visitors see and the primary hiring signal.", fields: [["headline","Accessible headline","text"],["heroLineOne","Headline — first line","text"],["heroLineTwo","Headline — accent line","text"],["intro","Opening introduction","textarea"],["availability","Availability","text"],["location","Location","text"],["timezone","Timezone","text"],["responseTime","Response time","text"]] },
   { title: "Homepage sections", description: "Editorial messaging for the work library, showreel, capabilities, experience, and testimonial sections.", fields: [["workHeading","Work heading","text"],["workIntro","Work introduction","textarea"],["showreelHeading","Showreel heading","text"],["showreelIntro","Showreel introduction","textarea"],["capabilitiesHeading","Capabilities heading","text"],["capabilitiesIntro","Capabilities introduction","textarea"],["experienceHeading","Experience heading","text"],["experienceIntro","Experience introduction","textarea"],["testimonialsHeading","Testimonials heading","text"],["testimonialsIntro","Testimonials introduction","textarea"]] },
+  { title: "About page", description: "Keep the personal story concise. These notes explain your work life, career direction, and how you care for client projects.", fields: [["aboutWorkLife","Work-life note","textarea"],["aboutCareer","Career note","textarea"],["aboutClientCare","Client-care note","textarea"]] },
   { title: "Profile & contact", description: "Public biography, direct contact, social profiles, and calls to action.", fields: [["biography","Biography","textarea"],["email","Contact email","email"],["primaryCta","Primary button label","text"],["secondaryCta","Secondary button label","text"],["instagram","Instagram URL","url"],["linkedin","LinkedIn URL","url"],["behance","Behance URL","url"]] },
   { title: "Search visibility", description: "Default title and description used when the portfolio is shared or discovered.", fields: [["seoTitle","SEO title","text"],["seoDescription","SEO description","textarea"]] },
 ];
@@ -28,6 +30,7 @@ export function AdminContentForm({ initial }: { initial: SiteContent }) {
   const [content, setContent] = useState(initial);
   const [busy, setBusy] = useState(false);
   const [uploadingPortrait, setUploadingPortrait] = useState(false);
+  const [uploadingAboutPhoto, setUploadingAboutPhoto] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [saved, setSaved] = useState(false);
 
@@ -45,14 +48,41 @@ export function AdminContentForm({ initial }: { initial: SiteContent }) {
       for (const [key, value] of Object.entries(signed.params)) form.set(key, value);
       const response = await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(signed.cloudName)}/image/upload`, { method: "POST", body: form });
       const uploaded = await response.json().catch(() => ({})) as UploadResponse;
-      if (!response.ok || !uploaded.secure_url || uploaded.resource_type !== "image") throw new Error(uploaded.error?.message ?? "The portrait could not be uploaded.");
+      if (!response.ok || !uploaded.secure_url || uploaded.resource_type !== "image") throw new Error("The portrait could not be uploaded.");
       setContent((current) => ({ ...current, profileImageUrl: uploaded.secure_url ?? "", profileImageAlt: current.profileImageAlt || `Portrait of ${current.name}` }));
       setMessage("Portrait uploaded. Save public content to publish it.");
       notifyAdmin({ tone: "success", title: "Portrait uploaded", message: "The image is ready. Save public content to publish it in About & experience." });
-    } catch (error) {
-      setMessage(error instanceof Error ? error.message : "The portrait could not be uploaded.");
+    } catch {
+      setMessage("The portrait could not be uploaded. Please try again.");
       notifyAdmin({ tone: "error", title: "Upload not completed", message: "The portrait image could not be uploaded. Please try again." });
     } finally { setUploadingPortrait(false); }
+  }
+
+  async function uploadAboutGalleryPhoto(id: string, file?: File) {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) { setSaved(false); setMessage("Choose an image file for the About gallery."); return; }
+    if (file.size > 15 * 1024 * 1024) { setSaved(false); setMessage("Each About gallery image must be smaller than 15 MB."); return; }
+    setUploadingAboutPhoto(id); setSaved(false); setMessage("");
+    try {
+      const signatureResponse = await fetch("/api/admin/media/signature", { method: "POST" });
+      const signed = await signatureResponse.json().catch(() => ({ message: "Upload authorization failed." })) as SignatureResponse;
+      if (!signatureResponse.ok || !signed.ok || !signed.cloudName || !signed.apiKey || !signed.signature || !signed.params) throw new Error(signed.message ?? "Upload authorization failed.");
+      const form = new FormData();
+      form.set("file", file); form.set("api_key", signed.apiKey); form.set("signature", signed.signature);
+      for (const [key, value] of Object.entries(signed.params)) form.set(key, value);
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(signed.cloudName)}/image/upload`, { method: "POST", body: form });
+      const uploaded = await response.json().catch(() => ({})) as UploadResponse;
+      if (!response.ok || !uploaded.secure_url || uploaded.resource_type !== "image") throw new Error("The gallery photo could not be uploaded.");
+      setContent((current) => ({
+        ...current,
+        aboutGallery: current.aboutGallery.map((item) => item.id === id ? { ...item, url: uploaded.secure_url ?? "" } : item),
+      }));
+      setMessage("Gallery photo uploaded. Save public content to publish it.");
+      notifyAdmin({ tone: "success", title: "Gallery photo uploaded", message: "The image is ready. Save public content to publish it on the About page." });
+    } catch {
+      setMessage("The gallery photo could not be uploaded. Please try again.");
+      notifyAdmin({ tone: "error", title: "Upload not completed", message: "The About gallery image could not be uploaded. Please try again." });
+    } finally { setUploadingAboutPhoto(null); }
   }
 
   async function save(event: React.FormEvent) {
@@ -78,6 +108,21 @@ export function AdminContentForm({ initial }: { initial: SiteContent }) {
 
   function removeExperience(id: string) {
     setContent((current) => ({ ...current, experiences: current.experiences.filter((item) => item.id !== id) }));
+  }
+
+  function updateAboutGalleryItem(id: string, field: keyof Omit<AboutGalleryItem, "id">, value: string) {
+    setContent((current) => ({ ...current, aboutGallery: current.aboutGallery.map((item) => item.id === id ? { ...item, [field]: value } : item) }));
+  }
+
+  function addAboutGalleryItem() {
+    setContent((current) => ({
+      ...current,
+      aboutGallery: [...current.aboutGallery, { id: recordId("about-photo"), url: "", alt: `Orko Biswas at work`, caption: "" }],
+    }));
+  }
+
+  function removeAboutGalleryItem(id: string) {
+    setContent((current) => ({ ...current, aboutGallery: current.aboutGallery.filter((item) => item.id !== id) }));
   }
 
   function updateTestimonial(id: string, field: keyof Omit<Testimonial, "id">, value: string) {
@@ -115,6 +160,24 @@ export function AdminContentForm({ initial }: { initial: SiteContent }) {
           </div>
         </div>
       </section>
+      <section className="admin-form-section admin-collection-section admin-about-gallery-section">
+        <div className="admin-form-intro"><h2>About photo gallery</h2><p>Add real photos from your work life, studio, career, or creative process. Each photo can have a short caption and accessible description.</p><button className="admin-add-button" type="button" onClick={addAboutGalleryItem} disabled={content.aboutGallery.length >= 8 || Boolean(uploadingAboutPhoto)}><Plus aria-hidden="true" />Add photo</button></div>
+        <div className="admin-record-list">
+          {content.aboutGallery.length > 0 ? content.aboutGallery.map((photo, index) => <fieldset className="admin-record admin-about-photo-record" key={photo.id}>
+            <legend>About photo {String(index + 1).padStart(2, "0")}</legend>
+            <button className="admin-remove-button" type="button" onClick={() => removeAboutGalleryItem(photo.id)} disabled={Boolean(uploadingAboutPhoto)} aria-label={`Remove About photo ${index + 1}`}><Trash2 aria-hidden="true" />Remove</button>
+            <div className={`admin-about-photo-preview${photo.url ? " has-image" : ""}`}>
+              {photo.url ? <img src={photo.url} alt={photo.alt || "About gallery preview"} /> : <div><ImageUp aria-hidden="true" /><span>No image attached</span></div>}
+            </div>
+            <div className="admin-form-grid">
+              <label className="admin-field-wide"><span>Secure image URL</span><input type="url" placeholder="https://res.cloudinary.com/..." value={photo.url} onChange={(event) => updateAboutGalleryItem(photo.id, "url", event.target.value)} /></label>
+              <label><span>Image description</span><input value={photo.alt} placeholder="Describe what is visible" onChange={(event) => updateAboutGalleryItem(photo.id, "alt", event.target.value)} /></label>
+              <label><span>Short caption (optional)</span><input value={photo.caption} placeholder="Studio day, Dhaka" onChange={(event) => updateAboutGalleryItem(photo.id, "caption", event.target.value)} /></label>
+            </div>
+            <label className="admin-media-attach admin-about-photo-upload"><input type="file" accept="image/*" disabled={Boolean(uploadingAboutPhoto)} onChange={(event) => { const file = event.currentTarget.files?.[0]; event.currentTarget.value = ""; void uploadAboutGalleryPhoto(photo.id, file); }} /><ImageUp aria-hidden="true" />{uploadingAboutPhoto === photo.id ? "Uploading..." : photo.url ? "Replace image" : "Upload image"}</label>
+          </fieldset>) : <div className="admin-record-empty"><p>No About gallery photos yet.</p><span>Add only real images that you are comfortable showing publicly. The gallery stays hidden until a photo is published.</span></div>}
+        </div>
+      </section>
       <section className="admin-form-section admin-collection-section">
         <div className="admin-form-intro"><h2>Work experience</h2><p>Add current and past workplaces, roles, dates, locations, and a short description. Keep only information you want visitors to see.</p><button className="admin-add-button" type="button" onClick={addExperience} disabled={content.experiences.length >= 8}><Plus aria-hidden="true" />Add experience</button></div>
         <div className="admin-record-list">
@@ -149,7 +212,7 @@ export function AdminContentForm({ initial }: { initial: SiteContent }) {
           </fieldset>) : <div className="admin-record-empty"><p>No testimonials published.</p><span>The public site will show an honest approved-feedback notice instead of a fake quote.</span></div>}
         </div>
       </section>
-      <div className="admin-save-bar"><div>{message && <p className={saved ? "is-success" : "is-error"} role="status">{saved && <Check aria-hidden="true" />}{message}</p>}</div><button type="submit" disabled={busy || uploadingPortrait}>{busy ? <LoaderCircle className="spin" aria-hidden="true" /> : <Save aria-hidden="true" />}{busy ? "Saving…" : "Save public content"}</button></div>
+      <div className="admin-save-bar"><div>{message && <p className={saved ? "is-success" : "is-error"} role="status">{saved && <Check aria-hidden="true" />}{message}</p>}</div><button type="submit" disabled={busy || uploadingPortrait || Boolean(uploadingAboutPhoto)}>{busy ? <LoaderCircle className="spin" aria-hidden="true" /> : <Save aria-hidden="true" />}{busy ? "Saving…" : "Save public content"}</button></div>
     </form>
   );
 }

@@ -92,6 +92,17 @@ export const footerContent = {
   identityNote: "Video editing, motion design, and graphic design for brands, businesses, and creators.",
 } as const;
 
+export const aboutPageContent = {
+  headlineLead: "A visual designer",
+  headlineAccent: "who keeps ideas clear.",
+  workLifeHeading: "Curious by habit.",
+  workLife: "My workday moves between editing timelines, motion tests, layout studies, and the small details that make a visual feel finished.",
+  careerHeading: "Growing with every brief.",
+  career: "I am building an independent creative career by solving real communication problems for brands, businesses, and creators.",
+  clientCareHeading: "Clear from start to finish.",
+  clientCare: "I listen carefully, explain decisions in simple language, keep feedback organized, and deliver work that is ready to use.",
+} as const;
+
 export const workDisciplines = [
   { value: "video", label: "Video" },
   { value: "motion", label: "Motion" },

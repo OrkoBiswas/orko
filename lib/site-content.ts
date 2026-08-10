@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { brand } from "@/lib/brand";
-import { showreelMedia } from "@/lib/portfolio";
+import { aboutPageContent, showreelMedia } from "@/lib/portfolio";
 
 const textField = z.string().trim().min(1).max(500);
 const longTextField = z.string().trim().min(1).max(3000);
@@ -37,6 +37,13 @@ const testimonialSchema = z.object({
   mediaAlt: optionalTextField.max(300).default(""),
 });
 
+const aboutGalleryItemSchema = z.object({
+  id: textField.max(120),
+  url: optionalAssetUrl.refine(Boolean, "Upload an About photo or enter its secure Cloudinary URL."),
+  alt: textField.max(240),
+  caption: optionalTextField.max(180),
+});
+
 export const siteContentSchema = z.object({
   name: textField.max(80),
   monogram: textField.max(6),
@@ -59,6 +66,10 @@ export const siteContentSchema = z.object({
   behance: optionalUrl,
   profileImageUrl: optionalAssetUrl.default(""),
   profileImageAlt: optionalTextField.max(240).default(""),
+  aboutWorkLife: longTextField.max(900).default(aboutPageContent.workLife),
+  aboutCareer: longTextField.max(900).default(aboutPageContent.career),
+  aboutClientCare: longTextField.max(900).default(aboutPageContent.clientCare),
+  aboutGallery: z.array(aboutGalleryItemSchema).max(8).default([]),
   logoUrl: optionalAssetUrl.default(""),
   logoAlt: optionalTextField.max(160).default(""),
   logoWidth: z.number().int().min(20).max(200).default(180),
@@ -119,6 +130,10 @@ export const defaultSiteContent: SiteContent = {
   behance: brand.social.behance,
   profileImageUrl: "",
   profileImageAlt: "Portrait of Orko Biswas",
+  aboutWorkLife: aboutPageContent.workLife,
+  aboutCareer: aboutPageContent.career,
+  aboutClientCare: aboutPageContent.clientCare,
+  aboutGallery: [],
   logoUrl: "",
   logoAlt: "Orko Biswas logo",
   logoWidth: 180,

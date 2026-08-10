@@ -31,14 +31,17 @@ test("server-renders the finished portfolio homepage", async () => {
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|Your site is taking shape/i);
 });
 
-test("about page includes the managed work history", async () => {
+test("about page presents the compact managed story and work history", async () => {
   const response = await request("/about");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /About me/);
-  assert.match(html, /About &amp; experience/);
+  assert.match(html, /About Orko/);
+  assert.match(html, /Work, life &amp; trust/);
+  assert.match(html, /Client care/);
   assert.match(html, /Independent creative practice/);
   assert.match(html, /Bangladesh/);
+  assert.doesNotMatch(html, /Every cut has a purpose|The right tool for each job/);
+  assert.doesNotMatch(html, /about-photo-journal/);
 });
 
 test("work archive renders a clean empty-library state", async () => {

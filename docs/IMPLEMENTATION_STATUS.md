@@ -76,6 +76,8 @@ Last updated: 2026-08-10
 
 - Refined the homepage “About & experience” composition into a compact, screen-conscious introduction. Its headline uses a lighter, smaller scale; the portrait, profile details, spacing, and history rows are shorter; and dedicated mobile rules preserve readable touch-friendly content without changing the fuller About page presentation.
 
+- Rebuilt the About page as a clean editorial profile with restrained typography, a concise personal introduction, work-life, career, client-care, experience, and creative-focus chapters. Removed the older repeated hero, editing/design cards, tool explanation, and duplicated experience presentation. Added an owner-managed photo journal with secure Cloudinary image uploads, captions, accessible descriptions, automatic empty-state hiding, durable content validation, dashboard notifications, and responsive layouts down to 320px.
+
 ## Validation
 
 - Lint: passed.

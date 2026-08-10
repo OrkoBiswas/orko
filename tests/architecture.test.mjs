@@ -347,3 +347,30 @@ test("owner portrait and owner-created category portfolio stay secure, durable, 
   assert.match(css, /max-height: min\(78svh, 880px\)/);
   assert.match(css, /\.project-detail-page \.project-intro h1/);
 });
+
+test("about story and photo journal stay compact, owner-managed, and securely uploaded", async () => {
+  const [contentModel, editor, aboutPage, portfolio, signatureRoute, css] = await Promise.all([
+    readFile(new URL("lib/site-content.ts", root), "utf8"),
+    readFile(new URL("components/AdminContentForm.tsx", root), "utf8"),
+    readFile(new URL("app/about/page.tsx", root), "utf8"),
+    readFile(new URL("lib/portfolio.ts", root), "utf8"),
+    readFile(new URL("app/api/admin/media/signature/route.ts", root), "utf8"),
+    readFile(new URL("app/globals.css", root), "utf8"),
+  ]);
+  assert.match(contentModel, /aboutGalleryItemSchema/);
+  assert.match(contentModel, /aboutGallery: z\.array\(aboutGalleryItemSchema\)\.max\(8\)/);
+  assert.match(contentModel, /aboutClientCare/);
+  assert.match(editor, /About photo gallery/);
+  assert.match(editor, /uploadAboutGalleryPhoto/);
+  assert.match(editor, /accept="image\/\*"/);
+  assert.match(editor, /Save public content to publish it on the About page/);
+  assert.match(signatureRoute, /getOwner/);
+  assert.match(signatureRoute, /requireSameOrigin/);
+  assert.match(aboutPage, /content\.aboutGallery\.filter/);
+  assert.match(aboutPage, /about-photo-journal/);
+  assert.match(aboutPage, /Work, life &amp; trust/);
+  assert.match(portfolio, /aboutPageContent/);
+  assert.match(css, /Compact editorial About page/);
+  assert.match(css, /@media \(max-width: 360px\)/);
+  assert.match(css, /prefers-reduced-motion: reduce/);
+});

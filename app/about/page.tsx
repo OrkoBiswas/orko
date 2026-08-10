@@ -1,20 +1,98 @@
+/* eslint-disable @next/next/no-img-element -- About photos use owner-managed, validated Cloudinary delivery URLs. */
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
-import { PageHero } from "@/components/PageHero";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { getSiteContent } from "@/db/repository";
-import { ExperienceSection } from "@/components/ExperienceSection";
+import { aboutPageContent } from "@/lib/portfolio";
 
-export const metadata: Metadata = { title: "About", description: "About Orko Biswas, a video editor, motion designer, and graphic designer." };
+export const metadata: Metadata = {
+  title: "About",
+  description: "Meet Orko Biswas and learn about his visual design practice, career, work life, and approach to client projects.",
+};
 export const dynamic = "force-dynamic";
 
 export default async function AboutPage() {
   const content = await getSiteContent();
-  return <>
-    <PageHero index="03" eyebrow="About Orko" title={<>Creative work<br /><em>made clear.</em></>} intro="I combine video editing, motion graphics, and graphic design to help ideas look strong and easy to understand." />
-    <section className="editorial-section section-shell"><div className="editorial-grid"><p className="eyebrow">About me</p><div className="editorial-copy"><h2>I turn ideas into visual work people can follow.</h2><p>{content.biography}</p><div className="split-cards"><article><span>01 / Editing</span><h3>Every cut has a purpose.</h3><p>I use pace, sound, text, and images to keep the story clear and hold attention.</p></article><article><span>02 / Design</span><h3>Clear before decorative.</h3><p>I build strong layouts and motion that support the message instead of hiding it.</p></article></div></div></div></section>
-    <ExperienceSection content={content} index="Experience" showProfile={false} />
-    <section className="editorial-section dark-section"><div className="editorial-grid section-shell"><p className="eyebrow">How I work</p><div className="editorial-copy"><h2>Good questions.<br /><em>Clean delivery.</em></h2><p>I ask the important questions early, explain the creative direction, and keep feedback focused on the project goal.</p><div className="skills-cloud">{["Story editing","Video pacing","Motion graphics","Animated text","Art direction","Campaign versions","Sound timing","Social formats","Organized files","Clear captions"].map((item) => <span key={item}>{item}</span>)}</div></div></div></section>
-    <section className="editorial-section section-shell"><div className="editorial-grid"><p className="eyebrow">Tools</p><div className="editorial-copy"><h2>The right tool for each job.</h2><p>I use Premiere Pro and DaVinci Resolve for editing and finishing, After Effects for motion, and Photoshop, Illustrator, and Figma for design.</p><Link className="text-link" href="/resume">View my résumé <ArrowUpRight aria-hidden="true" /></Link></div></div></section>
-  </>;
+  const gallery = content.aboutGallery.filter((item) => item.url);
+  const expertise = content.expertiseAreas.split(",").map((item) => item.trim()).filter(Boolean).slice(0, 8);
+
+  return <main className="about-page">
+    <section className="about-intro section-shell">
+      <div className="about-intro-rail">
+        <p className="eyebrow"><span>03</span>About Orko</p>
+        <p>{content.shortTitle}</p>
+      </div>
+      <div className="about-intro-grid">
+        <div className="about-intro-copy" data-reveal>
+          <h1>{aboutPageContent.headlineLead}<br /><em>{aboutPageContent.headlineAccent}</em></h1>
+          <p>{content.biography}</p>
+          <div className="about-intro-actions">
+            <Link className="button button-dark" href="/work">See selected work <ArrowRight aria-hidden="true" /></Link>
+            <Link className="text-link" href="/start-a-project">Start a project <ArrowUpRight aria-hidden="true" /></Link>
+          </div>
+        </div>
+        <figure className={`about-portrait${content.profileImageUrl ? " has-image" : ""}`} data-reveal>
+          {content.profileImageUrl
+            ? <img src={content.profileImageUrl} alt={content.profileImageAlt || `Portrait of ${content.name}`} fetchPriority="high" />
+            : <div className="about-portrait-fallback" aria-label={`Portrait placeholder for ${content.name}`}><span>{content.monogram}</span></div>}
+          <figcaption><strong>{content.name}</strong><span>{content.location}</span></figcaption>
+        </figure>
+      </div>
+      <dl className="about-facts" data-reveal>
+        <div><dt>Based in</dt><dd>{content.location}</dd></div>
+        <div><dt>Practice</dt><dd>Independent</dd></div>
+        <div><dt>Working with</dt><dd>{content.serviceArea}</dd></div>
+        <div><dt>Status</dt><dd>{content.availability}</dd></div>
+      </dl>
+    </section>
+
+    <section className="about-story section-shell">
+      <header className="about-section-head" data-reveal>
+        <p className="eyebrow"><span>01</span>Work, life &amp; trust</p>
+        <h2>Creative work should feel<br /><em>clear and human.</em></h2>
+      </header>
+      <div className="about-story-list">
+        <article data-reveal><span>01</span><div><p>Work life</p><h3>{aboutPageContent.workLifeHeading}</h3><p>{content.aboutWorkLife}</p></div></article>
+        <article data-reveal><span>02</span><div><p>Career</p><h3>{aboutPageContent.careerHeading}</h3><p>{content.aboutCareer}</p></div></article>
+        <article data-reveal><span>03</span><div><p>Client care</p><h3>{aboutPageContent.clientCareHeading}</h3><p>{content.aboutClientCare}</p></div></article>
+      </div>
+    </section>
+
+    {gallery.length > 0 && <section className="about-photo-journal">
+      <div className="about-photo-head section-shell" data-reveal>
+        <p className="eyebrow"><span>02</span>Photo journal</p>
+        <div><h2>A little life<br /><em>behind the work.</em></h2><p>Real moments from the studio, daily practice, and the journey around each project.</p></div>
+      </div>
+      <div className="about-photo-grid section-shell">
+        {gallery.map((photo, index) => <figure key={photo.id} className={`about-photo about-photo-${index % 4}`} data-reveal>
+          <img src={photo.url} alt={photo.alt} loading="lazy" />
+          {photo.caption && <figcaption><span>{String(index + 1).padStart(2, "0")}</span>{photo.caption}</figcaption>}
+        </figure>)}
+      </div>
+    </section>}
+
+    <section className="about-career section-shell">
+      <header className="about-section-head" data-reveal>
+        <p className="eyebrow"><span>03</span>Career path</p>
+        <h2>Experience,<br /><em>kept useful.</em></h2>
+        <p>{content.experienceIntro}</p>
+      </header>
+      {content.experiences.length > 0 ? <ol className="about-career-list">
+        {content.experiences.map((experience, index) => <li key={experience.id} data-reveal>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <div><p>{experience.organization}</p><h3>{experience.role}</h3><p>{experience.summary}</p></div>
+          <dl><div><dt>Period</dt><dd>{experience.period}</dd></div><div><dt>Place</dt><dd>{experience.location}</dd></div></dl>
+        </li>)}
+      </ol> : <p className="about-career-empty">Career details will appear here when they are ready to publish.</p>}
+    </section>
+
+    <section className="about-focus section-shell">
+      <div className="about-focus-title" data-reveal><p className="eyebrow"><span>04</span>Creative focus</p><h2>Flexible skills.<br /><em>One clear direction.</em></h2></div>
+      <div className="about-focus-body" data-reveal>
+        <p>I bring editing, motion, and design together when a project needs more than one format. The goal stays simple: make the idea easy to understand and good to experience.</p>
+        {expertise.length > 0 && <ul aria-label="Creative expertise">{expertise.map((item) => <li key={item}>{item}</li>)}</ul>}
+        <Link className="text-link" href="/services">Explore services <ArrowUpRight aria-hidden="true" /></Link>
+      </div>
+    </section>
+  </main>;
 }
