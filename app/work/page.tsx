@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { WorkLibrary } from "@/components/WorkLibrary";
 import { listPortfolioProjects } from "@/db/repository";
 import { deriveShowcaseCategories, projectMatchesShowcaseCategory, projects, workDisciplines, type WorkDiscipline } from "@/lib/portfolio";
@@ -24,24 +24,24 @@ export default async function WorkPage({ searchParams }: { searchParams: Promise
   const initialFilters = { query: first(requested.q), discipline, category: first(requested.category), industry: first(requested.industry), year: first(requested.year) };
   return (
     <div className="work-page">
-      <header className="work-intro section-shell">
-        <div className="work-intro-top"><p className="eyebrow"><span>01</span>Selected work</p><span>{String(liveProjects.length).padStart(2, "0")} published projects</span></div>
-        <div className="work-intro-main">
-          <h1>Work made to<br /><em>earn attention.</em></h1>
-          <div><p>A focused collection of visual design, motion, video, and digital work. Choose a category or browse the complete archive.</p><div className="work-intro-actions"><a className="button button-accent" href="#work-library">Browse projects <ArrowDown aria-hidden="true" /></a><Link className="text-link" href="/start-a-project">Discuss your project <ArrowUpRight aria-hidden="true" /></Link></div></div>
+      <header className="work-gallery-hero section-shell">
+        <div className="work-gallery-top"><p className="eyebrow"><span>01</span>Portfolio archive</p><p>Orko Biswas · Visual designer</p></div>
+        <div className="work-gallery-main">
+          <div className="work-gallery-title"><span aria-hidden="true" /><h1>Selected<br /><em>work.</em></h1></div>
+          <div className="work-gallery-copy"><p>A collection of brand, motion, video, and digital projects. Open a category or browse the full library below.</p><small>Clear ideas, strong visual direction, and useful final work.</small><div><a className="work-gallery-scroll" href="#project-library">View the projects <ArrowDown aria-hidden="true" /></a><Link className="text-link" href="/start-a-project">Discuss your project <ArrowUpRight aria-hidden="true" /></Link></div></div>
         </div>
-        <div className="work-intro-foot"><span>Clear ideas</span><span>Strong visual direction</span><span>Useful final work</span></div>
+        <div className="work-gallery-foot"><p><strong>{String(liveProjects.length).padStart(2, "0")}</strong><span>Published projects</span></p><p>Design · Motion · Video · Digital</p></div>
       </header>
 
-      {categories.length > 0 && <nav className="work-category-index section-shell" aria-label="Browse work by category">
-        <div className="work-category-index-head"><p className="eyebrow">Explore by category</p><p>Start with the kind of work you need.</p></div>
-        <div className="work-category-index-links">{categories.map((category, index) => {
+      {categories.length > 0 && <nav className="work-gallery-categories section-shell" aria-label="Browse work by category">
+        <div className="work-gallery-categories-head"><p className="eyebrow">Browse by category</p><h2>Find the work<br />you need.</h2><p>Each category opens a complete collection of related projects.</p></div>
+        <div className="work-gallery-category-list">{categories.map((category, index) => {
           const count = liveProjects.filter((project) => projectMatchesShowcaseCategory(project, category.value)).length;
-          return <Link href={`/work/category/${category.value}`} key={category.value}><span>{String(index + 1).padStart(2, "0")}</span><strong>{category.label}</strong><small>{String(count).padStart(2, "0")} projects</small><ArrowRight aria-hidden="true" /></Link>;
+          return <Link href={`/work/category/${category.value}`} key={category.value}><span>{String(index + 1).padStart(2, "0")}</span><strong>{category.label}</strong><small>{String(count).padStart(2, "0")}</small><ArrowUpRight aria-hidden="true" /></Link>;
         })}</div>
       </nav>}
 
-      <section id="work-library" className="work-library-section section-shell" aria-label="Complete project archive"><WorkLibrary projects={liveProjects} initialFilters={initialFilters} /></section>
+      <section id="project-library" className="work-collection section-shell" aria-label="Complete project archive"><WorkLibrary projects={liveProjects} initialFilters={initialFilters} /></section>
     </div>
   );
 }

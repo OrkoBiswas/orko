@@ -62,14 +62,13 @@ export function WorkLibrary({ projects, initialFilters = {} }: { projects: Proje
 
   return (
     <div className="work-library">
-      <div className="work-library-head"><div><p className="eyebrow">Complete collection</p><h2>Browse all projects.</h2></div><p>Search by name or open the filters for a specific format, category, industry, or year.</p></div>
-      <div className="work-toolbar">
-        <label className="search-field" htmlFor="work-search"><Search aria-hidden="true" /><span className="sr-only">Search work</span><input id="work-search" type="search" value={query} placeholder="Search title, format, or industry…" onChange={(event) => changeFilter(() => setQuery(event.target.value))} /></label>
-        <button className="filter-toggle" type="button" aria-expanded={filtersOpen} onClick={() => setFiltersOpen((value) => !value)}><SlidersHorizontal aria-hidden="true" /> Filters {isFiltered && <span />}</button>
+      <div className="work-collection-head">
+        <div><p className="eyebrow">Project library</p><h2>All projects</h2></div>
+        <div className="work-toolbar"><label className="search-field" htmlFor="work-search"><Search aria-hidden="true" /><span className="sr-only">Search work</span><input id="work-search" type="search" value={query} placeholder="Search projects…" onChange={(event) => changeFilter(() => setQuery(event.target.value))} /></label><button className="filter-toggle" type="button" aria-expanded={filtersOpen} onClick={() => setFiltersOpen((value) => !value)}><SlidersHorizontal aria-hidden="true" /> Refine {isFiltered && <span />}</button></div>
       </div>
 
       <div className={`filter-panel ${filtersOpen ? "is-open" : ""}`}>
-        <div><p>Showreel</p><div className="filter-options"><button type="button" aria-pressed={discipline === "All"} onClick={() => changeFilter(() => setDiscipline("All"))}>All work</button>{workDisciplines.map((item) => <button type="button" key={item.value} aria-pressed={discipline === item.value} onClick={() => changeFilter(() => setDiscipline(item.value))}>{item.label}</button>)}</div></div>
+        <div><p>Type</p><div className="filter-options"><button type="button" aria-pressed={discipline === "All"} onClick={() => changeFilter(() => setDiscipline("All"))}>All work</button>{workDisciplines.map((item) => <button type="button" key={item.value} aria-pressed={discipline === item.value} onClick={() => changeFilter(() => setDiscipline(item.value))}>{item.label}</button>)}</div></div>
         {showcaseCategories.length > 0 && <div><p>Category</p><div className="filter-options"><button type="button" aria-pressed={category === "All"} onClick={() => changeFilter(() => setCategory("All"))}>All categories</button>{showcaseCategories.map((item) => <button type="button" key={item.value} aria-pressed={category === item.value} onClick={() => changeFilter(() => setCategory(item.value))}>{item.label}</button>)}</div></div>}
         <div><p>Industry</p><div className="filter-options">{industries.map((item) => <button type="button" key={item} aria-pressed={industry === item} onClick={() => changeFilter(() => setIndustry(item))}>{item}</button>)}</div></div>
         <div><p>Year</p><div className="filter-options">{years.map((item) => <button type="button" key={item} aria-pressed={year === item} onClick={() => changeFilter(() => setYear(item))}>{item}</button>)}</div></div>
@@ -79,7 +78,7 @@ export function WorkLibrary({ projects, initialFilters = {} }: { projects: Proje
 
       {visible.length ? (
         <div ref={root} className="project-library is-grid" aria-live="polite">
-          {visible.map((project, index) => <ProjectCard project={project} key={project.id} priority={index < 4} />)}
+          {visible.map((project, index) => <ProjectCard project={project} key={project.id} priority={index < 4} clean />)}
         </div>
       ) : (
         <div className="empty-state" role="status"><p className="eyebrow">{projects.length ? "No matching frames" : "New library"}</p><h2>{projects.length ? "The archive has more directions." : "New projects are coming soon."}</h2><p>{projects.length ? "Try a broader phrase or reset the filters to see the full library." : "Orko is preparing a fresh collection of selected work."}</p>{projects.length > 0 && <button className="button button-light" type="button" onClick={clearFilters}>Reset the archive</button>}</div>

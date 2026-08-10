@@ -56,6 +56,8 @@ Last updated: 2026-08-10
 
 - Rebuilt the Work archive as a simpler client-focused journey: a compact high-impact introduction, clear project discussion action, direct category index with live counts, and a calm two-column project collection with search plus optional filters. The shared “Start a collaboration” close now appears once across every public page with a compact dark composition, simple three-step expectation, focused primary action, quick-message path, keyboard support, reduced motion, and dedicated 320px behavior.
 
+- Replaced the complete Work-page design with a quieter editorial gallery built for client browsing. The new light hero, focused portfolio introduction, dark category index, and open two-column collection remove the previous box-heavy presentation. Public project thumbnails are now strictly media-only: titles, category, client, industry, year, and project cues sit in a clean information rail below each image or video, while focus, touch, natural project frames, search, optional refinement, reduced motion, and 320px layouts remain fully supported.
+
 ## Validation
 
 - Lint: passed.
