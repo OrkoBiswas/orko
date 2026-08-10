@@ -59,7 +59,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <ExperienceSection content={brand} />
+      <ExperienceSection content={brand} compact />
 
       <ProfileLinksBand content={brand} />
 

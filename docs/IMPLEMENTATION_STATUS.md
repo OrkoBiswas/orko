@@ -74,6 +74,8 @@ Last updated: 2026-08-10
 
 - Moved the complete “04 — About & experience” composition directly below the homepage hero so visitors meet Orko, see the portrait, and understand the work history before browsing projects and services. The hero scroll cue now targets this section directly while its existing responsive and accessible behavior remains unchanged.
 
+- Refined the homepage “About & experience” composition into a compact, screen-conscious introduction. Its headline uses a lighter, smaller scale; the portrait, profile details, spacing, and history rows are shorter; and dedicated mobile rules preserve readable touch-friendly content without changing the fuller About page presentation.
+
 ## Validation
 
 - Lint: passed.

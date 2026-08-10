@@ -311,6 +311,9 @@ test("owner portrait and owner-created category portfolio stay secure, durable, 
   assert.match(artwork, /!hideLabels/);
   assert.match(home, /showcaseCategories\.length > 0/);
   assert.match(home, /href="#about-experience"/);
+  assert.match(home, /<ExperienceSection content=\{brand\} compact \/>/);
+  assert.match(experience, /compact \? " is-compact"/);
+  assert.match(css, /\.experience-section\.is-compact\.section-space/);
   assert.ok(home.indexOf("<ExperienceSection") < home.indexOf("<ProfileLinksBand"), "About & experience should follow the hero before the profile-links band");
   assert.match(portfolio, /export const projects: Project\[\] = \[\]/);
   assert.match(portfolio, /export const showcaseCategories: ShowcaseCategoryDefinition\[\] = \[\]/);

@@ -3,9 +3,9 @@ import Link from "next/link";
 import { ArrowUpRight, MapPin } from "lucide-react";
 import type { SiteContent } from "@/lib/site-content";
 
-export function ExperienceSection({ content, index = "04", showProfile = true }: { content: SiteContent; index?: string; showProfile?: boolean }) {
+export function ExperienceSection({ content, index = "04", showProfile = true, compact = false }: { content: SiteContent; index?: string; showProfile?: boolean; compact?: boolean }) {
   return (
-    <section id="about-experience" className={`experience-section section-shell section-space${showProfile ? "" : " is-history-only"}`}>
+    <section id="about-experience" className={`experience-section section-shell section-space${showProfile ? "" : " is-history-only"}${compact ? " is-compact" : ""}`}>
       <div className="section-heading" data-reveal>
         <div><p className="eyebrow"><span>{index}</span>About &amp; experience</p><h2>{content.experienceHeading}</h2></div>
         <p>{content.experienceIntro}</p>
