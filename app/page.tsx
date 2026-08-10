@@ -54,10 +54,12 @@ export default async function Home() {
           <HeroMotionMedia />
         </div>
         <div className="hero-foot">
-          <a className="scroll-note" href={showcaseCategories.length ? "#selected-work" : "#showreel"}><ArrowDown aria-hidden="true" /> Scroll to explore</a>
+          <a className="scroll-note" href="#about-experience"><ArrowDown aria-hidden="true" /> Scroll to explore</a>
           <p><span>Orko Biswas</span><span>Portfolio / 2026</span></p>
         </div>
       </section>
+
+      <ExperienceSection content={brand} />
 
       <ProfileLinksBand content={brand} />
 
@@ -84,8 +86,6 @@ export default async function Home() {
         <div className="service-index">{liveServices.map((service) => <Link key={service.slug} href={`/services/${service.slug}`}><span>{service.number}</span><h3>{service.title}</h3><p>{service.short}</p><ArrowUpRight aria-hidden="true" /></Link>)}</div>
         <Link className="button button-dark" href="/services">View all services <ArrowRight aria-hidden="true" /></Link>
       </section>
-
-      <ExperienceSection content={brand} />
 
       <section className="process-preview process-showcase section-shell" data-process-sequence>
         <div className="section-heading"><div><p className="eyebrow"><span>05</span>Process</p><h2>A clear path from <em>idea</em><br />to delivery.</h2></div><Link className="text-link" href="/process">See the full process <ArrowUpRight aria-hidden="true" /></Link></div>

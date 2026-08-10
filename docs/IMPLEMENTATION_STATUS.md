@@ -72,6 +72,8 @@ Last updated: 2026-08-10
 
 - Anchored the Work search, sorting, and advanced-filter bar to its designed position below the introduction. It now scrolls naturally with the page instead of following visitors as a sticky control, preserving the same desktop and mobile layout without covering project content.
 
+- Moved the complete “04 — About & experience” composition directly below the homepage hero so visitors meet Orko, see the portrait, and understand the work history before browsing projects and services. The hero scroll cue now targets this section directly while its existing responsive and accessible behavior remains unchanged.
+
 ## Validation
 
 - Lint: passed.

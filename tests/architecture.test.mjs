@@ -303,12 +303,15 @@ test("owner portrait and owner-created category portfolio stay secure, durable, 
   assert.match(editor, /Save public content to publish it/);
   assert.match(experience, /experience-portrait/);
   assert.match(experience, /profileImageAlt/);
+  assert.match(experience, /id="about-experience"/);
   assert.match(showcase, /hideLabels/);
   assert.match(showcase, /\/work\/category\//);
   assert.match(showcase, /workCount/);
   assert.doesNotMatch(showcase, /Client|Industry|Year|project\.summary/);
   assert.match(artwork, /!hideLabels/);
   assert.match(home, /showcaseCategories\.length > 0/);
+  assert.match(home, /href="#about-experience"/);
+  assert.ok(home.indexOf("<ExperienceSection") < home.indexOf("<ProfileLinksBand"), "About & experience should follow the hero before the profile-links band");
   assert.match(portfolio, /export const projects: Project\[\] = \[\]/);
   assert.match(portfolio, /export const showcaseCategories: ShowcaseCategoryDefinition\[\] = \[\]/);
   assert.match(portfolio, /deriveShowcaseCategories/);
