@@ -82,6 +82,8 @@ Last updated: 2026-08-10
 
 - Reframed “Work, life & trust” as a simpler three-part editorial system. A short plain-language introduction now leads three equal, border-separated statements for curiosity, career growth, and client care, with restrained typographic watermarks replacing the previous dense row layout and a clean stacked treatment on small screens.
 
+- Replaced the “Work, life & trust” column composition with a genuinely different editorial timeline: a light stacked type statement anchors one side while three concise, connected information rows carry the daily-practice, career, and client-care story. Removed the watermark/card-like treatment and kept the section compact, border-led, and naturally stacked on mobile.
+
 ## Validation
 
 - Lint: passed.

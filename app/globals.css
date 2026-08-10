@@ -5965,21 +5965,21 @@ html[data-motion="reduced"] .work-gallery-category-list strong { transition: non
 .about-section-head > h2 { grid-column: 5 / -1; margin: 0; font-family: var(--display); font-size: clamp(2.5rem, 4.35vw, 4.5rem); font-weight: 540; line-height: .92; letter-spacing: -.05em; text-transform: uppercase; }
 .about-section-head > h2 em { color: #5d7c20; font-family: var(--serif); font-weight: 400; letter-spacing: -.05em; text-transform: none; }
 .about-section-head > p:not(.eyebrow) { grid-column: 5 / span 6; max-width: 620px; margin: 14px 0 0; color: #62675d; font-size: 13px; line-height: 1.55; }
-.about-story-head { align-items: start; }
-.about-story-head > .eyebrow { grid-column: 1 / span 3; }
-.about-story-heading { grid-column: 4 / -1; display: grid; grid-template-columns: minmax(0,1.25fr) minmax(220px,.75fr); gap: clamp(28px, 5vw, 80px); align-items: end; }
-.about-story-heading h2 { margin: 0; font-family: var(--display); font-size: clamp(2.45rem, 4vw, 4.15rem); font-weight: 530; line-height: .93; letter-spacing: -.05em; text-transform: uppercase; }
-.about-story-heading h2 em { color: #5d7c20; font-family: var(--serif); font-weight: 400; letter-spacing: -.05em; text-transform: none; }
-.about-story-heading > p { max-width: 380px; margin: 0; color: #62675d; font-size: 12px; line-height: 1.55; }
-.about-story-list { width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); margin: 0; border-block: 1px solid rgba(31,35,28,.27); }
-.about-story-list article { position: relative; min-height: 250px; display: flex; flex-direction: column; padding: 22px clamp(20px, 2.4vw, 34px) 26px; overflow: hidden; border-right: 1px solid rgba(31,35,28,.2); }
-.about-story-list article:last-child { border-right: 0; }
-.about-story-list article::after { content: attr(data-word); position: absolute; right: -8px; bottom: -12px; color: rgba(31,35,28,.045); font-family: var(--serif); font-size: clamp(3.8rem, 5vw, 5.8rem); font-style: italic; line-height: .8; letter-spacing: -.07em; pointer-events: none; }
-.about-story-meta { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
-.about-story-meta span { color: #789f22; font: 10px/1 monospace; }
-.about-story-meta p { margin: 0; color: #73786e; font-size: 8px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
-.about-story-list h3 { position: relative; z-index: 1; max-width: 260px; margin: auto 0 12px; font-family: var(--display); font-size: clamp(1.55rem, 2.1vw, 2.25rem); font-weight: 550; line-height: 1; letter-spacing: -.03em; text-transform: uppercase; }
-.about-story-list article > p:last-child { position: relative; z-index: 1; max-width: 390px; margin: 0; color: #5a5f55; font-size: 12px; line-height: 1.55; }
+.about-story-rail { min-height: 42px; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-block: 10px; border-block: 1px solid rgba(31,35,28,.27); }
+.about-story-rail > p:last-child { margin: 0; color: #73786e; font-size: 8px; font-weight: 780; letter-spacing: .1em; text-transform: uppercase; }
+.about-story-stage { display: grid; grid-template-columns: minmax(250px,.72fr) minmax(0,1.28fr); gap: clamp(40px, 7vw, 110px); align-items: stretch; padding-top: clamp(28px, 3.5vw, 46px); }
+.about-story-title { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; padding-bottom: 4px; }
+.about-story-title h2 { display: flex; flex-direction: column; align-items: flex-start; margin: 0; font-family: var(--display); font-size: clamp(2.8rem, 4.6vw, 4.8rem); font-weight: 520; line-height: .77; letter-spacing: -.06em; text-transform: uppercase; }
+.about-story-title h2 em { margin-left: clamp(22px, 4vw, 64px); color: #5d7c20; font-family: var(--serif); font-weight: 400; letter-spacing: -.06em; text-transform: none; }
+.about-story-title > p { max-width: 300px; margin: 0; color: #62675d; font-size: 12px; line-height: 1.55; }
+.about-story-timeline { position: relative; list-style: none; margin: 0; padding: 0; }
+.about-story-timeline::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: linear-gradient(180deg, #6f941e, rgba(31,35,28,.18)); }
+.about-story-timeline li { position: relative; display: grid; grid-template-columns: 42px minmax(160px,.72fr) minmax(0,1.28fr); gap: clamp(16px, 2.5vw, 34px); align-items: start; padding: 19px 0 19px 18px; border-bottom: 1px solid rgba(31,35,28,.22); }
+.about-story-timeline li:first-child { border-top: 1px solid rgba(31,35,28,.22); }
+.about-story-node { color: #6f941e; font: 10px/1 monospace; }
+.about-story-timeline li > div > p { margin: 0 0 7px; color: #73786e; font-size: 8px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.about-story-timeline h3 { margin: 0; font-family: var(--display); font-size: clamp(1.35rem, 1.75vw, 1.9rem); font-weight: 540; line-height: 1; letter-spacing: -.03em; text-transform: uppercase; }
+.about-story-timeline li > p:last-child { max-width: 440px; margin: 0; color: #5a5f55; font-size: 12px; line-height: 1.55; }
 
 .about-photo-journal { padding-block: clamp(52px, 5.5vw, 76px); color: #efeee7; background: #171a15; }
 .about-photo-head { display: grid; grid-template-columns: repeat(12, minmax(0,1fr)); gap: clamp(22px, 3vw, 42px); align-items: start; margin-bottom: clamp(28px, 3.5vw, 42px); padding-top: 13px; border-top: 1px solid rgba(239,238,231,.22); }
@@ -6032,8 +6032,8 @@ html[data-motion="reduced"] .work-gallery-category-list strong { transition: non
 @media (max-width: 900px) {
   .about-intro-copy { grid-column: 1 / span 7; }
   .about-portrait { grid-column: 8 / -1; }
-  .about-story-heading { grid-template-columns: 1fr; gap: 14px; }
-  .about-story-list { width: 100%; }
+  .about-story-stage { grid-template-columns: minmax(210px,.55fr) minmax(0,1.45fr); gap: 38px; }
+  .about-story-timeline li { grid-template-columns: 34px minmax(140px,.65fr) minmax(0,1.35fr); gap: 14px; }
   .about-career-list li { grid-template-columns: 52px minmax(0,1fr); }
   .about-career-list dl { grid-column: 2; max-width: 340px; }
   .about-focus { grid-template-columns: 1fr; gap: 38px; }
@@ -6066,14 +6066,14 @@ html[data-motion="reduced"] .work-gallery-category-list strong { transition: non
   .about-photo-head h2 { margin-top: 16px; font-size: clamp(2.25rem, 10.5vw, 3.3rem); line-height: .93; }
   .about-section-head > p:not(.eyebrow),
   .about-photo-head > div > p { margin-top: 12px; }
-  .about-story-head .about-story-heading { margin-top: 16px; display: block; }
-  .about-story-heading h2 { font-size: clamp(2.25rem, 10.5vw, 3.3rem); }
-  .about-story-heading > p { margin-top: 12px; }
-  .about-story-list { width: 100%; grid-template-columns: 1fr; }
-  .about-story-list article { min-height: 0; padding: 18px 0 20px; border-right: 0; border-bottom: 1px solid rgba(31,35,28,.2); }
-  .about-story-list article:last-child { border-bottom: 0; }
-  .about-story-list h3 { max-width: none; margin: 28px 0 10px; }
-  .about-story-list article::after { right: -4px; bottom: 0; font-size: 4.2rem; }
+  .about-story-rail { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .about-story-stage { grid-template-columns: 1fr; gap: 24px; padding-top: 24px; }
+  .about-story-title { display: grid; grid-template-columns: minmax(0,1fr) minmax(160px,.65fr); align-items: end; gap: 22px; }
+  .about-story-title h2 { display: block; font-size: clamp(2.5rem, 11.5vw, 3.6rem); line-height: .88; }
+  .about-story-title h2 span,
+  .about-story-title h2 em { display: inline; margin: 0 7px 0 0; }
+  .about-story-timeline li { grid-template-columns: 28px minmax(0,1fr); gap: 10px 12px; padding: 16px 0 16px 12px; }
+  .about-story-timeline li > p:last-child { grid-column: 2; }
   .about-photo-journal { padding-block: 48px; }
   .about-photo-grid { grid-template-columns: 1fr; gap: 24px; }
   .about-photo-0,
@@ -6091,6 +6091,8 @@ html[data-motion="reduced"] .work-gallery-category-list strong { transition: non
 
 @media (max-width: 360px) {
   .about-intro-copy h1 { font-size: 2.6rem; }
+  .about-story-title { grid-template-columns: 1fr; gap: 12px; }
+  .about-story-title > p { max-width: 260px; }
   .about-portrait,
   .about-portrait > img,
   .about-portrait-fallback { min-height: 280px; }

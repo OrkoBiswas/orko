@@ -47,14 +47,14 @@ export default async function AboutPage() {
     </section>
 
     <section className="about-story section-shell">
-      <header className="about-section-head about-story-head" data-reveal>
-        <p className="eyebrow"><span>01</span>Work, life &amp; trust</p>
-        <div className="about-story-heading"><h2>How I work,<br /><em>and why it matters.</em></h2><p>Three simple ideas guide my daily practice, career growth, and every client collaboration.</p></div>
-      </header>
-      <div className="about-story-list">
-        <article data-word="Curiosity" data-reveal><div className="about-story-meta"><span>01</span><p>Work life</p></div><h3>{aboutPageContent.workLifeHeading}</h3><p>{content.aboutWorkLife}</p></article>
-        <article data-word="Growth" data-reveal><div className="about-story-meta"><span>02</span><p>Career</p></div><h3>{aboutPageContent.careerHeading}</h3><p>{content.aboutCareer}</p></article>
-        <article data-word="Trust" data-reveal><div className="about-story-meta"><span>03</span><p>Client care</p></div><h3>{aboutPageContent.clientCareHeading}</h3><p>{content.aboutClientCare}</p></article>
+      <div className="about-story-rail" data-reveal><p className="eyebrow"><span>01</span>Work, life &amp; trust</p><p>Daily practice · Career · Client care</p></div>
+      <div className="about-story-stage">
+        <header className="about-story-title" data-reveal><h2><span>Work.</span><em>Life.</em><span>Trust.</span></h2><p>Three simple parts shape how I think, grow, and collaborate.</p></header>
+        <ol className="about-story-timeline">
+          <li data-reveal><span className="about-story-node">01</span><div><p>Work life</p><h3>{aboutPageContent.workLifeHeading}</h3></div><p>{content.aboutWorkLife}</p></li>
+          <li data-reveal><span className="about-story-node">02</span><div><p>Career</p><h3>{aboutPageContent.careerHeading}</h3></div><p>{content.aboutCareer}</p></li>
+          <li data-reveal><span className="about-story-node">03</span><div><p>Client care</p><h3>{aboutPageContent.clientCareHeading}</h3></div><p>{content.aboutClientCare}</p></li>
+        </ol>
       </div>
     </section>
 
