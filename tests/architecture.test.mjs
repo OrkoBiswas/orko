@@ -220,10 +220,9 @@ test("work archive and global collaboration close stay simple, client-focused, a
     readFile(new URL("components/CtaBand.tsx", root), "utf8"),
     readFile(new URL("app/globals.css", root), "utf8"),
   ]);
-  assert.match(workPage, /work-gallery-hero/);
   assert.match(workPage, /work-gallery-categories/);
   assert.match(workPage, /projectMatchesShowcaseCategory/);
-  assert.match(workPage, /Discuss your project/);
+  assert.doesNotMatch(workPage, /work-gallery-hero|Selected<br|View the projects|Discuss your project|Published projects/);
   assert.match(library, /All projects/);
   assert.match(library, /className="project-library is-grid"/);
   assert.match(library, /<ProjectCard project=\{project\}[^>]+clean/);
@@ -236,6 +235,7 @@ test("work archive and global collaboration close stay simple, client-focused, a
   assert.match(collaboration, /Start your project/);
   assert.match(collaboration, /Send a quick message/);
   assert.match(css, /Editorial Work gallery: open media, quiet information, no thumbnail labels/);
+  assert.match(css, /Work opens directly on useful navigation and projects/);
   assert.match(css, /Compact collaboration close shared by every public page/);
   assert.match(css, /\.work-card-media \.project-art\.is-label-free::after/);
   assert.match(css, /\.work-collection \.project-library\.is-grid \{/);

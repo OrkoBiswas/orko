@@ -58,6 +58,8 @@ Last updated: 2026-08-10
 
 - Replaced the complete Work-page design with a quieter editorial gallery built for client browsing. The new light hero, focused portfolio introduction, dark category index, and open two-column collection remove the previous box-heavy presentation. Public project thumbnails are now strictly media-only: titles, category, client, industry, year, and project cues sit in a clean information rail below each image or video, while focus, touch, natural project frames, search, optional refinement, reduced motion, and 320px layouts remain fully supported.
 
+- Removed the redundant Work-page introduction entirely: the “Selected work” headline, supporting paragraphs, buttons, project count, and discipline summary no longer repeat information already available in the archive. The page now opens directly on category navigation when categories exist, or on the project collection when empty, with navbar-safe spacing across desktop and 320px layouts.
+
 ## Validation
 
 - Lint: passed.

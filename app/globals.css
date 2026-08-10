@@ -4694,3 +4694,11 @@ html[data-motion="reduced"] .work-gallery-category-list a,
 html[data-motion="reduced"] .work-gallery-category-list svg,
 html[data-motion="reduced"] .work-card-media .project-art,
 html[data-motion="reduced"] .work-card-meta svg { transition: none; }
+
+/* Work opens directly on useful navigation and projects. */
+.work-page > .work-gallery-categories:first-child { padding-top: clamp(156px, 15vw, 218px); }
+.work-page > .work-collection:first-child { padding-top: clamp(148px, 14vw, 204px); }
+@media (max-width: 700px) {
+  .work-page > .work-gallery-categories:first-child,
+  .work-page > .work-collection:first-child { padding-top: 118px; }
+}
