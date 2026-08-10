@@ -216,7 +216,9 @@ test("owner portrait and category portfolio stay secure, durable, and label-free
   assert.match(adminProjects, /admin-category-grid/);
   assert.match(adminProjects, /admin\/projects\/new\?category=/);
   assert.match(projectEditor, /<CategoryOptions current=\{project\.category\}/);
-  assert.match(projectEditor, /category controls where this project appears/i);
+  assert.match(projectEditor, /admin-project-composer/);
+  assert.match(projectEditor, /admin-simple-settings/);
+  assert.match(projectEditor, /Public category/);
   assert.match(projectEditor, /contentBlocks/);
   assert.doesNotMatch(home, /featured chapters|Browse category showreels/);
   assert.match(css, /\.process-focus li,[\s\S]*white-space: nowrap/);

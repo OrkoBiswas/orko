@@ -67,7 +67,7 @@ test("category portfolio renders a complete Behance-style work stack", async () 
   const html = await response.text();
   assert.match(html, /Thumbnail Design/);
   assert.match(html, /Complete category stack/);
-  assert.match(html, /Explore every published piece/);
+  assert.match(html, /Choose a project to explore/);
   assert.match(html, /Abstract Index/);
   assert.match(html, /View project/);
   assert.match(html, /\/work\/category\/brand-identity-design/);
