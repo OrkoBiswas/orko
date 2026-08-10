@@ -4702,3 +4702,21 @@ html[data-motion="reduced"] .work-card-meta svg { transition: none; }
   .work-page > .work-gallery-categories:first-child,
   .work-page > .work-collection:first-child { padding-top: 118px; }
 }
+
+/* Uniform edge-to-edge Work thumbnails */
+.work-project-card .work-card-media { aspect-ratio: 4 / 3; }
+.work-project-card .work-card-media .project-art {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 3 !important;
+}
+.work-project-card .work-card-media .project-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center;
+  background: transparent;
+}

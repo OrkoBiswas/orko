@@ -236,6 +236,9 @@ test("work archive and global collaboration close stay simple, client-focused, a
   assert.match(collaboration, /Send a quick message/);
   assert.match(css, /Editorial Work gallery: open media, quiet information, no thumbnail labels/);
   assert.match(css, /Work opens directly on useful navigation and projects/);
+  assert.match(css, /Uniform edge-to-edge Work thumbnails/);
+  assert.match(css, /\.work-project-card \.work-card-media \{ aspect-ratio: 4 \/ 3; \}/);
+  assert.match(css, /\.work-project-card \.work-card-media \.project-media[\s\S]*object-fit: cover/);
   assert.match(css, /Compact collaboration close shared by every public page/);
   assert.match(css, /\.work-card-media \.project-art\.is-label-free::after/);
   assert.match(css, /\.work-collection \.project-library\.is-grid \{/);

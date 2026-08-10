@@ -60,6 +60,8 @@ Last updated: 2026-08-10
 
 - Removed the redundant Work-page introduction entirely: the “Selected work” headline, supporting paragraphs, buttons, project count, and discipline summary no longer repeat information already available in the archive. The page now opens directly on category navigation when categories exist, or on the project collection when empty, with navbar-safe spacing across desktop and 320px layouts.
 
+- Standardized every Work-page project thumbnail to a clean 4:3 frame. Uploaded images and videos now fill their media area edge-to-edge with centered cover fitting, consistent card heights, transparent media backgrounds, and no grey gaps or empty borders.
+
 ## Validation
 
 - Lint: passed.
