@@ -1,6 +1,6 @@
 # Implementation status
 
-Last updated: 2026-08-05
+Last updated: 2026-08-10
 
 ## Completed
 
@@ -47,12 +47,13 @@ Last updated: 2026-08-05
 
 - Converted Selected Work from project-detail chapters into three direct category showreel covers for Video, Motion, and Design. Each clean cover contains no text or metadata, while its category name remains in a separate accessible caption and opens the complete filtered archive. Process labels now stay on one line, including Source files.
 - Added a durable owner portrait and accessible description to public content, with an authenticated signed Cloudinary image upload, replacement, preview, URL entry, removal, standard notifications, and responsive presentation inside the homepage About & experience profile so visitors can recognize Orko.
+- Replaced the fixed cover-plus-gallery project template with a complete Behance-style presentation system. Category thumbnails now stay exclusively in Selected Work, category pages, and archive cards; opening a project never inserts that cover automatically. The owner dashboard provides an ordered visual builder for Image, Text, Photo Grid, Video/Audio, supported Embed, Lightroom before/after, Prototype, 3D, and spacing blocks, plus project-wide styles, custom buttons, downloadable assets, responsive reordering, signed Cloudinary uploads, and legacy-gallery migration. All presentation data is strictly validated and stored inside the existing server-managed D1 project content record. Public project pages render the authored full-width stack with accessible media, safe allowlisted embeds, legacy fallbacks, responsive widths down to 320px, reduced-motion media behavior, project credits, assets, and CTA controls. Category pages now contain projects rather than duplicating individual uploads as separate cards.
 
 ## Validation
 
 - Lint: passed.
 - Typecheck: passed.
-- Automated tests: 20 passed.
+- Automated tests: 21 passed.
 - Production build: passed.
 - Prior desktop and mobile browser reviews passed for public navigation, archive filters, case studies, forms, animations, and inquiry persistence.
 
@@ -64,6 +65,6 @@ Last updated: 2026-08-05
 
 ## Honest remaining extensions
 
-- The owner area now manages content, experience, testimonials, showreel replacement, services, project creation/deletion/publication, Cloudinary media, and inquiries. Analytics and role-granular multi-user permissions remain future modules.
+- The owner area now manages content, experience, testimonials, showreel replacement, services, complete visual project presentations, project creation/deletion/publication, Cloudinary media, and inquiries. Analytics and role-granular multi-user permissions remain future modules.
 - Public uploads remain intentionally disabled; every media control requires an authenticated owner session.
 - Drizzle Kit encountered a host-level credential lookup failure in the Windows sandbox, so the inspected equivalent SQL migration remains the source of truth and runtime initialization uses the same idempotent schema.

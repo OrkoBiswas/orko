@@ -102,24 +102,28 @@ test("testimonial media is validated, owner-managed, and rendered accessibly", a
   assert.match(nextConfig, /connect-src[^;]+https:\/\/api\.cloudinary\.com/);
 });
 
-test("project galleries are validated, owner-uploaded, and publicly rendered", async () => {
-  const [contentModel, projectEditor, projectPage, workLibrary] = await Promise.all([
+test("project presentations are validated, owner-built, cover-free, and publicly rendered", async () => {
+  const [contentModel, projectEditor, projectBuilder, projectPage, presentation, workLibrary] = await Promise.all([
     readFile(new URL("lib/project-content.ts", root), "utf8"),
     readFile(new URL("components/AdminProjectEditor.tsx", root), "utf8"),
+    readFile(new URL("components/AdminProjectContentBuilder.tsx", root), "utf8"),
     readFile(new URL("app/work/[project-slug]/page.tsx", root), "utf8"),
+    readFile(new URL("components/ProjectPresentation.tsx", root), "utf8"),
     readFile(new URL("components/WorkLibrary.tsx", root), "utf8"),
   ]);
   assert.match(contentModel, /gallery: z\.array\(galleryMediaSchema\)\.max\(24\)/);
-  assert.match(contentModel, /title: z\.string\(\).*default\(""\)/);
-  assert.match(contentModel, /year: z\.number\(\).*nullable\(\)\.default\(null\)/);
-  assert.match(projectEditor, /accept="image\/\*,video\/\*" multiple/);
-  assert.match(projectEditor, /\/api\/admin\/media\/signature/);
-  assert.match(projectEditor, /Set as cover/);
-  assert.match(projectEditor, /Work title/);
-  assert.match(projectEditor, /Client/);
-  assert.match(projectEditor, /Industry/);
-  assert.match(projectPage, /case-gallery/);
-  assert.match(projectPage, /<ProjectMedia/);
+  assert.match(contentModel, /contentBlocks: z\.array\(contentBlockSchema\)\.max\(60\)/);
+  assert.match(contentModel, /presentation: presentationSchema\.default/);
+  assert.match(projectBuilder, /\/api\/admin\/media\/signature/);
+  assert.match(projectBuilder, /Photo Grid/);
+  assert.match(projectBuilder, /Video \/ Audio/);
+  assert.match(projectBuilder, /Attach assets/);
+  assert.match(projectEditor, /Category thumbnail/);
+  assert.match(projectEditor, /It will never appear automatically inside the opened project/);
+  assert.match(projectPage, /<ProjectPresentation project=\{project\}/);
+  assert.doesNotMatch(projectPage, /case-art|case-gallery/);
+  assert.match(presentation, /item\.url !== project\.mediaUrl/);
+  assert.match(presentation, /<ProjectMedia/);
   assert.match(workLibrary, /discipline/);
   assert.match(workLibrary, /workDisciplines/);
 });
@@ -212,7 +216,8 @@ test("owner portrait and category portfolio stay secure, durable, and label-free
   assert.match(adminProjects, /admin-category-grid/);
   assert.match(adminProjects, /admin\/projects\/new\?category=/);
   assert.match(projectEditor, /<CategoryOptions current=\{project\.category\}/);
-  assert.match(projectEditor, /assign every piece to a public category shelf/);
+  assert.match(projectEditor, /category controls where this project appears/i);
+  assert.match(projectEditor, /contentBlocks/);
   assert.doesNotMatch(home, /featured chapters|Browse category showreels/);
   assert.match(css, /\.process-focus li,[\s\S]*white-space: nowrap/);
   assert.match(css, /Behance-inspired category library/);

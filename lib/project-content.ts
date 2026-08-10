@@ -14,6 +14,44 @@ const galleryMediaSchema = z.object({
   year: z.number().int().min(2000).max(2100).nullable().default(null),
 }).strict();
 
+const blockId = z.string().trim().min(1).max(120);
+const secureUrl = z.string().trim().min(1).max(1000).refine((value) => /^https:\/\//i.test(value), "Use a secure https URL.");
+const optionalSecureUrl = z.string().trim().max(1000).refine((value) => !value || /^https:\/\//i.test(value), "Use a secure https URL.");
+const blockWidth = z.enum(["compact", "standard", "wide", "full"]);
+const textWidth = z.enum(["compact", "standard", "wide"]);
+const blockMediaSchema = z.object({ id: blockId, url: secureUrl, alt: z.string().trim().max(300) }).strict();
+const contentBlockSchema = z.discriminatedUnion("type", [
+  z.object({ id: blockId, type: z.literal("image"), width: blockWidth, url: optionalSecureUrl, alt: z.string().trim().max(300), caption: z.string().trim().max(500) }).strict(),
+  z.object({ id: blockId, type: z.literal("text"), width: textWidth, style: z.enum(["heading", "body", "quote"]), align: z.enum(["left", "center"]), heading: z.string().trim().max(300), body: z.string().trim().max(5000) }).strict(),
+  z.object({ id: blockId, type: z.literal("photo-grid"), width: blockWidth, columns: z.union([z.literal(2), z.literal(3)]), gap: z.enum(["none", "small", "medium"]), items: z.array(blockMediaSchema).max(12) }).strict(),
+  z.object({ id: blockId, type: z.literal("video-audio"), width: blockWidth, mediaType: z.enum(["video", "audio"]), url: optionalSecureUrl, posterUrl: optionalSecureUrl, alt: z.string().trim().max(300), caption: z.string().trim().max(500) }).strict(),
+  z.object({ id: blockId, type: z.literal("embed"), width: blockWidth, url: optionalSecureUrl, title: z.string().trim().max(200), caption: z.string().trim().max(500) }).strict(),
+  z.object({ id: blockId, type: z.literal("lightroom"), width: blockWidth, beforeUrl: optionalSecureUrl, afterUrl: optionalSecureUrl, alt: z.string().trim().max(300), caption: z.string().trim().max(500) }).strict(),
+  z.object({ id: blockId, type: z.literal("prototype"), width: blockWidth, url: optionalSecureUrl, title: z.string().trim().max(200), description: z.string().trim().max(1000) }).strict(),
+  z.object({ id: blockId, type: z.literal("3d"), width: blockWidth, url: optionalSecureUrl, title: z.string().trim().max(200), description: z.string().trim().max(1000) }).strict(),
+  z.object({ id: blockId, type: z.literal("divider"), width: textWidth, size: z.enum(["small", "medium", "large"]) }).strict(),
+]);
+
+const presentationSchema = z.object({
+  background: z.string().regex(/^#[0-9a-f]{6}$/i),
+  textColor: z.string().regex(/^#[0-9a-f]{6}$/i),
+  contentWidth: z.enum(["standard", "wide", "full"]),
+  spacing: z.enum(["compact", "balanced", "airy"]),
+}).strict();
+
+const customCtaSchema = z.object({
+  enabled: z.boolean(),
+  label: z.string().trim().max(100),
+  url: optionalSecureUrl,
+}).strict();
+
+const assetSchema = z.object({
+  id: blockId,
+  name: z.string().trim().min(1).max(200),
+  description: z.string().trim().max(500),
+  url: secureUrl,
+}).strict();
+
 export const projectContentSchema = z.object({
   id: z.string().trim().min(1).max(100),
   slug: z.string().trim().min(2).max(120).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
@@ -38,6 +76,10 @@ export const projectContentSchema = z.object({
   mediaType: z.enum(["generated", "image", "video"]).default("generated"),
   mediaAlt: z.string().trim().max(300).default(""),
   gallery: z.array(galleryMediaSchema).max(24).default([]),
+  contentBlocks: z.array(contentBlockSchema).max(60).default([]),
+  presentation: presentationSchema.default({ background: "#f4f2ea", textColor: "#171a16", contentWidth: "wide", spacing: "balanced" }),
+  customCta: customCtaSchema.default({ enabled: false, label: "Visit project", url: "" }),
+  assets: z.array(assetSchema).max(20).default([]),
 });
 
 export const managedProjectSchema = projectContentSchema.extend({
@@ -78,6 +120,10 @@ export function createProjectTemplate(displayOrder: number, category = "Others")
     mediaType: "generated",
     mediaAlt: "",
     gallery: [],
+    contentBlocks: [],
+    presentation: { background: "#f4f2ea", textColor: "#171a16", contentWidth: "wide", spacing: "balanced" },
+    customCta: { enabled: false, label: "Visit project", url: "" },
+    assets: [],
     status: "draft",
     displayOrder,
   };

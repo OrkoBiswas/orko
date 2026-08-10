@@ -22,6 +22,48 @@ export type Project = {
   mediaType?: "generated" | "image" | "video";
   mediaAlt?: string;
   gallery?: ProjectGalleryItem[];
+  contentBlocks?: ProjectContentBlock[];
+  presentation?: ProjectPresentation;
+  customCta?: ProjectCustomCta;
+  assets?: ProjectAsset[];
+};
+
+export type ProjectBlockWidth = "compact" | "standard" | "wide" | "full";
+
+export type ProjectBlockMedia = {
+  id: string;
+  url: string;
+  alt: string;
+};
+
+export type ProjectContentBlock =
+  | { id: string; type: "image"; width: ProjectBlockWidth; url: string; alt: string; caption: string }
+  | { id: string; type: "text"; width: Exclude<ProjectBlockWidth, "full">; style: "heading" | "body" | "quote"; align: "left" | "center"; heading: string; body: string }
+  | { id: string; type: "photo-grid"; width: ProjectBlockWidth; columns: 2 | 3; gap: "none" | "small" | "medium"; items: ProjectBlockMedia[] }
+  | { id: string; type: "video-audio"; width: ProjectBlockWidth; mediaType: "video" | "audio"; url: string; posterUrl: string; alt: string; caption: string }
+  | { id: string; type: "embed"; width: ProjectBlockWidth; url: string; title: string; caption: string }
+  | { id: string; type: "lightroom"; width: ProjectBlockWidth; beforeUrl: string; afterUrl: string; alt: string; caption: string }
+  | { id: string; type: "prototype" | "3d"; width: ProjectBlockWidth; url: string; title: string; description: string }
+  | { id: string; type: "divider"; width: Exclude<ProjectBlockWidth, "full">; size: "small" | "medium" | "large" };
+
+export type ProjectPresentation = {
+  background: string;
+  textColor: string;
+  contentWidth: "standard" | "wide" | "full";
+  spacing: "compact" | "balanced" | "airy";
+};
+
+export type ProjectCustomCta = {
+  enabled: boolean;
+  label: string;
+  url: string;
+};
+
+export type ProjectAsset = {
+  id: string;
+  name: string;
+  description: string;
+  url: string;
 };
 
 export type ProjectGalleryItem = {
@@ -158,12 +200,7 @@ export function galleryItemMatchesShowcaseCategory(item: ProjectGalleryItem, cat
 }
 
 export function projectCategoryWorkCount(project: Project, category: ShowcaseCategory) {
-  const includeCover = projectMatchesShowcaseCategory(project, category);
-  const matchingGallery = (project.gallery ?? []).filter((item) => galleryItemMatchesShowcaseCategory(item, category));
-  const additionalGallery = includeCover && project.mediaUrl
-    ? matchingGallery.filter((item) => item.url !== project.mediaUrl)
-    : matchingGallery;
-  return (includeCover ? 1 : 0) + additionalGallery.length;
+  return projectMatchesShowcaseCategory(project, category) ? 1 : 0;
 }
 
 export const projects: Project[] = [
