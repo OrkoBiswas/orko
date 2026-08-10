@@ -245,6 +245,24 @@ test("work archive and global collaboration close stay simple, client-focused, a
   assert.match(css, /@media \(max-width: 700px\)/);
 });
 
+test("services overview stays calm, compact, and understandable", async () => {
+  const [page, css] = await Promise.all([
+    readFile(new URL("app/services/page.tsx", root), "utf8"),
+    readFile(new URL("app/globals.css", root), "utf8"),
+  ]);
+  assert.match(page, /simple-services-page/);
+  assert.match(page, /simple-service-rows/);
+  assert.match(page, /service\.short/);
+  assert.match(page, /service\.idealFor/);
+  assert.match(page, /service\.timeline/);
+  assert.match(page, /Start with your goal/);
+  assert.doesNotMatch(page, /PageHero/);
+  assert.match(css, /Calm and compact services overview/);
+  assert.match(css, /\.simple-service-rows article > a/);
+  assert.match(css, /@media \(max-width: 360px\)/);
+  assert.match(css, /prefers-reduced-motion: reduce/);
+});
+
 test("owner portrait and owner-created category portfolio stay secure, durable, and label-free", async () => {
   const [contentModel, editor, experience, showcase, artwork, home, portfolio, categoryPage, adminProjects, projectEditor, resetMigration, css] = await Promise.all([
     readFile(new URL("lib/site-content.ts", root), "utf8"),

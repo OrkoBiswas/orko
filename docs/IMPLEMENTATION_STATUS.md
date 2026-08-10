@@ -62,11 +62,13 @@ Last updated: 2026-08-10
 
 - Standardized every Work-page project thumbnail to a clean 4:3 frame. Uploaded images and videos now fill their media area edge-to-edge with centered cover fitting, consistent card heights, transparent media backgrounds, and no grey gaps or empty borders.
 
+- Rebuilt the Services overview as a calm, compact guide for clients of any age or background. The oversized generic hero and heavy service titles were replaced by a lighter introduction, plain-language descriptions, visible project timing, simple audience guidance, and open lined service rows with complete keyboard, touch, reduced-motion, and 320px support.
+
 ## Validation
 
 - Lint: passed.
 - Typecheck: passed.
-- Automated tests: 24 passed.
+- Automated tests: 25 passed.
 - Production build: passed.
 - Prior desktop and mobile browser reviews passed for public navigation, archive filters, case studies, forms, animations, and inquiry persistence.
 
