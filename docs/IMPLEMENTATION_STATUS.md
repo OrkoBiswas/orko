@@ -52,6 +52,8 @@ Last updated: 2026-08-10
 - Reset the complete project library at the owner’s request. Bundled demo projects and fixed category shelves were removed, existing D1 project and project-content records are deleted once by a guarded migration, and Cloudinary media remains available for reuse. Categories are now created automatically from the free-text category entered on each new project, so an empty library stays clean and every future category reflects owner-created work only.
 - Separated category thumbnails from individual projects. Every category shelf in the Projects dashboard now has its own signed Cloudinary image/video attach, direct Cloudinary URL input with automatic media detection, replace, frame, preview, media-library, and remove controls backed by a dedicated audited D1 record. The project editor no longer contains category-thumbnail fields, public category cards use only the category’s assigned cover, and projects derive their archive previews from their authored presentation content.
 
+- Made every category project card one complete accessible link, so its image, title, details, and “View project” cue all open the presentation. Opened projects now use calmer headline scales and viewport-bounded presentation media on desktop and responsive screens, with natural aspect ratios, safe gutters, keyboard focus, and reduced-motion behavior preserved.
+
 ## Validation
 
 - Lint: passed.

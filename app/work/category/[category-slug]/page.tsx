@@ -55,8 +55,10 @@ export default async function WorkCategoryPage({ params }: { params: CategoryPar
         const mediaUrl = project.mediaUrl;
         const mediaAlt = project.mediaAlt || `${project.title} category thumbnail`;
         return <article className={`category-work-card ratio-${project.ratio}`} key={project.id}>
-          <div className="category-work-media">{mediaType && mediaUrl ? <ProjectMedia url={mediaUrl} type={mediaType} alt={mediaAlt} controls={mediaType === "video"} /> : <ProjectArtwork project={project} hideLabels />}<span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span></div>
-          <div className="category-work-caption"><div><h3>{project.title}</h3><p>{project.client} · {project.industry} · {project.year}</p></div><Link href={`/work/${project.slug}`} aria-label={`Open ${project.title} project`}>View project <ArrowUpRight aria-hidden="true" /></Link></div>
+          <Link className="category-work-card-link" href={`/work/${project.slug}`} aria-label={`Open ${project.title} project`}>
+            <div className="category-work-media">{mediaType && mediaUrl ? <ProjectMedia url={mediaUrl} type={mediaType} alt={mediaAlt} /> : <ProjectArtwork project={project} hideLabels />}<span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span></div>
+            <div className="category-work-caption"><div><h3>{project.title}</h3><p>{project.client} · {project.industry} · {project.year}</p></div><span className="category-work-open">View project <ArrowUpRight aria-hidden="true" /></span></div>
+          </Link>
         </article>;
       })}</div>
     </section>

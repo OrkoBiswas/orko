@@ -249,6 +249,9 @@ test("owner portrait and owner-created category portfolio stay secure, durable, 
   assert.match(portfolio, /projectCategoryWorkCount/);
   assert.match(categoryPage, /category-work-grid/);
   assert.match(categoryPage, /ProjectMedia/);
+  assert.match(categoryPage, /className="category-work-card-link"/);
+  assert.match(categoryPage, /className="category-work-open"/);
+  assert.match(categoryPage, /href=\{`\/work\/\$\{project\.slug\}`\}/);
   assert.match(adminProjects, /admin-category-grid/);
   assert.match(adminProjects, /admin\/projects\/new\?category=/);
   assert.match(adminProjects, /Categories appear automatically/);
@@ -264,4 +267,7 @@ test("owner portrait and owner-created category portfolio stay secure, durable, 
   assert.match(resetMigration, /manual-reset-2026-08-10/);
   assert.match(css, /\.process-focus li,[\s\S]*white-space: nowrap/);
   assert.match(css, /Behance-inspired category library/);
+  assert.match(css, /Viewport-fit project presentation/);
+  assert.match(css, /max-height: min\(78svh, 880px\)/);
+  assert.match(css, /\.project-detail-page \.project-intro h1/);
 });
