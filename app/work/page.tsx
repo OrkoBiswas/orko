@@ -25,16 +25,17 @@ export default async function WorkPage({ searchParams }: { searchParams: Promise
   return (
     <div className="work-page">
       {categories.length > 0 && <nav className="work-gallery-categories section-shell" aria-label="Browse work by category" data-work-category-sequence>
-        <span className="work-category-orbit" aria-hidden="true"><i /><i /></span>
         <div className="work-gallery-categories-head">
           <div className="work-category-head-meta">
             <p className="eyebrow">Browse by category</p>
             <span>{String(categories.length).padStart(2, "0")} collections</span>
           </div>
           <h2 aria-label="Find the work you need.">
-            <span className="work-category-type work-category-type-find"><span data-work-category-line>Find the</span></span>
-            <span className="work-category-type work-category-type-work"><span data-work-category-line><em>work</em></span></span>
-            <span className="work-category-type work-category-type-need"><span data-work-category-line>you need.</span></span>
+            <span className="work-category-title-find"><span data-work-category-line>Find the</span></span>
+            <span className="work-category-title-main">
+              <em data-work-category-line>work</em>
+              <span data-work-category-line>you need.</span>
+            </span>
           </h2>
           <div className="work-category-intro" data-work-category-intro>
             <span aria-hidden="true" />

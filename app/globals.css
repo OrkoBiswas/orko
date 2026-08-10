@@ -5273,3 +5273,147 @@ html[data-motion="reduced"] .simple-service-open svg { transition: none; }
 html[data-motion="reduced"] .work-category-orbit { animation: none; }
 html[data-motion="reduced"] .work-gallery-category-list a::before,
 html[data-motion="reduced"] .work-gallery-category-list strong { transition: none; }
+
+/* Refined typography-first Work category entrance */
+.work-page > .work-gallery-categories:first-child {
+  min-height: 0;
+  display: block;
+  padding-top: clamp(150px, 13vw, 190px);
+  padding-bottom: clamp(78px, 8vw, 118px);
+  background: #11140f;
+}
+.work-page > .work-gallery-categories:first-child::before { display: none; }
+.work-gallery-categories-head {
+  width: 100%;
+  display: block;
+}
+.work-category-head-meta {
+  min-height: 44px;
+  padding-block: 11px;
+  border-top: 1px solid rgba(242,240,233,.23);
+  border-bottom: 0;
+}
+.work-category-head-meta > span { color: #92988b; }
+.work-gallery-categories-head h2 {
+  max-width: none;
+  margin: clamp(44px, 5.5vw, 76px) 0 clamp(42px, 5vw, 68px);
+  font-size: clamp(4.9rem, 10vw, 10.8rem);
+  font-weight: 610;
+  line-height: .72;
+  letter-spacing: -.068em;
+}
+.work-category-title-find {
+  display: block;
+  overflow: hidden;
+  margin-left: .055em;
+  color: #aeb4a8;
+  font-size: .32em;
+  font-weight: 520;
+  line-height: 1;
+  letter-spacing: -.025em;
+}
+.work-category-title-find > span { display: block; }
+.work-category-title-main {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: .13em;
+  align-items: baseline;
+  margin-top: .06em;
+}
+.work-category-title-main > * { display: block; }
+.work-category-title-main em {
+  color: var(--accent);
+  font-family: var(--serif);
+  font-size: 1.03em;
+  font-weight: 400;
+  line-height: .72;
+  letter-spacing: -.09em;
+}
+.work-category-title-main > span {
+  color: #f2f0e9;
+  font-size: .62em;
+  font-weight: 610;
+  line-height: 1;
+  letter-spacing: -.065em;
+}
+.work-category-intro {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 22px;
+  margin: 0;
+  padding-top: 20px;
+  border-top: 1px solid rgba(242,240,233,.23);
+}
+.work-category-intro > span {
+  width: clamp(48px, 8vw, 118px);
+  flex: 0 0 auto;
+  margin-top: 10px;
+}
+.work-category-intro p { width: min(100%, 440px); }
+.work-category-orbit { display: none; }
+
+.work-gallery-category-list {
+  margin-top: clamp(58px, 7vw, 92px);
+  border-color: rgba(242,240,233,.23);
+}
+.work-gallery-category-list a {
+  min-height: 92px;
+  grid-template-columns: 46px minmax(0, 1fr) 46px 24px;
+  padding-inline: 0;
+  border-color: rgba(242,240,233,.23);
+}
+.work-gallery-category-list a::before {
+  z-index: 0;
+  inset: auto 0 -1px;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+}
+.work-gallery-category-list a > * { position: relative; z-index: 1; }
+.work-gallery-category-list strong {
+  font-size: clamp(1.85rem, 3vw, 3.45rem);
+  font-weight: 640;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .work-gallery-category-list a:hover { padding-inline: 8px; }
+  .work-gallery-category-list a:hover strong { transform: translateX(4px); }
+}
+
+@media (max-width: 700px) {
+  .work-page > .work-gallery-categories:first-child {
+    padding-top: 112px;
+    padding-bottom: 68px;
+    background: #11140f;
+  }
+  .work-category-head-meta { align-items: flex-start; flex-direction: column; gap: 5px; }
+  .work-gallery-categories-head h2 {
+    margin-block: 38px 34px;
+    font-size: clamp(3.65rem, 17vw, 5.4rem);
+    line-height: .74;
+  }
+  .work-category-title-find { margin-left: 0; font-size: .38em; }
+  .work-category-title-main { gap: .11em; }
+  .work-category-title-main > span { font-size: .58em; }
+  .work-category-intro {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr);
+    justify-content: initial;
+    gap: 14px;
+  }
+  .work-category-intro > span { width: 38px; }
+  .work-gallery-category-list { margin-top: 48px; }
+  .work-gallery-category-list a {
+    min-height: 76px;
+    grid-template-columns: 28px minmax(0, 1fr) 22px 18px;
+    gap: 9px;
+  }
+  .work-gallery-category-list strong { font-size: clamp(1.55rem, 8vw, 2.25rem); }
+}
+
+@media (max-width: 360px) {
+  .work-gallery-categories-head h2 { font-size: 3.45rem; }
+  .work-gallery-category-list a { grid-template-columns: 24px minmax(0, 1fr) 18px; }
+  .work-gallery-category-list small { display: none; }
+}

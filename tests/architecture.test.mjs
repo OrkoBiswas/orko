@@ -224,8 +224,8 @@ test("work archive and global collaboration close stay simple, client-focused, a
   assert.match(workPage, /work-gallery-categories/);
   assert.match(workPage, /projectMatchesShowcaseCategory/);
   assert.match(workPage, /data-work-category-sequence/);
-  assert.match(workPage, /work-category-type-work/);
-  assert.match(workPage, /work-category-orbit/);
+  assert.match(workPage, /work-category-title-main/);
+  assert.doesNotMatch(workPage, /work-category-orbit/);
   assert.doesNotMatch(workPage, /work-gallery-hero|Selected<br|View the projects|Discuss your project|Published projects/);
   assert.match(library, /All projects/);
   assert.match(library, /className="project-library is-grid"/);
@@ -244,7 +244,7 @@ test("work archive and global collaboration close stay simple, client-focused, a
   assert.match(css, /Work opens directly on useful navigation and projects/);
   assert.match(css, /Uniform edge-to-edge Work thumbnails/);
   assert.match(css, /Expressive editorial category masthead/);
-  assert.match(css, /@keyframes work-category-orbit/);
+  assert.match(css, /Refined typography-first Work category entrance/);
   assert.match(css, /\.work-project-card \.work-card-media \{ aspect-ratio: 4 \/ 3; \}/);
   assert.match(css, /\.work-project-card \.work-card-media \.project-media[\s\S]*object-fit: cover/);
   assert.match(css, /Compact collaboration close shared by every public page/);

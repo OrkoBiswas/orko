@@ -87,16 +87,14 @@ export function MotionProvider() {
       if (workCategorySequence) {
         const lines = gsap.utils.toArray<HTMLElement>("[data-work-category-line]", workCategorySequence);
         const intro = workCategorySequence.querySelector<HTMLElement>("[data-work-category-intro]");
-        const orbit = workCategorySequence.querySelector<HTMLElement>(".work-category-orbit");
         const items = gsap.utils.toArray<HTMLElement>("[data-work-category-item]", workCategorySequence);
         const categoryReveal = gsap.timeline({
-          scrollTrigger: { trigger: workCategorySequence, start: "top 94%", once: true },
+          scrollTrigger: { trigger: workCategorySequence, start: "top 88%", once: true },
         });
 
-        if (orbit) categoryReveal.fromTo(orbit, { scale: 0.58, rotate: -42, autoAlpha: 0 }, { scale: 1, rotate: 0, autoAlpha: 1, duration: 1.25, ease: "power4.out" }, 0);
-        if (lines.length) categoryReveal.fromTo(lines, { yPercent: 115, rotate: 2.5 }, { yPercent: 0, rotate: 0, duration: 1.05, stagger: 0.1, ease: "power4.out" }, 0.05);
-        if (intro) categoryReveal.fromTo(intro, { x: -24, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.72, ease: "power3.out" }, 0.45);
-        if (items.length) categoryReveal.fromTo(items, { x: 46, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.76, stagger: 0.075, ease: "power3.out" }, 0.28);
+        if (lines.length) categoryReveal.fromTo(lines, { y: 34, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.88, stagger: 0.08, ease: "power4.out" }, 0);
+        if (intro) categoryReveal.fromTo(intro, { y: 14, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.62, ease: "power3.out" }, 0.3);
+        if (items.length) categoryReveal.fromTo(items, { y: 22, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.68, stagger: 0.065, ease: "power3.out" }, 0.24);
       }
 
       const showreelSequence = document.querySelector<HTMLElement>("[data-showreel-sequence]");

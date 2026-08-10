@@ -64,7 +64,7 @@ Last updated: 2026-08-10
 
 - Rebuilt the Services overview as a calm, compact guide for clients of any age or background. The oversized generic hero and heavy service titles were replaced by a lighter introduction, plain-language descriptions, visible project timing, simple audience guidance, and open lined service rows with complete keyboard, touch, reduced-motion, and 320px support.
 
-- Reimagined the Work category entrance as a high-impact editorial type composition. Mixed display and serif lettering, a restrained theme-green orbital detail, live collection count, connected category rows, and a coordinated GSAP entrance give “Find the work you need” a distinctive client-facing identity while preserving direct navigation, touch comfort, reduced motion, and 320px layouts.
+- Reworked the Work category entrance into a cleaner typography-first editorial composition after removing the overly theatrical orbit, ray, split background, and fragmented headline. A restrained display-and-serif hierarchy now leads naturally into full-width category lines, with subtle GSAP reveals, live collection counts, touch comfort, reduced motion, and 320px layouts preserved.
 
 ## Validation
 
