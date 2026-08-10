@@ -52,14 +52,14 @@ export function normalizeProject(value: unknown): Project | null {
   return parsed.success ? parsed.data : null;
 }
 
-export function createProjectTemplate(displayOrder: number): ManagedProjectInput {
+export function createProjectTemplate(displayOrder: number, category = "Others"): ManagedProjectInput {
   const number = displayOrder + 1;
   return {
     id: `prj_custom_${crypto.randomUUID().replaceAll("-", "")}`,
     slug: `new-project-${number}`,
     title: "New Project",
     index: String(number).padStart(2, "0"),
-    category: "Video Editing",
+    category,
     services: ["Video Editing"],
     industry: "Creative",
     client: "Portfolio Project",

@@ -59,16 +59,21 @@ export const workDisciplines = [
 export type WorkDiscipline = (typeof workDisciplines)[number]["value"];
 
 export const showcaseCategories = [
-  { value: "book-cover-design", label: "Book Cover Design" },
-  { value: "brand-identity-design", label: "Brand Identity Design" },
-  { value: "thumbnail-design", label: "Thumbnail Design" },
-  { value: "banner-poster-design", label: "Banner & Poster Design" },
-  { value: "2d-motion", label: "2D Motion" },
-  { value: "ui-ux", label: "UI/UX" },
-  { value: "others", label: "Others" },
+  { value: "book-cover-design", label: "Book Cover Design", description: "Book covers, editorial artwork, and connected cover systems." },
+  { value: "brand-identity-design", label: "Brand Identity Design", description: "Logos, identity systems, campaign direction, and brand visuals." },
+  { value: "thumbnail-design", label: "Thumbnail Design", description: "Clear, high-impact thumbnails made for channels and campaigns." },
+  { value: "banner-poster-design", label: "Banner & Poster Design", description: "Posters, banners, key visuals, and promotional artwork." },
+  { value: "2d-motion", label: "2D Motion", description: "Motion graphics, animated identities, titles, and short visual loops." },
+  { value: "ui-ux", label: "UI/UX", description: "Digital interfaces, product visuals, and practical design systems." },
+  { value: "others", label: "Others", description: "Experiments, mixed-format projects, and work outside the main categories." },
 ] as const;
 
 export type ShowcaseCategory = (typeof showcaseCategories)[number]["value"];
+
+export function getShowcaseCategory(value: string) {
+  const normalized = value.trim().toLowerCase();
+  return showcaseCategories.find((item) => item.value === normalized || item.label.toLowerCase() === normalized);
+}
 
 export function projectMatchesDiscipline(project: Project, discipline: WorkDiscipline) {
   if (discipline === "video") return project.services.some((service) => ["Video Editing", "YouTube"].includes(service));
@@ -119,6 +124,46 @@ export function projectMatchesShowcaseCategory(project: Project, category: Showc
     "ui-ux",
   ];
   return !namedCategories.some((item) => matchesNamedShowcaseCategory(project, item));
+}
+
+function galleryCategoryText(item: ProjectGalleryItem) {
+  return [item.title, item.category, item.alt, item.client, item.industry].join(" ").toLowerCase();
+}
+
+function matchesNamedGalleryCategory(item: ProjectGalleryItem, category: Exclude<ShowcaseCategory, "others">) {
+  const assigned = getShowcaseCategory(item.category);
+  if (assigned) return assigned.value === category;
+  const text = galleryCategoryText(item);
+  if (category === "book-cover-design") return /\bbook\b|editorial|cover design/.test(text);
+  if (category === "brand-identity-design") return /\bbranding\b|brand identity|brand visual|logo design/.test(text);
+  if (category === "thumbnail-design") return /\bthumbnail(s)?\b|youtube cover/.test(text);
+  if (category === "banner-poster-design") return /\bbanner(s)?\b|\bposter(s)?\b|key visual/.test(text);
+  if (category === "2d-motion") return /\b2d motion\b|motion graphic|motion design|animation/.test(text);
+  return /\bui\b|\bux\b|user interface|user experience|web design|product design|app design/.test(text);
+}
+
+export function galleryItemMatchesShowcaseCategory(item: ProjectGalleryItem, category: ShowcaseCategory) {
+  const assigned = getShowcaseCategory(item.category);
+  if (assigned) return assigned.value === category;
+  if (category !== "others") return matchesNamedGalleryCategory(item, category);
+  const namedCategories: Exclude<ShowcaseCategory, "others">[] = [
+    "book-cover-design",
+    "brand-identity-design",
+    "thumbnail-design",
+    "banner-poster-design",
+    "2d-motion",
+    "ui-ux",
+  ];
+  return !namedCategories.some((itemCategory) => matchesNamedGalleryCategory(item, itemCategory));
+}
+
+export function projectCategoryWorkCount(project: Project, category: ShowcaseCategory) {
+  const includeCover = projectMatchesShowcaseCategory(project, category);
+  const matchingGallery = (project.gallery ?? []).filter((item) => galleryItemMatchesShowcaseCategory(item, category));
+  const additionalGallery = includeCover && project.mediaUrl
+    ? matchingGallery.filter((item) => item.url !== project.mediaUrl)
+    : matchingGallery;
+  return (includeCover ? 1 : 0) + additionalGallery.length;
 }
 
 export const projects: Project[] = [

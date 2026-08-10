@@ -21,7 +21,7 @@ test("server-renders the finished portfolio homepage", async () => {
   assert.match(html, /<title>Orko Biswas/);
   assert.match(html, /Visual ideas/);
   assert.match(html, /Selected creative work/);
-  assert.match(html, /Category showreels/);
+  assert.match(html, /All categories/);
   assert.match(html, /Book Cover Design/);
   assert.match(html, /Brand Identity Design/);
   assert.match(html, /Thumbnail Design/);
@@ -29,8 +29,8 @@ test("server-renders the finished portfolio homepage", async () => {
   assert.match(html, /2D Motion/);
   assert.match(html, /UI\/UX/);
   assert.match(html, /Others/);
-  assert.match(html, /\/work\?category=book-cover-design/);
-  assert.match(html, /\/work\?category=ui-ux/);
+  assert.match(html, /\/work\/category\/book-cover-design/);
+  assert.match(html, /\/work\/category\/ui-ux/);
   assert.match(html, /items in the full library/);
   assert.doesNotMatch(html, /Selected chapter|showcase-piece-media-label|Open project/);
   assert.match(html, /About &amp; experience/);
@@ -59,6 +59,18 @@ test("work archive renders real searchable project content", async () => {
   assert.match(html, /Kinetic Launch Film/);
   assert.match(html, /Abstract Index/);
   assert.match(html, /Search title, format, industry/);
+});
+
+test("category portfolio renders a complete Behance-style work stack", async () => {
+  const response = await request("/work/category/thumbnail-design");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /Thumbnail Design/);
+  assert.match(html, /Complete category stack/);
+  assert.match(html, /Explore every published piece/);
+  assert.match(html, /Abstract Index/);
+  assert.match(html, /View project/);
+  assert.match(html, /\/work\/category\/brand-identity-design/);
 });
 
 test("inquiry endpoint rejects invalid data before persistence", async () => {
