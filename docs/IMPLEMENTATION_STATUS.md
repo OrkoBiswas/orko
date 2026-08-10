@@ -66,6 +66,8 @@ Last updated: 2026-08-10
 
 - Reworked the Work category entrance into a cleaner typography-first editorial composition after removing the overly theatrical orbit, ray, split background, and fragmented headline. A restrained display-and-serif hierarchy now leads naturally into full-width category lines, with subtle GSAP reveals, live collection counts, touch comfort, reduced motion, and 320px layouts preserved.
 
+- Removed the Work category entrance entirely so the page now contains one focused All Projects archive. A display-and-serif archive masthead leads directly into a sticky client-friendly control rail with project search, newest/oldest/alphabetical sorting, advanced type/category/industry/year filters, URL-persisted choices, live result count, reset, responsive touch layouts, and reduced-motion-safe project reordering.
+
 ## Validation
 
 - Lint: passed.

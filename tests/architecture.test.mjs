@@ -212,22 +212,24 @@ test("shared footer gives every viewport a clear and accessible hiring path", as
 });
 
 test("work archive and global collaboration close stay simple, client-focused, and responsive", async () => {
-  const [workPage, library, projectCard, frame, collaboration, motion, css] = await Promise.all([
+  const [workPage, library, projectCard, frame, collaboration, css] = await Promise.all([
     readFile(new URL("app/work/page.tsx", root), "utf8"),
     readFile(new URL("components/WorkLibrary.tsx", root), "utf8"),
     readFile(new URL("components/ProjectCard.tsx", root), "utf8"),
     readFile(new URL("components/AppFrame.tsx", root), "utf8"),
     readFile(new URL("components/CtaBand.tsx", root), "utf8"),
-    readFile(new URL("components/MotionProvider.tsx", root), "utf8"),
     readFile(new URL("app/globals.css", root), "utf8"),
   ]);
-  assert.match(workPage, /work-gallery-categories/);
-  assert.match(workPage, /projectMatchesShowcaseCategory/);
-  assert.match(workPage, /data-work-category-sequence/);
-  assert.match(workPage, /work-category-title-main/);
-  assert.doesNotMatch(workPage, /work-category-orbit/);
+  assert.doesNotMatch(workPage, /work-gallery-categories|projectMatchesShowcaseCategory|data-work-category-sequence/);
+  assert.match(workPage, /aria-labelledby="work-archive-title"/);
   assert.doesNotMatch(workPage, /work-gallery-hero|Selected<br|View the projects|Discuss your project|Published projects/);
-  assert.match(library, /All projects/);
+  assert.match(library, /work-archive-title/);
+  assert.match(library, /work-archive-masthead/);
+  assert.match(library, /Advanced filters/);
+  assert.match(library, /Newest first/);
+  assert.match(library, /Oldest first/);
+  assert.match(library, /A to Z/);
+  assert.match(library, /params\.set\("sort", sort\)/);
   assert.match(library, /className="project-library is-grid"/);
   assert.match(library, /<ProjectCard project=\{project\}[^>]+clean/);
   assert.doesNotMatch(library, /Grid2X2|Editorial list view|ResizeObserver/);
@@ -238,13 +240,13 @@ test("work archive and global collaboration close stay simple, client-focused, a
   assert.match(collaboration, /cta-band-steps/);
   assert.match(collaboration, /Start your project/);
   assert.match(collaboration, /Send a quick message/);
-  assert.match(motion, /data-work-category-line/);
-  assert.match(motion, /data-work-category-item/);
   assert.match(css, /Editorial Work gallery: open media, quiet information, no thumbnail labels/);
   assert.match(css, /Work opens directly on useful navigation and projects/);
   assert.match(css, /Uniform edge-to-edge Work thumbnails/);
   assert.match(css, /Expressive editorial category masthead/);
   assert.match(css, /Refined typography-first Work category entrance/);
+  assert.match(css, /Single-section Work archive with advanced controls/);
+  assert.match(css, /\.work-archive-controls/);
   assert.match(css, /\.work-project-card \.work-card-media \{ aspect-ratio: 4 \/ 3; \}/);
   assert.match(css, /\.work-project-card \.work-card-media \.project-media[\s\S]*object-fit: cover/);
   assert.match(css, /Compact collaboration close shared by every public page/);

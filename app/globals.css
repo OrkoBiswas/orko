@@ -5417,3 +5417,155 @@ html[data-motion="reduced"] .work-gallery-category-list strong { transition: non
   .work-gallery-category-list a { grid-template-columns: 24px minmax(0, 1fr) 18px; }
   .work-gallery-category-list small { display: none; }
 }
+
+/* Single-section Work archive with advanced controls */
+.work-page > .work-collection:first-child {
+  padding-top: 0;
+  padding-bottom: clamp(92px, 10vw, 150px);
+}
+.work-collection .work-library { padding: 0; }
+.work-archive-masthead {
+  padding-top: clamp(144px, 13vw, 188px);
+  padding-bottom: clamp(50px, 6vw, 82px);
+}
+.work-archive-topline {
+  min-height: 44px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding-block: 11px;
+  border-top: 1px solid #aeb2a7;
+}
+.work-archive-topline > p:last-child {
+  margin: 0;
+  color: #666d62;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.work-archive-masthead h1 {
+  margin: clamp(38px, 4.5vw, 66px) 0 clamp(34px, 4vw, 58px);
+  font-family: var(--display);
+  font-size: clamp(5.4rem, 11.5vw, 12rem);
+  line-height: .7;
+  letter-spacing: -.075em;
+}
+.work-archive-masthead h1 span {
+  display: block;
+  margin-left: .035em;
+  font-size: .31em;
+  font-weight: 680;
+  line-height: 1;
+  letter-spacing: -.035em;
+  text-transform: uppercase;
+}
+.work-archive-masthead h1 em {
+  display: block;
+  color: #59721c;
+  font-family: var(--serif);
+  font-weight: 400;
+  line-height: .72;
+  letter-spacing: -.085em;
+}
+.work-archive-intro {
+  display: grid;
+  grid-template-columns: minmax(70px, 1fr) minmax(300px, 500px);
+  gap: clamp(24px, 4vw, 62px);
+  align-items: start;
+  padding-top: 20px;
+  border-top: 1px solid #aeb2a7;
+}
+.work-archive-intro > span {
+  width: min(15vw, 180px);
+  height: 1px;
+  justify-self: end;
+  margin-top: 10px;
+  background: #6d8b23;
+}
+.work-archive-intro p {
+  margin: 0;
+  color: #565d52;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.work-archive-controls {
+  position: sticky;
+  z-index: 32;
+  top: 82px;
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(165px, 210px) auto;
+  gap: 10px;
+  padding-block: 11px;
+  border-block: 1px solid #aeb2a7;
+  background: rgba(242,240,233,.94);
+  backdrop-filter: blur(14px);
+}
+.work-archive-controls .archive-search-field {
+  min-height: 48px;
+  background: #e3e1d9;
+}
+.work-sort-field {
+  min-height: 48px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 0 13px;
+  border: 1px solid #b9bdb2;
+}
+.work-sort-field > span {
+  color: #6c7268;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.work-sort-field select {
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  outline: 0;
+  color: #171a16;
+  background: transparent;
+  font-size: 11px;
+  font-weight: 720;
+}
+.work-sort-field:focus-within { outline: 3px solid #668817; outline-offset: 2px; }
+.work-archive-controls .filter-toggle {
+  min-height: 48px;
+  white-space: nowrap;
+}
+.work-archive-controls + .filter-panel { scroll-margin-top: 160px; }
+.work-collection .library-count { min-height: 82px; }
+
+@media (max-width: 760px) {
+  .work-page > .work-collection:first-child { padding-top: 0; }
+  .work-archive-masthead { padding-top: 108px; padding-bottom: 46px; }
+  .work-archive-topline { align-items: flex-start; flex-direction: column; gap: 5px; }
+  .work-archive-masthead h1 {
+    margin-block: 34px 30px;
+    font-size: clamp(4.3rem, 22vw, 6.5rem);
+  }
+  .work-archive-masthead h1 span { font-size: .35em; }
+  .work-archive-intro { grid-template-columns: 40px minmax(0, 1fr); gap: 14px; }
+  .work-archive-intro > span { width: 40px; }
+  .work-archive-intro p { font-size: 13px; }
+  .work-archive-controls {
+    top: 70px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+  }
+  .work-archive-controls .archive-search-field { grid-column: 1 / -1; }
+  .work-sort-field { min-width: 0; }
+  .work-archive-controls .filter-toggle { min-width: 48px; padding-inline: 13px; font-size: 0; }
+  .work-archive-controls .filter-toggle svg { margin: 0; }
+}
+
+@media (max-width: 360px) {
+  .work-archive-masthead h1 { font-size: 4.15rem; }
+  .work-sort-field { grid-template-columns: 1fr; gap: 1px; padding-block: 5px; }
+}

@@ -9,7 +9,8 @@ import { ProjectCard } from "@/components/ProjectCard";
 
 gsap.registerPlugin(Flip);
 
-type InitialWorkFilters = { query?: string; discipline?: WorkDiscipline | "All"; category?: string; industry?: string; year?: string };
+type WorkSort = "newest" | "oldest" | "az";
+type InitialWorkFilters = { query?: string; discipline?: WorkDiscipline | "All"; category?: string; industry?: string; year?: string; sort?: WorkSort };
 
 export function WorkLibrary({ projects, initialFilters = {} }: { projects: Project[]; initialFilters?: InitialWorkFilters }) {
   const showcaseCategories = useMemo(() => deriveShowcaseCategories(projects), [projects]);
@@ -23,10 +24,18 @@ export function WorkLibrary({ projects, initialFilters = {} }: { projects: Proje
   const [category, setCategory] = useState(categoryValues.includes(initialFilters.category ?? "") ? initialFilters.category! : "All");
   const [industry, setIndustry] = useState(industries.includes(initialFilters.industry ?? "") ? initialFilters.industry! : "All");
   const [year, setYear] = useState(years.includes(initialFilters.year ?? "") ? initialFilters.year! : "All");
+  const [sort, setSort] = useState<WorkSort>(initialFilters.sort ?? "newest");
   const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const visible = useMemo(() => filterProjects(projects, { query, discipline, category, industry, year }), [projects, query, discipline, category, industry, year]);
-  const isFiltered = query || discipline !== "All" || category !== "All" || industry !== "All" || year !== "All";
+  const visible = useMemo(() => {
+    const filtered = filterProjects(projects, { query, discipline, category, industry, year });
+    return [...filtered].sort((a, b) => {
+      if (sort === "az") return a.title.localeCompare(b.title);
+      if (sort === "oldest") return a.year - b.year;
+      return b.year - a.year;
+    });
+  }, [projects, query, discipline, category, industry, year, sort]);
+  const isFiltered = query || discipline !== "All" || category !== "All" || industry !== "All" || year !== "All" || sort !== "newest";
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -35,8 +44,9 @@ export function WorkLibrary({ projects, initialFilters = {} }: { projects: Proje
     if (category !== "All") params.set("category", category);
     if (industry !== "All") params.set("industry", industry);
     if (year !== "All") params.set("year", year);
+    if (sort !== "newest") params.set("sort", sort);
     window.history.replaceState(null, "", params.size ? `/work?${params}` : "/work");
-  }, [query, discipline, category, industry, year]);
+  }, [query, discipline, category, industry, year, sort]);
 
   useLayoutEffect(() => {
     if (!pendingFlip.current || !root.current) return;
@@ -57,17 +67,25 @@ export function WorkLibrary({ projects, initialFilters = {} }: { projects: Proje
       setCategory("All");
       setIndustry("All");
       setYear("All");
+      setSort("newest");
     });
   }
 
   return (
     <div className="work-library">
-      <div className="work-collection-head">
-        <div><p className="eyebrow">Project library</p><h2>All projects</h2></div>
-        <div className="work-toolbar"><label className="search-field" htmlFor="work-search"><Search aria-hidden="true" /><span className="sr-only">Search work</span><input id="work-search" type="search" value={query} placeholder="Search projects…" onChange={(event) => changeFilter(() => setQuery(event.target.value))} /></label><button className="filter-toggle" type="button" aria-expanded={filtersOpen} onClick={() => setFiltersOpen((value) => !value)}><SlidersHorizontal aria-hidden="true" /> Refine {isFiltered && <span />}</button></div>
+      <header className="work-archive-masthead">
+        <div className="work-archive-topline"><p className="eyebrow">Complete archive</p><p>{String(projects.length).padStart(2, "0")} published projects</p></div>
+        <h1 id="work-archive-title"><span>All</span><em>projects.</em></h1>
+        <div className="work-archive-intro"><span aria-hidden="true" /><p>Browse every published project. Search by name, narrow the archive with advanced filters, or change the order to find the most useful work quickly.</p></div>
+      </header>
+
+      <div className="work-archive-controls" aria-label="Project search and display options">
+        <label className="search-field archive-search-field" htmlFor="work-search"><Search aria-hidden="true" /><span className="sr-only">Search work</span><input id="work-search" type="search" value={query} placeholder="Search projects…" onChange={(event) => changeFilter(() => setQuery(event.target.value))} /></label>
+        <label className="work-sort-field"><span>Sort by</span><select value={sort} onChange={(event) => changeFilter(() => setSort(event.target.value as WorkSort))}><option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="az">A to Z</option></select></label>
+        <button className="filter-toggle" type="button" aria-expanded={filtersOpen} aria-controls="advanced-work-filters" onClick={() => setFiltersOpen((value) => !value)}><SlidersHorizontal aria-hidden="true" /> Advanced filters {isFiltered && <span />}</button>
       </div>
 
-      <div className={`filter-panel ${filtersOpen ? "is-open" : ""}`}>
+      <div className={`filter-panel ${filtersOpen ? "is-open" : ""}`} id="advanced-work-filters">
         <div><p>Type</p><div className="filter-options"><button type="button" aria-pressed={discipline === "All"} onClick={() => changeFilter(() => setDiscipline("All"))}>All work</button>{workDisciplines.map((item) => <button type="button" key={item.value} aria-pressed={discipline === item.value} onClick={() => changeFilter(() => setDiscipline(item.value))}>{item.label}</button>)}</div></div>
         {showcaseCategories.length > 0 && <div><p>Category</p><div className="filter-options"><button type="button" aria-pressed={category === "All"} onClick={() => changeFilter(() => setCategory("All"))}>All categories</button>{showcaseCategories.map((item) => <button type="button" key={item.value} aria-pressed={category === item.value} onClick={() => changeFilter(() => setCategory(item.value))}>{item.label}</button>)}</div></div>}
         <div><p>Industry</p><div className="filter-options">{industries.map((item) => <button type="button" key={item} aria-pressed={industry === item} onClick={() => changeFilter(() => setIndustry(item))}>{item}</button>)}</div></div>

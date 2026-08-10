@@ -83,20 +83,6 @@ export function MotionProvider() {
         });
       });
 
-      const workCategorySequence = document.querySelector<HTMLElement>("[data-work-category-sequence]");
-      if (workCategorySequence) {
-        const lines = gsap.utils.toArray<HTMLElement>("[data-work-category-line]", workCategorySequence);
-        const intro = workCategorySequence.querySelector<HTMLElement>("[data-work-category-intro]");
-        const items = gsap.utils.toArray<HTMLElement>("[data-work-category-item]", workCategorySequence);
-        const categoryReveal = gsap.timeline({
-          scrollTrigger: { trigger: workCategorySequence, start: "top 88%", once: true },
-        });
-
-        if (lines.length) categoryReveal.fromTo(lines, { y: 34, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.88, stagger: 0.08, ease: "power4.out" }, 0);
-        if (intro) categoryReveal.fromTo(intro, { y: 14, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.62, ease: "power3.out" }, 0.3);
-        if (items.length) categoryReveal.fromTo(items, { y: 22, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.68, stagger: 0.065, ease: "power3.out" }, 0.24);
-      }
-
       const showreelSequence = document.querySelector<HTMLElement>("[data-showreel-sequence]");
       if (showreelSequence) {
         const copy = showreelSequence.querySelector<HTMLElement>("[data-showreel-copy]");
