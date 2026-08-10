@@ -80,6 +80,8 @@ Last updated: 2026-08-10
 
 - Compressed the full About page into a tighter editorial rhythm: reduced every chapter’s vertical spacing, shortened the portrait and gallery offsets, made the headline system smaller and visibly lighter, tightened timeline and story rows, and preserved the serif accents and responsive 320px reading flow.
 
+- Reframed “Work, life & trust” as a simpler three-part editorial system. A short plain-language introduction now leads three equal, border-separated statements for curiosity, career growth, and client care, with restrained typographic watermarks replacing the previous dense row layout and a clean stacked treatment on small screens.
+
 ## Validation
 
 - Lint: passed.

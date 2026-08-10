@@ -369,10 +369,13 @@ test("about story and photo journal stay compact, owner-managed, and securely up
   assert.match(aboutPage, /content\.aboutGallery\.filter/);
   assert.match(aboutPage, /about-photo-journal/);
   assert.match(aboutPage, /Work, life &amp; trust/);
+  assert.match(aboutPage, /about-story-heading/);
+  assert.match(aboutPage, /data-word="Curiosity"/);
   assert.match(portfolio, /aboutPageContent/);
   assert.match(css, /Compact editorial About page/);
   assert.match(css, /\.about-intro-copy h1 \{[^}]*font-weight: 540/);
   assert.match(css, /\.about-story,[\s\S]*padding-block: clamp\(52px, 5\.5vw, 76px\)/);
+  assert.match(css, /\.about-story-list \{[^}]*grid-template-columns: repeat\(3/);
   assert.match(css, /@media \(max-width: 360px\)/);
   assert.match(css, /prefers-reduced-motion: reduce/);
 });

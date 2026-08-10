@@ -47,14 +47,14 @@ export default async function AboutPage() {
     </section>
 
     <section className="about-story section-shell">
-      <header className="about-section-head" data-reveal>
+      <header className="about-section-head about-story-head" data-reveal>
         <p className="eyebrow"><span>01</span>Work, life &amp; trust</p>
-        <h2>Creative work should feel<br /><em>clear and human.</em></h2>
+        <div className="about-story-heading"><h2>How I work,<br /><em>and why it matters.</em></h2><p>Three simple ideas guide my daily practice, career growth, and every client collaboration.</p></div>
       </header>
       <div className="about-story-list">
-        <article data-reveal><span>01</span><div><p>Work life</p><h3>{aboutPageContent.workLifeHeading}</h3><p>{content.aboutWorkLife}</p></div></article>
-        <article data-reveal><span>02</span><div><p>Career</p><h3>{aboutPageContent.careerHeading}</h3><p>{content.aboutCareer}</p></div></article>
-        <article data-reveal><span>03</span><div><p>Client care</p><h3>{aboutPageContent.clientCareHeading}</h3><p>{content.aboutClientCare}</p></div></article>
+        <article data-word="Curiosity" data-reveal><div className="about-story-meta"><span>01</span><p>Work life</p></div><h3>{aboutPageContent.workLifeHeading}</h3><p>{content.aboutWorkLife}</p></article>
+        <article data-word="Growth" data-reveal><div className="about-story-meta"><span>02</span><p>Career</p></div><h3>{aboutPageContent.careerHeading}</h3><p>{content.aboutCareer}</p></article>
+        <article data-word="Trust" data-reveal><div className="about-story-meta"><span>03</span><p>Client care</p></div><h3>{aboutPageContent.clientCareHeading}</h3><p>{content.aboutClientCare}</p></article>
       </div>
     </section>
 
