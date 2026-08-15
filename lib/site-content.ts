@@ -39,7 +39,9 @@ const testimonialSchema = z.object({
 
 const aboutGalleryItemSchema = z.object({
   id: textField.max(120),
-  url: optionalAssetUrl.refine(Boolean, "Upload an About photo or enter its secure Cloudinary URL."),
+  mediaType: z.enum(["image", "video"]).default("image"),
+  url: optionalAssetUrl.refine(Boolean, "Upload an About image or video, or enter its secure Cloudinary URL."),
+  posterUrl: optionalAssetUrl.default(""),
   alt: textField.max(240),
   caption: optionalTextField.max(180),
 });
@@ -69,7 +71,7 @@ export const siteContentSchema = z.object({
   aboutWorkLife: longTextField.max(900).default(aboutPageContent.workLife),
   aboutCareer: longTextField.max(900).default(aboutPageContent.career),
   aboutClientCare: longTextField.max(900).default(aboutPageContent.clientCare),
-  aboutGallery: z.array(aboutGalleryItemSchema).max(8).default([]),
+  aboutGallery: z.array(aboutGalleryItemSchema).max(3).default([]),
   logoUrl: optionalAssetUrl.default(""),
   logoAlt: optionalTextField.max(160).default(""),
   logoWidth: z.number().int().min(20).max(200).default(180),
@@ -182,7 +184,8 @@ export const defaultSiteContent: SiteContent = {
 export function parseSiteContent(value: unknown): SiteContent {
   const stored = typeof value === "object" && value ? value as Record<string, unknown> : {};
   const normalizedLogoWidth = typeof stored.logoWidth === "number" ? Math.min(200, Math.max(20, Math.round(stored.logoWidth))) : defaultSiteContent.logoWidth;
-  const candidate = { ...defaultSiteContent, ...stored, logoWidth: normalizedLogoWidth };
+  const normalizedAboutGallery = Array.isArray(stored.aboutGallery) ? stored.aboutGallery.slice(0, 3) : defaultSiteContent.aboutGallery;
+  const candidate = { ...defaultSiteContent, ...stored, logoWidth: normalizedLogoWidth, aboutGallery: normalizedAboutGallery };
   const parsed = siteContentSchema.safeParse(candidate);
   return parsed.success ? parsed.data : defaultSiteContent;
 }

@@ -13,7 +13,8 @@ export const dynamic = "force-dynamic";
 
 export default async function AboutPage() {
   const content = await getSiteContent();
-  const gallery = content.aboutGallery.filter((item) => item.url);
+  const frameLabels = ["Working process", "Studio moments", "Behind the work"];
+  const storyFrames = frameLabels.map((fallbackLabel, index) => ({ media: content.aboutGallery[index] ?? null, fallbackLabel, index }));
   const expertise = content.expertiseAreas.split(",").map((item) => item.trim()).filter(Boolean).slice(0, 8);
 
   return <main className="about-page">
@@ -56,20 +57,18 @@ export default async function AboutPage() {
           <li data-reveal><span className="about-story-node">03</span><div><p>Client care</p><h3>{aboutPageContent.clientCareHeading}</h3></div><p>{content.aboutClientCare}</p></li>
         </ol>
       </div>
-    </section>
-
-    {gallery.length > 0 && <section className="about-photo-journal">
-      <div className="about-photo-head section-shell" data-reveal>
-        <p className="eyebrow"><span>02</span>Photo journal</p>
-        <div><h2>A little life<br /><em>behind the work.</em></h2><p>Real moments from the studio, daily practice, and the journey around each project.</p></div>
-      </div>
-      <div className="about-photo-grid section-shell">
-        {gallery.map((photo, index) => <figure key={photo.id} className={`about-photo about-photo-${index % 4}`} data-reveal>
-          <img src={photo.url} alt={photo.alt} loading="lazy" />
-          {photo.caption && <figcaption><span>{String(index + 1).padStart(2, "0")}</span>{photo.caption}</figcaption>}
+      <div className="about-story-media" aria-label="Work life media highlights" data-reveal>
+        {storyFrames.map(({ media, fallbackLabel, index }) => <figure className={`about-story-frame about-story-frame-${index}${media?.url ? " has-media" : " is-empty"}`} key={media?.id ?? fallbackLabel}>
+          <div className="about-story-frame-media">
+            {media?.url ? media.mediaType === "video"
+              ? <video src={media.url} poster={media.posterUrl || undefined} controls muted loop playsInline preload="metadata" aria-label={media.alt} />
+              : <img src={media.url} alt={media.alt} loading="lazy" />
+              : <div className="about-story-frame-placeholder" aria-label={`${fallbackLabel} media has not been published yet`}><span>{content.monogram}</span><small>Media {String(index + 1).padStart(2, "0")}</small></div>}
+          </div>
+          <figcaption><span>{String(index + 1).padStart(2, "0")}</span><strong>{media?.caption || fallbackLabel}</strong></figcaption>
         </figure>)}
       </div>
-    </section>}
+    </section>
 
     <section className="about-career section-shell">
       <header className="about-section-head" data-reveal>

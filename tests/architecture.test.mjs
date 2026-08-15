@@ -348,7 +348,7 @@ test("owner portrait and owner-created category portfolio stay secure, durable, 
   assert.match(css, /\.project-detail-page \.project-intro h1/);
 });
 
-test("about story and photo journal stay compact, owner-managed, and securely uploaded", async () => {
+test("about story media frames stay compact, owner-managed, and securely uploaded", async () => {
   const [contentModel, editor, aboutPage, portfolio, signatureRoute, css] = await Promise.all([
     readFile(new URL("lib/site-content.ts", root), "utf8"),
     readFile(new URL("components/AdminContentForm.tsx", root), "utf8"),
@@ -358,16 +358,22 @@ test("about story and photo journal stay compact, owner-managed, and securely up
     readFile(new URL("app/globals.css", root), "utf8"),
   ]);
   assert.match(contentModel, /aboutGalleryItemSchema/);
-  assert.match(contentModel, /aboutGallery: z\.array\(aboutGalleryItemSchema\)\.max\(8\)/);
+  assert.match(contentModel, /aboutGallery: z\.array\(aboutGalleryItemSchema\)\.max\(3\)/);
+  assert.match(contentModel, /stored\.aboutGallery\.slice\(0, 3\)/);
+  assert.match(contentModel, /mediaType: z\.enum\(\["image", "video"\]\)/);
+  assert.match(contentModel, /posterUrl: optionalAssetUrl/);
   assert.match(contentModel, /aboutClientCare/);
-  assert.match(editor, /About photo gallery/);
-  assert.match(editor, /uploadAboutGalleryPhoto/);
-  assert.match(editor, /accept="image\/\*"/);
-  assert.match(editor, /Save public content to publish it on the About page/);
+  assert.match(editor, /Work, life &amp; trust media/);
+  assert.match(editor, /uploadAboutGalleryMedia/);
+  assert.match(editor, /accept="image\/\*,video\/\*"/);
+  assert.match(editor, /content\.aboutGallery\.length >= 3/);
+  assert.match(editor, /Save public content to publish it in the Work, life & trust section/);
   assert.match(signatureRoute, /getOwner/);
   assert.match(signatureRoute, /requireSameOrigin/);
-  assert.match(aboutPage, /content\.aboutGallery\.filter/);
-  assert.match(aboutPage, /about-photo-journal/);
+  assert.match(aboutPage, /about-story-media/);
+  assert.match(aboutPage, /media\.mediaType === "video"/);
+  assert.match(aboutPage, /controls muted loop playsInline/);
+  assert.doesNotMatch(aboutPage, /about-photo-journal/);
   assert.match(aboutPage, /Work, life &amp; trust/);
   assert.match(aboutPage, /about-story-stage/);
   assert.match(aboutPage, /about-story-timeline/);
@@ -377,6 +383,7 @@ test("about story and photo journal stay compact, owner-managed, and securely up
   assert.match(css, /\.about-story,[\s\S]*padding-block: clamp\(52px, 5\.5vw, 76px\)/);
   assert.match(css, /\.about-story-stage \{[^}]*grid-template-columns/);
   assert.match(css, /\.about-story-timeline::before/);
+  assert.match(css, /\.about-story-media \{[^}]*grid-template-columns/);
   assert.match(css, /@media \(max-width: 360px\)/);
   assert.match(css, /prefers-reduced-motion: reduce/);
 });

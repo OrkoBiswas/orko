@@ -84,6 +84,8 @@ Last updated: 2026-08-10
 
 - Replaced the “Work, life & trust” column composition with a genuinely different editorial timeline: a light stacked type statement anchors one side while three concise, connected information rows carry the daily-practice, career, and client-care story. Removed the watermark/card-like treatment and kept the section compact, border-led, and naturally stacked on mobile.
 
+- Added three mixed-proportion media frames directly to “Work, life & trust” for working-process footage, studio images, and behind-the-scenes moments. Each frame now supports an owner-uploaded image or video, optional video poster, editable label and accessible description, secure Cloudinary delivery, intentional branded placeholders, desktop editorial proportions, and a touch-friendly snap strip on mobile. The former separate photo journal was removed to keep the page concise.
+
 ## Validation
 
 - Lint: passed.

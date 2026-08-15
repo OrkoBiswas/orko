@@ -58,10 +58,12 @@ export function AdminContentForm({ initial }: { initial: SiteContent }) {
     } finally { setUploadingPortrait(false); }
   }
 
-  async function uploadAboutGalleryPhoto(id: string, file?: File) {
+  async function uploadAboutGalleryMedia(id: string, file?: File) {
     if (!file) return;
-    if (!file.type.startsWith("image/")) { setSaved(false); setMessage("Choose an image file for the About gallery."); return; }
-    if (file.size > 15 * 1024 * 1024) { setSaved(false); setMessage("Each About gallery image must be smaller than 15 MB."); return; }
+    const resourceType = file.type.startsWith("video/") ? "video" : file.type.startsWith("image/") ? "image" : null;
+    if (!resourceType) { setSaved(false); setMessage("Choose an image or video for the About media frames."); return; }
+    const maximumBytes = resourceType === "video" ? 100 * 1024 * 1024 : 15 * 1024 * 1024;
+    if (file.size > maximumBytes) { setSaved(false); setMessage(resourceType === "video" ? "Each About video must be smaller than 100 MB." : "Each About image must be smaller than 15 MB."); return; }
     setUploadingAboutPhoto(id); setSaved(false); setMessage("");
     try {
       const signatureResponse = await fetch("/api/admin/media/signature", { method: "POST" });
@@ -70,18 +72,18 @@ export function AdminContentForm({ initial }: { initial: SiteContent }) {
       const form = new FormData();
       form.set("file", file); form.set("api_key", signed.apiKey); form.set("signature", signed.signature);
       for (const [key, value] of Object.entries(signed.params)) form.set(key, value);
-      const response = await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(signed.cloudName)}/image/upload`, { method: "POST", body: form });
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(signed.cloudName)}/${resourceType}/upload`, { method: "POST", body: form });
       const uploaded = await response.json().catch(() => ({})) as UploadResponse;
-      if (!response.ok || !uploaded.secure_url || uploaded.resource_type !== "image") throw new Error("The gallery photo could not be uploaded.");
+      if (!response.ok || !uploaded.secure_url || uploaded.resource_type !== resourceType) throw new Error("The About media could not be uploaded.");
       setContent((current) => ({
         ...current,
-        aboutGallery: current.aboutGallery.map((item) => item.id === id ? { ...item, url: uploaded.secure_url ?? "" } : item),
+        aboutGallery: current.aboutGallery.map((item) => item.id === id ? { ...item, mediaType: resourceType, url: uploaded.secure_url ?? "" } : item),
       }));
-      setMessage("Gallery photo uploaded. Save public content to publish it.");
-      notifyAdmin({ tone: "success", title: "Gallery photo uploaded", message: "The image is ready. Save public content to publish it on the About page." });
+      setMessage("About media uploaded. Save public content to publish it.");
+      notifyAdmin({ tone: "success", title: "About media uploaded", message: "The image or video is ready. Save public content to publish it in the Work, life & trust section." });
     } catch {
-      setMessage("The gallery photo could not be uploaded. Please try again.");
-      notifyAdmin({ tone: "error", title: "Upload not completed", message: "The About gallery image could not be uploaded. Please try again." });
+      setMessage("The About image or video could not be uploaded. Please try again.");
+      notifyAdmin({ tone: "error", title: "Upload not completed", message: "The About media could not be uploaded. Please try again." });
     } finally { setUploadingAboutPhoto(null); }
   }
 
@@ -117,7 +119,7 @@ export function AdminContentForm({ initial }: { initial: SiteContent }) {
   function addAboutGalleryItem() {
     setContent((current) => ({
       ...current,
-      aboutGallery: [...current.aboutGallery, { id: recordId("about-photo"), url: "", alt: `Orko Biswas at work`, caption: "" }],
+      aboutGallery: [...current.aboutGallery, { id: recordId("about-media"), mediaType: "image", url: "", posterUrl: "", alt: `Orko Biswas at work`, caption: ["Working process", "Studio moments", "Behind the work"][current.aboutGallery.length] ?? "Creative process" }],
     }));
   }
 
@@ -161,21 +163,23 @@ export function AdminContentForm({ initial }: { initial: SiteContent }) {
         </div>
       </section>
       <section className="admin-form-section admin-collection-section admin-about-gallery-section">
-        <div className="admin-form-intro"><h2>About photo gallery</h2><p>Add real photos from your work life, studio, career, or creative process. Each photo can have a short caption and accessible description.</p><button className="admin-add-button" type="button" onClick={addAboutGalleryItem} disabled={content.aboutGallery.length >= 8 || Boolean(uploadingAboutPhoto)}><Plus aria-hidden="true" />Add photo</button></div>
+        <div className="admin-form-intro"><h2>Work, life &amp; trust media</h2><p>Control the three creative frames shown in this About-page section. Each frame accepts a studio image, working-process video, or another real moment from your practice.</p><button className="admin-add-button" type="button" onClick={addAboutGalleryItem} disabled={content.aboutGallery.length >= 3 || Boolean(uploadingAboutPhoto)}><Plus aria-hidden="true" />Add media frame</button></div>
         <div className="admin-record-list">
           {content.aboutGallery.length > 0 ? content.aboutGallery.map((photo, index) => <fieldset className="admin-record admin-about-photo-record" key={photo.id}>
-            <legend>About photo {String(index + 1).padStart(2, "0")}</legend>
-            <button className="admin-remove-button" type="button" onClick={() => removeAboutGalleryItem(photo.id)} disabled={Boolean(uploadingAboutPhoto)} aria-label={`Remove About photo ${index + 1}`}><Trash2 aria-hidden="true" />Remove</button>
+            <legend>Media frame {String(index + 1).padStart(2, "0")}</legend>
+            <button className="admin-remove-button" type="button" onClick={() => removeAboutGalleryItem(photo.id)} disabled={Boolean(uploadingAboutPhoto)} aria-label={`Remove About media frame ${index + 1}`}><Trash2 aria-hidden="true" />Remove</button>
             <div className={`admin-about-photo-preview${photo.url ? " has-image" : ""}`}>
-              {photo.url ? <img src={photo.url} alt={photo.alt || "About gallery preview"} /> : <div><ImageUp aria-hidden="true" /><span>No image attached</span></div>}
+              {photo.url ? photo.mediaType === "video" ? <video src={photo.url} poster={photo.posterUrl || undefined} controls muted playsInline preload="metadata" aria-label={photo.alt || "About video preview"} /> : <img src={photo.url} alt={photo.alt || "About image preview"} /> : <div><ImageUp aria-hidden="true" /><span>No media attached</span></div>}
             </div>
             <div className="admin-form-grid">
-              <label className="admin-field-wide"><span>Secure image URL</span><input type="url" placeholder="https://res.cloudinary.com/..." value={photo.url} onChange={(event) => updateAboutGalleryItem(photo.id, "url", event.target.value)} /></label>
-              <label><span>Image description</span><input value={photo.alt} placeholder="Describe what is visible" onChange={(event) => updateAboutGalleryItem(photo.id, "alt", event.target.value)} /></label>
-              <label><span>Short caption (optional)</span><input value={photo.caption} placeholder="Studio day, Dhaka" onChange={(event) => updateAboutGalleryItem(photo.id, "caption", event.target.value)} /></label>
+              <label><span>Media type</span><select value={photo.mediaType} onChange={(event) => updateAboutGalleryItem(photo.id, "mediaType", event.target.value as AboutGalleryItem["mediaType"])}><option value="image">Image</option><option value="video">Video</option></select></label>
+              <label><span>Frame label</span><input value={photo.caption} placeholder="Working process" onChange={(event) => updateAboutGalleryItem(photo.id, "caption", event.target.value)} /></label>
+              <label className="admin-field-wide"><span>Secure media URL</span><input type="url" placeholder="https://res.cloudinary.com/..." value={photo.url} onChange={(event) => updateAboutGalleryItem(photo.id, "url", event.target.value)} /></label>
+              {photo.mediaType === "video" && <label className="admin-field-wide"><span>Video poster URL (optional)</span><input type="url" placeholder="https://res.cloudinary.com/..." value={photo.posterUrl} onChange={(event) => updateAboutGalleryItem(photo.id, "posterUrl", event.target.value)} /></label>}
+              <label className="admin-field-wide"><span>Accessible media description</span><input value={photo.alt} placeholder="Describe what visitors can see" onChange={(event) => updateAboutGalleryItem(photo.id, "alt", event.target.value)} /></label>
             </div>
-            <label className="admin-media-attach admin-about-photo-upload"><input type="file" accept="image/*" disabled={Boolean(uploadingAboutPhoto)} onChange={(event) => { const file = event.currentTarget.files?.[0]; event.currentTarget.value = ""; void uploadAboutGalleryPhoto(photo.id, file); }} /><ImageUp aria-hidden="true" />{uploadingAboutPhoto === photo.id ? "Uploading..." : photo.url ? "Replace image" : "Upload image"}</label>
-          </fieldset>) : <div className="admin-record-empty"><p>No About gallery photos yet.</p><span>Add only real images that you are comfortable showing publicly. The gallery stays hidden until a photo is published.</span></div>}
+            <label className="admin-media-attach admin-about-photo-upload"><input type="file" accept="image/*,video/*" disabled={Boolean(uploadingAboutPhoto)} onChange={(event) => { const file = event.currentTarget.files?.[0]; event.currentTarget.value = ""; void uploadAboutGalleryMedia(photo.id, file); }} /><ImageUp aria-hidden="true" />{uploadingAboutPhoto === photo.id ? "Uploading..." : photo.url ? "Replace media" : "Upload image or video"}</label>
+          </fieldset>) : <div className="admin-record-empty"><p>No About media frames attached.</p><span>Add up to three real images or videos. The public section uses clean branded placeholders until you publish media.</span></div>}
         </div>
       </section>
       <section className="admin-form-section admin-collection-section">
