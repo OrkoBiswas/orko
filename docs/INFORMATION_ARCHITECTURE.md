@@ -2,11 +2,11 @@
 
 ## Public routes
 
-- `/` — cinematic positioning, selected work, services, process, proof, and hiring CTA
+- `/` — cinematic positioning, selected work, services, journal preview, proof, and hiring CTA
 - `/work` — primary searchable/filterable showcase library
 - `/work/[project-slug]` — reusable project case-study template
 - `/services` and `/services/[service-slug]` — service discovery and conversion
-- `/about`, `/process`, `/showreel`, `/resume` — professional evaluation material
+- `/about`, `/journal`, `/journal/[slug]`, `/showreel`, `/resume` — professional evaluation material, studio writing, and public resources
 - `/contact`, `/start-a-project` — short and guided inquiry paths
 - `/privacy`, `/terms`, not-found — trust and legal support
 
@@ -14,6 +14,7 @@
 
 - `/admin` — authenticated overview
 - `/admin/projects` — project visibility and publication management
+- `/admin/journal` — protected publishing portal for creative news, tips, build notes, public files, draft/publish state, and audit-backed archiving
 - `/admin/showreel` — current reel preview, direct video replacement, poster URL, and original-media restoration
 - `/admin/media` — signed Cloudinary upload and media library management
 - `/admin/testimonials` — approved feedback and client media management

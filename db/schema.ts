@@ -101,3 +101,31 @@ export const serviceContent = sqliteTable("service_content", {
   contentJson: text("content_json").notNull(),
   updatedAt: text("updated_at").notNull(),
 });
+
+export const journalPosts = sqliteTable(
+  "journal_posts",
+  {
+    id: text("id").primaryKey(),
+    slug: text("slug").notNull(),
+    title: text("title").notNull(),
+    excerpt: text("excerpt").notNull(),
+    body: text("body").notNull(),
+    category: text("category", { enum: ["creative-news", "tips-tricks", "build-notes"] }).notNull(),
+    status: text("status", { enum: ["draft", "published", "archived", "deleted"] }).notNull().default("draft"),
+    featured: integer("featured", { mode: "boolean" }).notNull().default(false),
+    displayOrder: integer("display_order").notNull().default(0),
+    coverUrl: text("cover_url").notNull().default(""),
+    coverAlt: text("cover_alt").notNull().default(""),
+    tagsJson: text("tags_json").notNull().default("[]"),
+    filesJson: text("files_json").notNull().default("[]"),
+    readingMinutes: integer("reading_minutes").notNull().default(3),
+    publishedAt: text("published_at").notNull(),
+    createdAt: text("created_at").notNull(),
+    updatedAt: text("updated_at").notNull(),
+  },
+  (table) => [
+    uniqueIndex("idx_journal_posts_slug").on(table.slug),
+    index("idx_journal_posts_status_published").on(table.status, table.publishedAt),
+    index("idx_journal_posts_category_status").on(table.category, table.status),
+  ],
+);

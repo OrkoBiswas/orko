@@ -1,5 +1,6 @@
 import type { InquiryInput } from "@/lib/inquiry";
-import type { Project, Service } from "@/lib/portfolio";
+import { journalPosts, type JournalPost, type Project, type Service } from "@/lib/portfolio";
+import { normalizeJournalPost, type ManagedJournalPostInput } from "@/lib/journal-content";
 import { normalizeProject, type ManagedProjectInput } from "@/lib/project-content";
 import { defaultSiteContent, parseSiteContent, type SiteContent } from "@/lib/site-content";
 import type { CategoryThumbnail } from "@/lib/category-content";
@@ -139,6 +140,27 @@ export function ensureSchema() {
         content_json TEXT NOT NULL,
         updated_at TEXT NOT NULL
       )`),
+      db.prepare(`CREATE TABLE IF NOT EXISTS journal_posts (
+        id TEXT PRIMARY KEY,
+        slug TEXT NOT NULL UNIQUE,
+        title TEXT NOT NULL,
+        excerpt TEXT NOT NULL,
+        body TEXT NOT NULL,
+        category TEXT NOT NULL CHECK (category IN ('creative-news', 'tips-tricks', 'build-notes')),
+        status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'published', 'archived', 'deleted')),
+        featured INTEGER NOT NULL DEFAULT 0,
+        display_order INTEGER NOT NULL DEFAULT 0,
+        cover_url TEXT NOT NULL DEFAULT '',
+        cover_alt TEXT NOT NULL DEFAULT '',
+        tags_json TEXT NOT NULL DEFAULT '[]',
+        files_json TEXT NOT NULL DEFAULT '[]',
+        reading_minutes INTEGER NOT NULL DEFAULT 3,
+        published_at TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )`),
+      db.prepare("CREATE INDEX IF NOT EXISTS idx_journal_posts_status_published ON journal_posts(status, published_at)"),
+      db.prepare("CREATE INDEX IF NOT EXISTS idx_journal_posts_category_status ON journal_posts(category, status)"),
     ]);
     await refreshLegacySiteCopy(db);
     await db.prepare("PRAGMA optimize").run();
@@ -488,4 +510,179 @@ export async function updateInquiryStatus(id: string, status: string, actor: { u
     .bind(crypto.randomUUID(), actor.userId, actor.email, id, now)
     .run();
   return true;
+}
+
+export type ManagedJournalPost = JournalPost & {
+  status: "draft" | "published" | "archived" | "deleted";
+  featured: boolean;
+  displayOrder: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type JournalPostRecord = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  body: string;
+  category: JournalPost["category"];
+  status: ManagedJournalPost["status"];
+  featured: number;
+  display_order: number;
+  cover_url: string;
+  cover_alt: string;
+  tags_json: string;
+  files_json: string;
+  reading_minutes: number;
+  published_at: string;
+  created_at: string;
+  updated_at: string;
+};
+
+function parseJournalRecord(record: JournalPostRecord): ManagedJournalPost | null {
+  try {
+    const post = normalizeJournalPost({
+      id: record.id,
+      slug: record.slug,
+      title: record.title,
+      excerpt: record.excerpt,
+      body: record.body,
+      category: record.category,
+      tags: JSON.parse(record.tags_json),
+      coverUrl: record.cover_url,
+      coverAlt: record.cover_alt,
+      readingMinutes: record.reading_minutes,
+      publishedAt: record.published_at,
+      files: JSON.parse(record.files_json),
+    });
+    if (!post) return null;
+    return {
+      ...post,
+      status: record.status,
+      featured: Boolean(record.featured),
+      displayOrder: record.display_order,
+      createdAt: record.created_at,
+      updatedAt: record.updated_at,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function defaultManagedJournalPosts(): ManagedJournalPost[] {
+  const now = new Date().toISOString();
+  return journalPosts.map((post, displayOrder) => ({ ...post, status: "published" as const, featured: displayOrder === 0, displayOrder, createdAt: post.publishedAt || now, updatedAt: post.publishedAt || now }));
+}
+
+async function seedJournalPosts() {
+  await ensureSchema();
+  const db = await database();
+  const statements = journalPosts.map((post, displayOrder) => db.prepare(
+    "INSERT OR IGNORE INTO journal_posts (id, slug, title, excerpt, body, category, status, featured, display_order, cover_url, cover_alt, tags_json, files_json, reading_minutes, published_at, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, 'published', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+  ).bind(
+    post.id,
+    post.slug,
+    post.title,
+    post.excerpt,
+    post.body,
+    post.category,
+    displayOrder === 0 ? 1 : 0,
+    displayOrder,
+    post.coverUrl,
+    post.coverAlt,
+    JSON.stringify(post.tags),
+    JSON.stringify(post.files),
+    post.readingMinutes,
+    post.publishedAt,
+    post.publishedAt,
+    post.publishedAt,
+  ));
+  if (statements.length) await db.batch(statements);
+}
+
+export async function listJournalPosts(options: { publishedOnly?: boolean; category?: JournalPost["category"]; limit?: number } = {}) {
+  try {
+    await seedJournalPosts();
+    const db = await database();
+    const constraints = ["status != 'deleted'"];
+    const values: Array<string | number> = [];
+    if (options.publishedOnly) {
+      constraints.push("status = 'published'", "published_at <= ?");
+      values.push(new Date().toISOString());
+    }
+    if (options.category) {
+      constraints.push("category = ?");
+      values.push(options.category);
+    }
+    const limit = Math.min(Math.max(options.limit ?? 100, 1), 100);
+    values.push(limit);
+    const rows = await db.prepare(`SELECT id, slug, title, excerpt, body, category, status, featured, display_order, cover_url, cover_alt, tags_json, files_json, reading_minutes, published_at, created_at, updated_at FROM journal_posts WHERE ${constraints.join(" AND ")} ORDER BY featured DESC, display_order ASC, published_at DESC LIMIT ?`).bind(...values).all<JournalPostRecord>();
+    return (rows.results ?? []).flatMap((record) => {
+      const post = parseJournalRecord(record);
+      return post ? [post] : [];
+    });
+  } catch {
+    return defaultManagedJournalPosts().filter((post) => !options.category || post.category === options.category).slice(0, options.limit ?? 100);
+  }
+}
+
+export async function getJournalPostBySlug(slug: string, options: { publishedOnly?: boolean } = {}) {
+  const posts = await listJournalPosts({ publishedOnly: options.publishedOnly, limit: 100 });
+  return posts.find((post) => post.slug === slug) ?? null;
+}
+
+export async function getManagedJournalPost(id: string) {
+  const posts = await listJournalPosts({ limit: 100 });
+  return posts.find((post) => post.id === id) ?? null;
+}
+
+export async function createManagedJournalPost(input: ManagedJournalPostInput, actor: { userId: string; email: string }) {
+  await ensureSchema();
+  const db = await database();
+  const now = new Date().toISOString();
+  const duplicate = await db.prepare("SELECT id FROM journal_posts WHERE id = ? OR slug = ? LIMIT 1").bind(input.id, input.slug).first<{ id: string }>();
+  if (duplicate) return false;
+  await db.batch([
+    db.prepare("INSERT INTO journal_posts (id, slug, title, excerpt, body, category, status, featured, display_order, cover_url, cover_alt, tags_json, files_json, reading_minutes, published_at, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+      .bind(input.id, input.slug, input.title, input.excerpt, input.body, input.category, input.status, input.featured ? 1 : 0, input.displayOrder, input.coverUrl, input.coverAlt, JSON.stringify(input.tags), JSON.stringify(input.files), input.readingMinutes, input.publishedAt, now, now),
+    db.prepare("INSERT INTO audit_logs (id, actor_id, actor_email, action, entity_type, entity_id, created_at) VALUES (?, ?, ?, 'journal.post.created', 'journal', ?, ?)")
+      .bind(crypto.randomUUID(), actor.userId, actor.email, input.id, now),
+  ]);
+  return true;
+}
+
+export async function updateManagedJournalPost(id: string, input: ManagedJournalPostInput, actor: { userId: string; email: string }) {
+  await ensureSchema();
+  const db = await database();
+  const now = new Date().toISOString();
+  const duplicate = await db.prepare("SELECT id FROM journal_posts WHERE slug = ? AND id != ? LIMIT 1").bind(input.slug, id).first<{ id: string }>();
+  if (duplicate) return false;
+  const result = await db.prepare("UPDATE journal_posts SET slug = ?, title = ?, excerpt = ?, body = ?, category = ?, status = ?, featured = ?, display_order = ?, cover_url = ?, cover_alt = ?, tags_json = ?, files_json = ?, reading_minutes = ?, published_at = ?, updated_at = ? WHERE id = ? AND status != 'deleted'")
+    .bind(input.slug, input.title, input.excerpt, input.body, input.category, input.status, input.featured ? 1 : 0, input.displayOrder, input.coverUrl, input.coverAlt, JSON.stringify(input.tags), JSON.stringify(input.files), input.readingMinutes, input.publishedAt, now, id).run();
+  if (!result.meta.changes) return null;
+  await db.prepare("INSERT INTO audit_logs (id, actor_id, actor_email, action, entity_type, entity_id, created_at) VALUES (?, ?, ?, 'journal.post.updated', 'journal', ?, ?)")
+    .bind(crypto.randomUUID(), actor.userId, actor.email, id, now).run();
+  return true;
+}
+
+export async function deleteManagedJournalPost(id: string, actor: { userId: string; email: string }) {
+  await ensureSchema();
+  const db = await database();
+  const now = new Date().toISOString();
+  const result = await db.prepare("UPDATE journal_posts SET status = 'deleted', updated_at = ? WHERE id = ? AND status != 'deleted'").bind(now, id).run();
+  if (!result.meta.changes) return false;
+  await db.prepare("INSERT INTO audit_logs (id, actor_id, actor_email, action, entity_type, entity_id, created_at) VALUES (?, ?, ?, 'journal.post.deleted', 'journal', ?, ?)")
+    .bind(crypto.randomUUID(), actor.userId, actor.email, id, now).run();
+  return true;
+}
+
+export async function journalCounts() {
+  try {
+    await seedJournalPosts();
+    const record = await (await database()).prepare("SELECT COUNT(*) AS total, SUM(CASE WHEN status = 'published' THEN 1 ELSE 0 END) AS published, SUM(CASE WHEN status = 'draft' THEN 1 ELSE 0 END) AS drafts FROM journal_posts WHERE status != 'deleted'").first<{ total: number; published: number | null; drafts: number | null }>();
+    return { total: record?.total ?? 0, published: record?.published ?? 0, drafts: record?.drafts ?? 0 };
+  } catch {
+    return { total: journalPosts.length, published: journalPosts.length, drafts: 0 };
+  }
 }

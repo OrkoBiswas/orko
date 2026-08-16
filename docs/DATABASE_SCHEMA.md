@@ -12,6 +12,7 @@ Cloudflare D1/SQLite is the production persistence layer because it is native to
 - `project_content` — editable case-study narrative, cover presentation, and ordered Cloudinary gallery metadata keyed to durable project records
 - `category_thumbnails` — one independently managed Cloudinary image/video cover, accessible description, and display ratio for each owner-created category slug
 - `service_content` — editable service positioning, deliverables, fit, commercial framing, related work, and FAQs
+- `journal_posts` — owner-managed creative news, tips, build notes, ordered publication state, safe plain-text body, topic tags, cover metadata, and public development-file links; indexed for public publication and category reads
 
 Schema initialization uses idempotent prepared statements, one statement per call, followed by `PRAGMA optimize`. IDs are random UUIDs; public inquiry references are separate non-sequential values.
 
