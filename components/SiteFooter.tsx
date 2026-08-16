@@ -58,7 +58,7 @@ export function SiteFooter({ content: brand }: { content: SiteContent }) {
             <Link href="/work"><span>Selected work</span><ArrowRight aria-hidden="true" /></Link>
             <Link href="/services"><span>Services</span><ArrowRight aria-hidden="true" /></Link>
             <Link href="/about"><span>About</span><ArrowRight aria-hidden="true" /></Link>
-            <Link href="/process"><span>Process</span><ArrowRight aria-hidden="true" /></Link>
+            <Link href="/journal"><span>Journal</span><ArrowRight aria-hidden="true" /></Link>
           </div>
           <div className="footer-nav-group">
             <p className="footer-label">Work with me</p>

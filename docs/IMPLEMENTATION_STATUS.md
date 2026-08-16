@@ -1,10 +1,11 @@
 # Implementation status
 
-Last updated: 2026-08-10
+Last updated: 2026-08-15
 
 ## Completed
 
 - Production Vinext/Next App Router foundation, TypeScript, Cloudflare Worker output, D1 binding, idempotent schema, design tokens, and project documentation.
+- Replaced the former Process route with a public Journal portal for creative news, practical editing/motion tips, build notes, and public development resources. The portal provides category filtering, search, feature placement, article pages, download/repository links, a backward-compatible `/process` redirect, sitemap/LLM discovery, and a responsive owner-only publishing workspace with drafts, publish controls, media, tags, files, audit logging, and soft archival.
 - Responsive public portfolio with homepage, filterable work library, project pages, services, about, experience, compact inline showreel, résumé, contact, brief builder, legal pages, SEO routes, and authored recovery states.
 - Smooth GSAP/ScrollTrigger/Flip motion with cleanup, touch behavior, reduced-motion handling, low-data mode, and mobile alternatives.
 - Format-aware showcase system with five selectable frame types, a full-width alternating project runway, oversized catalogue numbering, responsive metadata, route-aware reveals, and neutral generated previews that preserve each project frame.
@@ -89,14 +90,14 @@ Last updated: 2026-08-10
 ## Validation
 
 - Lint: passed.
-- Typecheck: passed.
-- Automated tests: 25 passed.
+- Typecheck: blocked by the existing `drizzle-kit` package/API mismatch (`defineConfig` is unavailable in the installed version); the journal additions introduce no TypeScript diagnostics.
+- Automated tests: 27 passed.
 - Production build: passed.
 - Prior desktop and mobile browser reviews passed for public navigation, archive filters, case studies, forms, animations, and inquiry persistence.
 
 ## External values still required
 
-- Hosted Cloudinary delivery is configured. Local development still needs the documented Cloudinary environment values when testing authenticated uploads.
+- Hosted Cloudinary delivery is configured. Local development reads Cloudinary values only from ignored server-side environment files when testing authenticated uploads.
 - `RESEND_API_KEY`, `INQUIRY_NOTIFICATION_TO`, and a verified `INQUIRY_FROM_EMAIL` are optional for inquiry notifications.
 - Final social profiles, direct email, résumé file, licensed showreel, captions/transcript, approved testimonials, and portfolio media remain content tasks.
 

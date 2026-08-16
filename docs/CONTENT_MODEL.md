@@ -16,4 +16,6 @@ Testimonials contain an approved quote, client name, optional role and company, 
 
 Services contain slug, promise, problem set, deliverables, ideal clients, process, timeline, pricing mode, FAQ, and related project slugs.
 
+Journal posts contain an opaque ID, unique URL slug, title, short introduction, category (`creative-news`, `tips-tricks`, or `build-notes`), safe plain-text body, tags, reading time, publish time, public cover URL with accessible description, featured/display controls, and a limited list of public HTTPS resources. Resources can link to owner-uploaded Cloudinary raw files, a repository, or another deliberate public destination; no local path, secret, or provider credential is ever stored or rendered.
+
 Inquiries contain reference, pathway, identity/contact fields, selections, project details, consent timestamp, status, private notes, created timestamp, update timestamp, and spam metadata. No portfolio performance claim is displayed unless marked verified.

@@ -103,6 +103,86 @@ export const aboutPageContent = {
   clientCare: "I listen carefully, explain decisions in simple language, keep feedback organized, and deliver work that is ready to use.",
 } as const;
 
+export const journalCategories = [
+  { value: "creative-news", label: "Creative news", description: "Studio notes, visual culture, and work in progress." },
+  { value: "tips-tricks", label: "Tips & tricks", description: "Practical techniques for sharper edits, motion, and design." },
+  { value: "build-notes", label: "Build notes", description: "Development experiments, files, and systems behind the work." },
+] as const;
+
+export type JournalCategory = (typeof journalCategories)[number]["value"];
+
+export type JournalDownload = {
+  id: string;
+  name: string;
+  description: string;
+  url: string;
+  format: string;
+};
+
+export type JournalPost = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  body: string;
+  category: JournalCategory;
+  tags: string[];
+  coverUrl: string;
+  coverAlt: string;
+  readingMinutes: number;
+  publishedAt: string;
+  files: JournalDownload[];
+};
+
+// These starter entries are public editorial content. They seed the server-managed
+// journal once, after which the owner dashboard controls every post and download.
+export const journalPosts: JournalPost[] = [
+  {
+    id: "journal-motion-systems",
+    slug: "motion-systems-before-effects",
+    title: "Why the best motion starts before After Effects",
+    excerpt: "A small set of decisions that keeps a motion direction clear before the timeline gets complicated.",
+    body: "Motion gets easier to judge when the message, rhythm, and visual hierarchy are decided before animation begins. I start by choosing the one idea a viewer should remember, then build a simple system around it.\n\nThat system can be a type rule, a transition grammar, or a timing ratio. It gives every cut and keyframe a reason to exist, and makes feedback much more useful than asking whether something simply feels more exciting.",
+    category: "creative-news",
+    tags: ["Motion design", "Creative direction", "Workflow"],
+    coverUrl: "",
+    coverAlt: "Abstract motion system preview",
+    readingMinutes: 3,
+    publishedAt: "2026-08-12T09:00:00.000Z",
+    files: [],
+  },
+  {
+    id: "journal-short-form-edits",
+    slug: "three-short-form-editing-checks",
+    title: "Three checks before you export a short-form edit",
+    excerpt: "A quick finishing pass for making social edits feel deliberate, readable, and ready for the feed.",
+    body: "First, watch without sound. The story and hierarchy should still make sense from the first frame. Second, listen without looking. Pace, pauses, and music should create a clean path through the idea. Finally, check the first second on a small screen.\n\nThese checks do not replace taste, but they stop many avoidable issues from reaching the final export. The best short-form work feels simple because the decisions behind it are disciplined.",
+    category: "tips-tricks",
+    tags: ["Editing", "Short-form", "Quality control"],
+    coverUrl: "",
+    coverAlt: "Short-form editing checklist",
+    readingMinutes: 2,
+    publishedAt: "2026-08-08T09:00:00.000Z",
+    files: [],
+  },
+  {
+    id: "journal-portfolio-build-notes",
+    slug: "portfolio-build-notes",
+    title: "Build notes: making a portfolio work like a small product",
+    excerpt: "The decisions behind a portfolio that can evolve with new work, writing, files, and real client activity.",
+    body: "A portfolio should not become difficult to update every time a project changes. I treat it like a small product: content is structured, public pages are fast to scan, and owner controls stay protected on the server.\n\nThis journal is part of that system. It gives studio notes, practical tutorials, and development resources one home without making the portfolio feel like a static archive.",
+    category: "build-notes",
+    tags: ["Development", "Portfolio", "Systems"],
+    coverUrl: "",
+    coverAlt: "Portfolio system build notes",
+    readingMinutes: 4,
+    publishedAt: "2026-08-04T09:00:00.000Z",
+    files: [
+      { id: "journal-repository", name: "Portfolio source repository", description: "Explore the project structure and development history.", url: "https://github.com/OrkoBiswas/orko", format: "Repository" },
+    ],
+  },
+];
+
 export const workDisciplines = [
   { value: "video", label: "Video" },
   { value: "motion", label: "Motion" },

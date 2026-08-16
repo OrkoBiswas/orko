@@ -1,8 +1,8 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";
-import { deriveShowcaseCategories, projectMatchesShowcaseCategory, projects, services } from "@/lib/portfolio";
-import { getSiteContent, listCategoryThumbnails, listPortfolioProjects, listPortfolioServices } from "@/db/repository";
+import { deriveShowcaseCategories, journalCategories, projectMatchesShowcaseCategory, projects, services } from "@/lib/portfolio";
+import { getSiteContent, listCategoryThumbnails, listJournalPosts, listPortfolioProjects, listPortfolioServices } from "@/db/repository";
 import { ShowcaseGrid } from "@/components/ShowcaseGrid";
 import { ShowreelLoop } from "@/components/ShowreelLoop";
 import { ExperienceSection } from "@/components/ExperienceSection";
@@ -19,21 +19,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const [brand, liveProjects, liveServices, categoryThumbnails] = await Promise.all([getSiteContent(), listPortfolioProjects(projects, { publishedOnly: true }), listPortfolioServices(services), listCategoryThumbnails()]);
+  const [brand, liveProjects, liveServices, categoryThumbnails, journal] = await Promise.all([getSiteContent(), listPortfolioProjects(projects, { publishedOnly: true }), listPortfolioServices(services), listCategoryThumbnails(), listJournalPosts({ publishedOnly: true, limit: 3 })]);
   const thumbnailsBySlug = new Map(categoryThumbnails.map((thumbnail) => [thumbnail.slug, thumbnail]));
   const showcaseCategories = deriveShowcaseCategories(liveProjects).flatMap((category) => {
     const matchingProjects = liveProjects.filter((project) => projectMatchesShowcaseCategory(project, category.value));
     const cover = matchingProjects.find((project) => project.featured) ?? matchingProjects[0];
     return cover ? [{ ...category, cover, thumbnail: thumbnailsBySlug.get(category.value), workCount: matchingProjects.length }] : [];
   });
-  const processStages = [
-    { title: "Discover", copy: "We discuss your goal, audience, content, deadline, and budget.", details: ["Goal", "Audience", "Scope"] },
-    { title: "Plan", copy: "I prepare the story, visual direction, deliverables, and schedule.", details: ["Story", "Formats", "Schedule"] },
-    { title: "Create", copy: "I build the first edit, design, or motion direction.", details: ["Edit", "Design", "Motion"] },
-    { title: "Review", copy: "You share clear feedback and we agree on the next changes.", details: ["Notes", "Priorities", "Changes"] },
-    { title: "Refine", copy: "I improve timing, sound, color, text, and final details.", details: ["Timing", "Sound", "Color"] },
-    { title: "Deliver", copy: "You receive clean files in the correct formats and sizes.", details: ["Exports", "Sizes", "Source files"] },
-  ] as const;
   return (
     <>
       <section className="home-hero section-shell">
@@ -87,18 +79,10 @@ export default async function Home() {
         <Link className="button button-dark" href="/services">View all services <ArrowRight aria-hidden="true" /></Link>
       </section>
 
-      <section className="process-preview process-showcase section-shell" data-process-sequence>
-        <div className="section-heading"><div><p className="eyebrow"><span>05</span>Process</p><h2>A clear path from <em>idea</em><br />to delivery.</h2></div><Link className="text-link" href="/process">See the full process <ArrowUpRight aria-hidden="true" /></Link></div>
-        <div className="process-stage" data-process-stage>
-          <div className="process-track-head"><span>Project timeline · 01—06</span><span>From the first brief to organized final files</span></div>
-          <div className="process-timeline" tabIndex={0} role="region" aria-label="Six-stage project timeline">
-            <div className="process-timeline-canvas">
-              <div className="process-line" aria-hidden="true"><span data-process-progress /></div>
-              <ol className="process-milestones">{processStages.map((stage, index) => <li key={stage.title} data-process-step><span className="process-node" data-process-node aria-hidden="true">0{index + 1}</span><article className="process-detail" data-process-entry><small>Stage 0{index + 1}</small><h3>{stage.title}</h3><p>{stage.copy}</p><ul className="process-focus" data-process-detail aria-label={`${stage.title} focus areas`}>{stage.details.map((detail) => <li key={detail}>{detail}</li>)}</ul></article></li>)}</ol>
-            </div>
-          </div>
-        </div>
-      </section>
+      {journal.length > 0 && <section className="journal-home-preview section-shell section-space">
+        <div className="section-heading"><div><p className="eyebrow"><span>05</span>Studio journal</p><h2>Fresh ideas.<br /><em>Useful files.</em></h2></div><div><p>Creative news, practical editing notes, and development resources from the studio.</p><Link className="text-link" href="/journal">Open the journal <ArrowUpRight aria-hidden="true" /></Link></div></div>
+        <div className="journal-home-grid">{journal.map((post, index) => <article className={`journal-home-card is-${post.category}`} key={post.id}><Link href={`/journal/${post.slug}`}><span className="journal-home-index">0{index + 1}</span><p>{journalCategories.find((category) => category.value === post.category)?.label} · {post.readingMinutes} min read</p><h3>{post.title}</h3><small>{post.excerpt}</small><span className="journal-home-arrow"><ArrowUpRight aria-hidden="true" /></span></Link></article>)}</div>
+      </section>}
 
       <TestimonialsSection content={brand} index="06" />
     </>

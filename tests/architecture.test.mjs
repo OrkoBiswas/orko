@@ -387,3 +387,36 @@ test("about story media frames stay compact, owner-managed, and securely uploade
   assert.match(css, /@media \(max-width: 360px\)/);
   assert.match(css, /prefers-reduced-motion: reduce/);
 });
+
+test("journal portal keeps public writing, development files, and owner publishing safely separated", async () => {
+  const [model, repository, createRoute, updateRoute, portal, editor, publicPage, adminPage, header, sitemap] = await Promise.all([
+    readFile(new URL("lib/journal-content.ts", root), "utf8"),
+    readFile(new URL("db/repository.ts", root), "utf8"),
+    readFile(new URL("app/api/admin/journal/route.ts", root), "utf8"),
+    readFile(new URL("app/api/admin/journal/[id]/route.ts", root), "utf8"),
+    readFile(new URL("components/JournalPortal.tsx", root), "utf8"),
+    readFile(new URL("components/AdminJournalEditor.tsx", root), "utf8"),
+    readFile(new URL("app/journal/page.tsx", root), "utf8"),
+    readFile(new URL("app/admin/journal/page.tsx", root), "utf8"),
+    readFile(new URL("components/SiteHeader.tsx", root), "utf8"),
+    readFile(new URL("app/sitemap.ts", root), "utf8"),
+  ]);
+  assert.match(model, /managedJournalPostSchema/);
+  assert.match(model, /creative-news/, "journal categories should be controlled");
+  assert.match(model, /Use a secure https URL/, "public downloads should be limited to secure URLs");
+  assert.match(repository, /journal_posts/);
+  assert.match(repository, /journal\.post\.created/);
+  assert.match(repository, /journal\.post\.deleted/);
+  assert.match(createRoute, /getOwner/);
+  assert.match(createRoute, /requireSameOrigin/);
+  assert.match(updateRoute, /getOwner/);
+  assert.match(updateRoute, /requireSameOrigin/);
+  assert.match(portal, /Search journal posts/);
+  assert.match(portal, /journal-files-panel/);
+  assert.match(editor, /Development files and downloads/);
+  assert.doesNotMatch(editor, /CLOUDINARY_API_SECRET|process\.env/);
+  assert.match(publicPage, /Studio journal/);
+  assert.match(adminPage, /Publishing portal/);
+  assert.match(header, /\["Journal", "\/journal"\]/);
+  assert.match(sitemap, /\/journal/);
+});
